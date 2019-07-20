@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{n}{MEVENT} \PYG{n}{even}\PYG{p}{;}
+  \PYG{n}{ch} \PYG{o}{=} \PYG{n}{getch}\PYG{p}{();}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{ch} \PYG{o}{==} \PYG{n}{KEY\PYGZus{}MOUSE}\PYG{p}{)}
+    \PYG{k}{if}\PYG{p}{(}\PYG{n}{getmouse}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{event}\PYG{p}{)} \PYG{o}{==} \PYG{n}{OK}\PYG{p}{)}
+      \PYG{c+cm}{/* Hacer algo con el evento */}
+      \PYG{c+cm}{/* ... */}
+\end{Verbatim}

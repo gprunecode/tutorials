@@ -1,0 +1,26 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}ncurses.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}stdlib.h\PYGZgt{}}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{()}
+\PYG{p}{\PYGZob{}}
+  \PYG{n}{initscr}\PYG{p}{();}                      \PYG{c+cm}{/* Iniciar el modo curses                 */}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Hola mundo !!!}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}     \PYG{c+cm}{/* Imprime Hola mundo                     */}
+  \PYG{n}{refresh}\PYG{p}{();}                      \PYG{c+cm}{/* Imprimir en la pantalla real           */}
+  \PYG{n}{getch}\PYG{p}{();}                        \PYG{c+cm}{/* Esperar                                */}
+  \PYG{n}{def\PYGZus{}prog\PYGZus{}mode}\PYG{p}{();}                \PYG{c+cm}{/* Guardar los modos tty                  */}
+  \PYG{n}{endwin}\PYG{p}{();}                       \PYG{c+cm}{/* Finalizar curnes temporalmente         */}
+  \PYG{n}{system}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}/bin/sh\PYGZdq{}}\PYG{p}{);}              \PYG{c+cm}{/* Realizar cualquier cosa en modo cooked */}
+  \PYG{n}{reset\PYGZus{}prog\PYGZus{}mode}\PYG{p}{();}              \PYG{c+cm}{/* Regresar al modo tty previo            */}
+                                  \PYG{c+cm}{/* almacenado por def\PYGZus{}prog\PYGZus{}mode()         */}
+  \PYG{n}{refresh}\PYG{p}{();}                      \PYG{c+cm}{/* refresh() restaura los contenidos      */}
+                                  \PYG{c+cm}{/* en pantalla                            */}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Otra Cadena}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}        \PYG{c+cm}{/* De nuevo utilizar curses al maximo     */}
+  \PYG{n}{refresh}\PYG{p}{();}                      \PYG{c+cm}{/* de sus capacidades                     */}
+  \PYG{n}{getch}\PYG{p}{();}                        \PYG{c+cm}{/* Esperar                                */}
+  \PYG{n}{endwin}\PYG{p}{();}                       \PYG{c+cm}{/* Finalizar el modo curses               */}
+
+  \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

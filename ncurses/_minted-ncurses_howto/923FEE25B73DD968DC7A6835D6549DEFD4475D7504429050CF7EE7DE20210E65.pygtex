@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}ncurses.h\PYGZgt{}}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{(}\PYG{k+kt}{void}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{n}{initscr}\PYG{p}{();}                  \PYG{c+cm}{/* Inicia el modo curses */}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Hello World!!!\PYGZdq{}}\PYG{p}{);}   \PYG{c+cm}{/* Imprime Hello World */}
+  \PYG{n}{refresh}\PYG{p}{();}                  \PYG{c+cm}{/* Imprimirlo en la pantalla real */}
+  \PYG{n}{getch}\PYG{p}{();}                    \PYG{c+cm}{/* Esperar entrada de usuario */}
+  \PYG{n}{endwin}\PYG{p}{();}                   \PYG{c+cm}{/* Terminar el modo curses */}
+
+  \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

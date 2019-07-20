@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k+kt}{int} \PYG{n}{dynamic\PYGZus{}field\PYGZus{}info}\PYG{p}{(} \PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{,}     \PYG{c+cm}{/* campo sobre el cual operar   */}
+                          \PYG{k+kt}{int}   \PYG{o}{*}\PYG{n}{prows}\PYG{p}{,}     \PYG{c+cm}{/* numero de filas              */}
+                          \PYG{k+kt}{int}   \PYG{o}{*}\PYG{n}{pcols}\PYG{p}{,}     \PYG{c+cm}{/* number de columnas           */}
+                          \PYG{k+kt}{int}   \PYG{o}{*}\PYG{n}{pmax}\PYG{p}{)}      \PYG{c+cm}{/* maximo crecimiento permitido */}
+\end{Verbatim}

@@ -1,0 +1,46 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}ncurses.h\PYGZgt{}}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{()}
+\PYG{p}{\PYGZob{}}
+  \PYG{n}{initscr}\PYG{p}{();}
+
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Upper left corner           \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}ULCORNER} \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Lower left corner           \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}LLCORNER} \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Lower right corner          \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}LRCORNER} \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Tee pointing right          \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}LTEE}     \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Tee pointing left           \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}RTEE}     \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Tee pointing up             \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}BTEE}     \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Tee pointing down           \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}TTEE}     \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Horizontal line             \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}HLINE}    \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Vertical line               \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}VLINE}    \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Large Plus or cross over    \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}PLUS}     \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Scan Line 1                 \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}S1}       \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Scan Line 3                 \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}S3}       \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Scan Line 7                 \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}S7}       \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Scan Line 9                 \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}S9}       \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Diamond                     \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}DIAMOND}  \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Checker board (stipple)     \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}CKBOARD}  \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Degree Symbol               \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}DEGREE}   \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Plus/Minus Symbol           \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}PLMINUS}  \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Bullet                      \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}BULLET}   \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Arrow Pointing Left         \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}LARROW}   \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Arrow Pointing Right        \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}RARROW}   \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Arrow Pointing Down         \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}DARROW}   \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Arrow Pointing Up           \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}UARROW}   \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Board of squares            \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}BOARD}    \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Lantern Symbol              \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}LANTERN}  \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Solid Square Block          \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}BLOCK}    \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Less/Equal sign             \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}LEQUAL}   \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Greater/Equal sign          \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}GEQUAL}   \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Pi                          \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}PI}       \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Not equal                   \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}NEQUAL}   \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}UK pound sign               \PYGZdq{}}\PYG{p}{);} \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ACS\PYGZus{}STERLING} \PYG{p}{);} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+
+  \PYG{n}{refresh}\PYG{p}{();}
+  \PYG{n}{getch}\PYG{p}{();}
+  \PYG{n}{endwin}\PYG{p}{();}
+
+  \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

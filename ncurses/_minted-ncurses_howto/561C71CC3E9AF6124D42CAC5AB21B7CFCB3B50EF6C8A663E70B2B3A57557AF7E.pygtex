@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k+kt}{int} \PYG{n+nf}{set\PYGZus{}field\PYGZus{}opts}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{,}          \PYG{c+cm}{/* campo a modificar          */}
+                     \PYG{k+kt}{int} \PYG{n}{attr}\PYG{p}{);}             \PYG{c+cm}{/* atributo a establecer      */}
+
+  \PYG{k+kt}{int} \PYG{n+nf}{field\PYGZus{}opts\PYGZus{}on}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{,}           \PYG{c+cm}{/* campo a modificar          */}
+                    \PYG{k+kt}{int} \PYG{n}{attr}\PYG{p}{);}              \PYG{c+cm}{/* atributo a encender        */}
+
+  \PYG{k+kt}{int} \PYG{n+nf}{field\PYGZus{}opts\PYGZus{}off}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{,}          \PYG{c+cm}{/* campo a modificar          */}
+                     \PYG{k+kt}{int} \PYG{n}{attr}\PYG{p}{);}             \PYG{c+cm}{/* atributo a apagar          */}
+
+  \PYG{k+kt}{int} \PYG{n+nf}{field\PYGZus{}opts}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{);}             \PYG{c+cm}{/* campo a consultar          */}
+\end{Verbatim}

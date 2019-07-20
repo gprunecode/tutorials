@@ -1,0 +1,27 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}ncurses.h\PYGZgt{}}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{argc}\PYG{p}{,} \PYG{k}{const} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{argv}\PYG{p}{[])}
+\PYG{p}{\PYGZob{}}
+  \PYG{n}{initscr}\PYG{p}{();}                  \PYG{c+cm}{/* Inicia el modo curses */}
+  \PYG{n}{start\PYGZus{}color}\PYG{p}{();}              \PYG{c+cm}{/* Inicia la funcionalidad de color */}
+
+  \PYG{n}{init\PYGZus{}pair}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}CYAN}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}BLACK}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Una gran cadena en la que no importa que escribir \PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{mvchgat}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{A\PYGZus{}BLINK}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n+nb}{NULL}\PYG{p}{);}
+  \PYG{c+cm}{/*}
+\PYG{c+cm}{   * Los primeros dos parametros especifican la posicion para empezar}
+\PYG{c+cm}{   * El tercer parametro es el numero de caracteres a actualizar, \PYGZhy{}1}
+\PYG{c+cm}{   * quiere decir hasta fin de linea}
+\PYG{c+cm}{   * El cuarto parametro es el attributo para el caracter}
+\PYG{c+cm}{   * El quinto parametro es el indice de color. Este indice se obtiene}
+\PYG{c+cm}{   * con init\PYGZus{}pair() utilice 0 si no quiere ningun color}
+\PYG{c+cm}{   * El sexto es para siempre NULL}
+\PYG{c+cm}{   */}
+  \PYG{n}{refresh}\PYG{p}{();}
+  \PYG{n}{getch}\PYG{p}{();}
+  \PYG{n}{endwin}\PYG{p}{();}                   \PYG{c+cm}{/* Fin del modo curses */}
+
+  \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

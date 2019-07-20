@@ -1,0 +1,183 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}curses.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}stdlib.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}string.h\PYGZgt{}}
+
+\PYG{c+cp}{\PYGZsh{}define POSX 10}
+\PYG{c+cp}{\PYGZsh{}define POSY 5}
+\PYG{c+cp}{\PYGZsh{}define DISC\PYGZus{}CHAR \PYGZsq{}*\PYGZsq{}}
+\PYG{c+cp}{\PYGZsh{}define PEG\PYGZus{}CHAR \PYGZsq{}\PYGZsh{}\PYGZsq{}}
+\PYG{c+cp}{\PYGZsh{}define TIME\PYGZus{}OUT 300}
+
+\PYG{k}{typedef} \PYG{k}{struct} \PYG{n}{\PYGZus{}peg\PYGZus{}struct} \PYG{p}{\PYGZob{}}
+  \PYG{k+kt}{int} \PYG{n}{n\PYGZus{}discs}\PYG{p}{;}    \PYG{c+cm}{/* Number of discs at present   */}
+  \PYG{k+kt}{int} \PYG{n}{bottomx}\PYG{p}{,} \PYG{n}{bottomy}\PYG{p}{;} \PYG{c+cm}{/* bottom x, bottom y co\PYGZhy{}ord    */}
+  \PYG{k+kt}{int} \PYG{o}{*}\PYG{n}{sizes}\PYG{p}{;}   \PYG{c+cm}{/* The disc sizes array   */}
+
+\PYG{p}{\PYGZcb{}}\PYG{n}{peg}\PYG{p}{;}
+
+\PYG{k+kt}{void} \PYG{n+nf}{init\PYGZus{}pegs}\PYG{p}{(}\PYG{n}{peg} \PYG{o}{*}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{n\PYGZus{}discs}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{show\PYGZus{}pegs}\PYG{p}{(}\PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{win}\PYG{p}{,} \PYG{n}{peg} \PYG{o}{*}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{n\PYGZus{}discs}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{free\PYGZus{}pegs}\PYG{p}{(}\PYG{n}{peg} \PYG{o}{*}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{n\PYGZus{}discs}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{solve\PYGZus{}hanoi}\PYG{p}{(}\PYG{n}{peg} \PYG{o}{*}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{n}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{src}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{aux}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{dst}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{move\PYGZus{}disc}\PYG{p}{(}\PYG{n}{peg} \PYG{o}{*}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{n\PYGZus{}discs}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{src}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{dst}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{print\PYGZus{}in\PYGZus{}middle}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{starty}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{width}\PYG{p}{,} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{string}\PYG{p}{,} \PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{win}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{check\PYGZus{}usr\PYGZus{}response}\PYG{p}{(}\PYG{n}{peg} \PYG{o}{*}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{n\PYGZus{}discs}\PYG{p}{);}
+
+\PYG{k+kt}{int} \PYG{n}{store\PYGZus{}n\PYGZus{}discs}\PYG{p}{;}
+\PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{welcome\PYGZus{}string} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Enter the number of discs you want to be solved: \PYGZdq{}}\PYG{p}{;}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{argc}\PYG{p}{,} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{argv}\PYG{p}{[])}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{n\PYGZus{}discs}\PYG{p}{;}
+  \PYG{n}{peg} \PYG{n}{my\PYGZus{}pegs}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{];}
+
+  \PYG{n}{initscr}\PYG{p}{();}  \PYG{c+cm}{/* Start curses mode    */}
+  \PYG{n}{cbreak}\PYG{p}{();} \PYG{c+cm}{/* Line buffering disabled. Pass on every thing */}
+  \PYG{n}{keypad}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);}
+  \PYG{n}{curs\PYGZus{}set}\PYG{p}{(}\PYG{n}{FALSE}\PYG{p}{);}
+
+  \PYG{n}{print\PYGZus{}in\PYGZus{}middle}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{LINES} \PYG{o}{/} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{COLS}\PYG{p}{,} \PYG{n}{welcome\PYGZus{}string}\PYG{p}{,} \PYG{n+nb}{NULL}\PYG{p}{);}
+  \PYG{n}{scanw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZpc{}d\PYGZdq{}}\PYG{p}{,} \PYG{o}{\PYGZam{}}\PYG{n}{n\PYGZus{}discs}\PYG{p}{);}
+
+  \PYG{n}{timeout}\PYG{p}{(}\PYG{n}{TIME\PYGZus{}OUT}\PYG{p}{);}
+  \PYG{n}{noecho}\PYG{p}{();}
+  \PYG{n}{store\PYGZus{}n\PYGZus{}discs} \PYG{o}{=} \PYG{n}{n\PYGZus{}discs}\PYG{p}{;}
+
+  \PYG{n}{init\PYGZus{}pegs}\PYG{p}{(}\PYG{n}{my\PYGZus{}pegs}\PYG{p}{,} \PYG{n}{n\PYGZus{}discs}\PYG{p}{);}
+  \PYG{n}{show\PYGZus{}pegs}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{my\PYGZus{}pegs}\PYG{p}{,} \PYG{n}{n\PYGZus{}discs}\PYG{p}{);}
+  \PYG{n}{solve\PYGZus{}hanoi}\PYG{p}{(}\PYG{n}{my\PYGZus{}pegs}\PYG{p}{,} \PYG{n}{n\PYGZus{}discs}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{);}
+
+  \PYG{n}{free\PYGZus{}pegs}\PYG{p}{(}\PYG{n}{my\PYGZus{}pegs}\PYG{p}{,} \PYG{n}{n\PYGZus{}discs}\PYG{p}{);}
+  \PYG{n}{endwin}\PYG{p}{();}   \PYG{c+cm}{/* End curses mode      */}
+  \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+  \PYG{k+kt}{void} \PYG{n+nf}{solve\PYGZus{}hanoi}\PYG{p}{(}\PYG{n}{peg} \PYG{o}{*}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{n\PYGZus{}discs}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{src}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{aux}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{dst}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k}{if}\PYG{p}{(}\PYG{n}{n\PYGZus{}discs} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)}
+  \PYG{k}{return}\PYG{p}{;}
+  \PYG{n}{solve\PYGZus{}hanoi}\PYG{p}{(}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{n}{n\PYGZus{}discs} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{src}\PYG{p}{,} \PYG{n}{dst}\PYG{p}{,} \PYG{n}{aux}\PYG{p}{);}
+  \PYG{n}{move\PYGZus{}disc}\PYG{p}{(}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{n}{store\PYGZus{}n\PYGZus{}discs}\PYG{p}{,} \PYG{n}{src}\PYG{p}{,} \PYG{n}{dst}\PYG{p}{);}
+  \PYG{n}{show\PYGZus{}pegs}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{n}{store\PYGZus{}n\PYGZus{}discs}\PYG{p}{);}
+  \PYG{n}{check\PYGZus{}usr\PYGZus{}response}\PYG{p}{(}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{n}{store\PYGZus{}n\PYGZus{}discs}\PYG{p}{);}
+  \PYG{n}{solve\PYGZus{}hanoi}\PYG{p}{(}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{n}{n\PYGZus{}discs} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{aux}\PYG{p}{,} \PYG{n}{src}\PYG{p}{,} \PYG{n}{dst}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{check\PYGZus{}usr\PYGZus{}response}\PYG{p}{(}\PYG{n}{peg} \PYG{o}{*}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{n\PYGZus{}discs}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{ch}\PYG{p}{;}
+
+  \PYG{n}{ch} \PYG{o}{=} \PYG{n}{getch}\PYG{p}{();} \PYG{c+cm}{/* Waits for TIME\PYGZus{}OUT milliseconds */}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{ch} \PYG{o}{==} \PYG{n}{ERR}\PYG{p}{)}
+    \PYG{k}{return}\PYG{p}{;}
+  \PYG{k}{else}
+    \PYG{k}{if}\PYG{p}{(}\PYG{n}{ch} \PYG{o}{==} \PYG{n}{KEY\PYGZus{}F}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{))}
+    \PYG{p}{\PYGZob{}} \PYG{n}{free\PYGZus{}pegs}\PYG{p}{(}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{n}{n\PYGZus{}discs}\PYG{p}{);}
+      \PYG{n}{endwin}\PYG{p}{();}
+      \PYG{n}{exit}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{);}
+    \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{move\PYGZus{}disc}\PYG{p}{(}\PYG{n}{peg} \PYG{o}{*}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{n\PYGZus{}discs}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{src}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{dst}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{temp}\PYG{p}{,} \PYG{n}{index}\PYG{p}{;}
+
+  \PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{n}{src}\PYG{p}{].}\PYG{n}{n\PYGZus{}discs}\PYG{p}{;}
+  \PYG{n}{index} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+  \PYG{k}{while}\PYG{p}{(}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{n}{src}\PYG{p}{].}\PYG{n}{sizes}\PYG{p}{[}\PYG{n}{index}\PYG{p}{]} \PYG{o}{==} \PYG{l+m+mi}{0} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{index} \PYG{o}{!=} \PYG{n}{n\PYGZus{}discs}\PYG{p}{)}
+    \PYG{o}{++}\PYG{n}{index}\PYG{p}{;}
+  \PYG{n}{temp} \PYG{o}{=} \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{n}{src}\PYG{p}{].}\PYG{n}{sizes}\PYG{p}{[}\PYG{n}{index}\PYG{p}{];}
+  \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{n}{src}\PYG{p}{].}\PYG{n}{sizes}\PYG{p}{[}\PYG{n}{index}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+
+  \PYG{n}{index} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+  \PYG{k}{while}\PYG{p}{(}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{n}{dst}\PYG{p}{].}\PYG{n}{sizes}\PYG{p}{[}\PYG{n}{index}\PYG{p}{]} \PYG{o}{==} \PYG{l+m+mi}{0} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{index} \PYG{o}{!=} \PYG{n}{n\PYGZus{}discs}\PYG{p}{)}
+    \PYG{o}{++}\PYG{n}{index}\PYG{p}{;}
+  \PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{n}{index}\PYG{p}{;}
+  \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{n}{dst}\PYG{p}{].}\PYG{n}{sizes}\PYG{p}{[}\PYG{n}{index}\PYG{p}{]} \PYG{o}{=} \PYG{n}{temp}\PYG{p}{;}
+  \PYG{o}{++}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{n}{dst}\PYG{p}{].}\PYG{n}{n\PYGZus{}discs}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{init\PYGZus{}pegs}\PYG{p}{(}\PYG{n}{peg} \PYG{o}{*}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{n\PYGZus{}discs}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{size}\PYG{p}{,} \PYG{n}{temp}\PYG{p}{,} \PYG{n}{i}\PYG{p}{;}
+
+  \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{].}\PYG{n}{n\PYGZus{}discs} \PYG{o}{=} \PYG{n}{n\PYGZus{}discs}\PYG{p}{;}
+
+  \PYG{c+cm}{/* Allocate memory for size array}
+\PYG{c+cm}{   *   * atmost the number of discs on a peg can be n\PYGZus{}discs}
+\PYG{c+cm}{   *       */}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{n\PYGZus{}discs}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+    \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{sizes} \PYG{o}{=} \PYG{p}{(}\PYG{k+kt}{int} \PYG{o}{*}\PYG{p}{)}\PYG{n}{calloc}\PYG{p}{(}\PYG{n}{n\PYGZus{}discs}\PYG{p}{,} \PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{));}
+  \PYG{n}{size} \PYG{o}{=} \PYG{l+m+mi}{3}\PYG{p}{;}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}\PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{n\PYGZus{}discs}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{,} \PYG{n}{size} \PYG{o}{+=} \PYG{l+m+mi}{2}\PYG{p}{)}
+    \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{].}\PYG{n}{sizes}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{size}\PYG{p}{;}
+
+  \PYG{n}{temp} \PYG{o}{=} \PYG{p}{(}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{].}\PYG{n}{sizes}\PYG{p}{[}\PYG{n}{n\PYGZus{}discs} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{/} \PYG{l+m+mi}{2}\PYG{p}{);}
+  \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{].}\PYG{n}{bottomx} \PYG{o}{=} \PYG{n}{POSX} \PYG{o}{+} \PYG{l+m+mi}{1} \PYG{o}{+} \PYG{n}{temp}\PYG{p}{;}
+  \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{].}\PYG{n}{bottomy} \PYG{o}{=} \PYG{n}{POSY} \PYG{o}{+} \PYG{l+m+mi}{2} \PYG{o}{+} \PYG{n}{n\PYGZus{}discs}\PYG{p}{;}
+
+  \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{].}\PYG{n}{bottomx} \PYG{o}{=} \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{].}\PYG{n}{bottomx} \PYG{o}{+} \PYG{l+m+mi}{2} \PYG{o}{+} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{temp}\PYG{p}{;}
+  \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{].}\PYG{n}{bottomy} \PYG{o}{=} \PYG{n}{POSY} \PYG{o}{+} \PYG{l+m+mi}{2} \PYG{o}{+} \PYG{n}{n\PYGZus{}discs}\PYG{p}{;}
+
+  \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{].}\PYG{n}{bottomx} \PYG{o}{=} \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{].}\PYG{n}{bottomx} \PYG{o}{+} \PYG{l+m+mi}{2} \PYG{o}{+} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{temp}\PYG{p}{;}
+  \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{].}\PYG{n}{bottomy} \PYG{o}{=} \PYG{n}{POSY} \PYG{o}{+} \PYG{l+m+mi}{2} \PYG{o}{+} \PYG{n}{n\PYGZus{}discs}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{show\PYGZus{}pegs}\PYG{p}{(}\PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{win}\PYG{p}{,} \PYG{n}{peg} \PYG{o}{*}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{n\PYGZus{}discs}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{i}\PYG{p}{,} \PYG{n}{j}\PYG{p}{,} \PYG{n}{k}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{size}\PYG{p}{;}
+
+  \PYG{n}{wclear}\PYG{p}{(}\PYG{n}{win}\PYG{p}{);}
+  \PYG{n}{attron}\PYG{p}{(}\PYG{n}{A\PYGZus{}REVERSE}\PYG{p}{);}
+  \PYG{n}{mvprintw}\PYG{p}{(}\PYG{l+m+mi}{24}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Press F1 to Exit\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{attroff}\PYG{p}{(}\PYG{n}{A\PYGZus{}REVERSE}\PYG{p}{);}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}\PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{3}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+    \PYG{n}{mvwprintw}\PYG{p}{(}  \PYG{n}{win}\PYG{p}{,} \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{bottomy} \PYG{o}{\PYGZhy{}} \PYG{n}{n\PYGZus{}discs} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{,}
+        \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{bottomx}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}\PYGZpc{}c\PYGZdq{}}\PYG{p}{,} \PYG{n}{PEG\PYGZus{}CHAR}\PYG{p}{);}
+  \PYG{n}{y} \PYG{o}{=} \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{].}\PYG{n}{bottomy} \PYG{o}{\PYGZhy{}} \PYG{n}{n\PYGZus{}discs}\PYG{p}{;}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{3}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}  \PYG{c+cm}{/* For each peg */}
+  \PYG{p}{\PYGZob{}} \PYG{k}{for}\PYG{p}{(}\PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{j} \PYG{o}{\PYGZlt{}} \PYG{n}{n\PYGZus{}discs}\PYG{p}{;} \PYG{o}{++} \PYG{n}{j}\PYG{p}{)} \PYG{c+cm}{/* For each row */}
+    \PYG{p}{\PYGZob{}} \PYG{k}{if}\PYG{p}{(}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{sizes}\PYG{p}{[}\PYG{n}{j}\PYG{p}{]} \PYG{o}{!=} \PYG{l+m+mi}{0}\PYG{p}{)}
+      \PYG{p}{\PYGZob{}} \PYG{n}{size} \PYG{o}{=} \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{sizes}\PYG{p}{[}\PYG{n}{j}\PYG{p}{];}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{bottomx} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{n}{size} \PYG{o}{/} \PYG{l+m+mi}{2}\PYG{p}{);}
+        \PYG{k}{for}\PYG{p}{(}\PYG{n}{k} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{k} \PYG{o}{\PYGZlt{}} \PYG{n}{size}\PYG{p}{;} \PYG{o}{++}\PYG{n}{k}\PYG{p}{)}
+          \PYG{n}{mvwprintw}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x} \PYG{o}{+} \PYG{n}{k}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}\PYGZpc{}c\PYGZdq{}}\PYG{p}{,} \PYG{n}{DISC\PYGZus{}CHAR}\PYG{p}{);}
+      \PYG{p}{\PYGZcb{}}
+      \PYG{k}{else}
+        \PYG{n}{mvwprintw}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{bottomx}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}\PYGZpc{}c\PYGZdq{}}\PYG{p}{,} \PYG{n}{PEG\PYGZus{}CHAR}\PYG{p}{);}
+      \PYG{o}{++}\PYG{n}{y}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+    \PYG{n}{y} \PYG{o}{=} \PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{].}\PYG{n}{bottomy} \PYG{o}{\PYGZhy{}} \PYG{n}{n\PYGZus{}discs}\PYG{p}{;}
+  \PYG{p}{\PYGZcb{}}
+  \PYG{n}{wrefresh}\PYG{p}{(}\PYG{n}{win}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{free\PYGZus{}pegs}\PYG{p}{(}\PYG{n}{peg} \PYG{o}{*}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{n\PYGZus{}discs}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{i}\PYG{p}{;}
+
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}\PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{n\PYGZus{}discs}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+    \PYG{n}{free}\PYG{p}{(}\PYG{n}{p\PYGZus{}my\PYGZus{}pegs}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{sizes}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cm}{/* \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}*}
+\PYG{c+cm}{ *  * startx = 0 means at present x         *}
+\PYG{c+cm}{ *   * starty = 0 means at present y        *}
+\PYG{c+cm}{ *    * win = NULL means take stdscr        *}
+\PYG{c+cm}{ *     * \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}*/}
+
+\PYG{k+kt}{void} \PYG{n+nf}{print\PYGZus{}in\PYGZus{}middle}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{starty}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{width}\PYG{p}{,} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{string}\PYG{p}{,} \PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{win}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{length}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{;}
+  \PYG{k+kt}{float} \PYG{n}{temp}\PYG{p}{;}
+
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{win} \PYG{o}{==} \PYG{n+nb}{NULL}\PYG{p}{)}
+    \PYG{n}{win} \PYG{o}{=} \PYG{n}{stdscr}\PYG{p}{;}
+  \PYG{n}{getyx}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{);}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{startx} \PYG{o}{!=} \PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{n}{x} \PYG{o}{=} \PYG{n}{startx}\PYG{p}{;}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{starty} \PYG{o}{!=} \PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{n}{y} \PYG{o}{=} \PYG{n}{starty}\PYG{p}{;}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{width} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{n}{width} \PYG{o}{=} \PYG{l+m+mi}{80}\PYG{p}{;}
+
+  \PYG{n}{length} \PYG{o}{=} \PYG{n}{strlen}\PYG{p}{(}\PYG{n}{string}\PYG{p}{);}
+  \PYG{n}{temp} \PYG{o}{=} \PYG{p}{(}\PYG{n}{width} \PYG{o}{\PYGZhy{}} \PYG{n}{length}\PYG{p}{)}\PYG{o}{/} \PYG{l+m+mi}{2}\PYG{p}{;}
+  \PYG{n}{x} \PYG{o}{=} \PYG{n}{startx} \PYG{o}{+} \PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{temp}\PYG{p}{;}
+  \PYG{n}{mvwprintw}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}\PYGZpc{}s\PYGZdq{}}\PYG{p}{,} \PYG{n}{string}\PYG{p}{);}
+  \PYG{n}{refresh}\PYG{p}{();}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

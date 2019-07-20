@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k+kt}{int} \PYG{n+nf}{set\PYGZus{}field\PYGZus{}just}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{,}       \PYG{c+cm}{/* campo a modificar  */}
+                     \PYG{k+kt}{int} \PYG{n}{justmode}\PYG{p}{);}      \PYG{c+cm}{/* modo de ajuste     */}
+  \PYG{k+kt}{int} \PYG{n+nf}{field\PYGZus{}just}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{);}          \PYG{c+cm}{/* obtener el modo de justificacion de un campo */}
+\end{Verbatim}

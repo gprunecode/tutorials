@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{n}{wborder}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{}|\PYGZsq{}}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{}|\PYGZsq{}}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{}+\PYGZsq{}}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{}+\PYGZsq{}}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{}+\PYGZsq{}}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{}+\PYGZsq{}}\PYG{p}{);}
+\end{Verbatim}

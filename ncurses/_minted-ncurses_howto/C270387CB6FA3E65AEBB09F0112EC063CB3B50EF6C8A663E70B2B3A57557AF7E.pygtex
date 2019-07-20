@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k+kt}{int} \PYG{n+nf}{set\PYGZus{}field\PYGZus{}type}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{,}          \PYG{c+cm}{/* campo a modificar     */}
+                     \PYG{n}{TYPE\PYGZus{}ALPHA}\PYG{p}{,}            \PYG{c+cm}{/* tipo asociado         */}
+                     \PYG{k+kt}{int} \PYG{n}{width}\PYG{p}{);}            \PYG{c+cm}{/* ancho minimo de campo */}
+\end{Verbatim}

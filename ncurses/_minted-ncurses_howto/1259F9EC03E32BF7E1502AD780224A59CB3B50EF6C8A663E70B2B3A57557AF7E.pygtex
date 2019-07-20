@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k+kt}{int} \PYG{n+nf}{set\PYGZus{}max\PYGZus{}field}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{,}    \PYG{c+cm}{/* Campo sabre el cual operar                 */}
+                    \PYG{k+kt}{int} \PYG{n}{max\PYGZus{}growth}\PYG{p}{);} \PYG{c+cm}{/* Crecimiento maximo permitido para el campo */}
+\end{Verbatim}

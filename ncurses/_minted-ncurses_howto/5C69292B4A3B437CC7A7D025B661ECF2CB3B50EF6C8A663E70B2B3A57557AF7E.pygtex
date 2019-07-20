@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{n}{getyx}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{);}
+  \PYG{c+cm}{/* win : puentero a ventana}
+\PYG{c+cm}{   * y, x: se colocaran las coordenadas y, x en estas variables}
+\PYG{c+cm}{   */}
+\end{Verbatim}

@@ -1,0 +1,22 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}ncurses.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}string.h\PYGZgt{}}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{(}\PYG{k+kt}{void}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{k+kt}{char} \PYG{n}{mesg}\PYG{p}{[]} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Solo una cadena\PYGZdq{}}\PYG{p}{;} \PYG{c+cm}{/* Mensaje que aparecera en la pantalla */}
+  \PYG{k+kt}{int} \PYG{n}{row}\PYG{p}{,} \PYG{n}{col}\PYG{p}{;}                    \PYG{c+cm}{/* Para guardar el numero de filas y }
+\PYG{c+cm}{                                    * el numero de columnas de la pantalla */}
+  \PYG{n}{initscr}\PYG{p}{();}                       \PYG{c+cm}{/* Inicia el modo curses */}
+  \PYG{n}{getmaxyx}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{row}\PYG{p}{,} \PYG{n}{col}\PYG{p}{);}      \PYG{c+cm}{/* Obtiene el numero de filas y columnas */}
+  \PYG{n}{mvprintw}\PYG{p}{(}\PYG{n}{row}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{p}{(}\PYG{n}{col}\PYG{o}{\PYGZhy{}}\PYG{n}{strlen}\PYG{p}{(}\PYG{n}{mesg}\PYG{p}{))}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}\PYGZpc{}s\PYGZdq{}}\PYG{p}{,} \PYG{n}{mesg}\PYG{p}{);}
+                                   \PYG{c+cm}{/* imprime el mensaje en el centro de la pantalla */}
+  \PYG{n}{mvprintw}\PYG{p}{(}\PYG{n}{row}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Esta pantalla tiene \PYGZpc{}d filas y \PYGZpc{}d columnas}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{row}\PYG{p}{,} \PYG{n}{col}\PYG{p}{);}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Prueba redimencionar la ventana (si es posible) y corre el programa nuevamente\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{refresh}\PYG{p}{();}
+  \PYG{n}{getch}\PYG{p}{();}
+  \PYG{n}{endwin}\PYG{p}{();}
+
+  \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

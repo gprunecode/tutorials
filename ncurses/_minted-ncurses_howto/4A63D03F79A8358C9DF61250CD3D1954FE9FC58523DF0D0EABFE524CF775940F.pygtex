@@ -1,0 +1,82 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}ncurses.h\PYGZgt{}}
+
+\PYG{n}{WINDOW} \PYG{o}{*}\PYG{n+nf}{create\PYGZus{}newwin}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{height}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{width}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{starty}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{destroy\PYGZus{}win}\PYG{p}{(}\PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{local\PYGZus{}win}\PYG{p}{);}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{argc}\PYG{p}{,} \PYG{k}{const} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{argv}\PYG{p}{[])}
+\PYG{p}{\PYGZob{}}
+  \PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{my\PYGZus{}win}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{n}{starty}\PYG{p}{,} \PYG{n}{width}\PYG{p}{,} \PYG{n}{height}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{ch}\PYG{p}{;}
+
+  \PYG{n}{initscr}\PYG{p}{();}          \PYG{c+cm}{/* Inicia el modo curses */}
+  \PYG{n}{cbreak}\PYG{p}{();}           \PYG{c+cm}{/* Desactivar el buffer de linea}
+\PYG{c+cm}{                       * pasarme todo el control a mi */}
+  \PYG{n}{keypad}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);} \PYG{c+cm}{/* Para habilitar F1 */}
+
+  \PYG{n}{height} \PYG{o}{=} \PYG{l+m+mi}{3}\PYG{p}{;}
+  \PYG{n}{width} \PYG{o}{=} \PYG{l+m+mi}{10}\PYG{p}{;}
+  \PYG{n}{starty} \PYG{o}{=} \PYG{p}{(}\PYG{n}{LINES} \PYG{o}{\PYGZhy{}} \PYG{n}{height}\PYG{p}{)} \PYG{o}{/} \PYG{l+m+mi}{2}\PYG{p}{;}    \PYG{c+cm}{/* Calculo para colorcar al centro */}
+  \PYG{n}{startx} \PYG{o}{=} \PYG{p}{(}\PYG{n}{COLS} \PYG{o}{\PYGZhy{}} \PYG{n}{width}\PYG{p}{)} \PYG{o}{/} \PYG{l+m+mi}{2}\PYG{p}{;}      \PYG{c+cm}{/* de la ventana */}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Pulse F1 para salir\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{refresh}\PYG{p}{();}
+  \PYG{n}{my\PYGZus{}win} \PYG{o}{=} \PYG{n}{create\PYGZus{}newwin}\PYG{p}{(}\PYG{n}{height}\PYG{p}{,} \PYG{n}{width}\PYG{p}{,} \PYG{n}{starty}\PYG{p}{,} \PYG{n}{startx}\PYG{p}{);}
+
+  \PYG{k}{while} \PYG{p}{((}\PYG{n}{ch} \PYG{o}{=} \PYG{n}{getch}\PYG{p}{())} \PYG{o}{!=} \PYG{n}{KEY\PYGZus{}F}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{))} \PYG{p}{\PYGZob{}}
+    \PYG{k}{switch} \PYG{p}{(}\PYG{n}{ch}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}LEFT}\PYG{p}{:}
+        \PYG{n}{destroy\PYGZus{}win}\PYG{p}{(}\PYG{n}{my\PYGZus{}win}\PYG{p}{);}
+        \PYG{n}{my\PYGZus{}win} \PYG{o}{=} \PYG{n}{create\PYGZus{}newwin}\PYG{p}{(}\PYG{n}{height}\PYG{p}{,} \PYG{n}{width}\PYG{p}{,} \PYG{n}{starty}\PYG{p}{,} \PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{n}{startx}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}RIGHT}\PYG{p}{:}
+        \PYG{n}{destroy\PYGZus{}win}\PYG{p}{(}\PYG{n}{my\PYGZus{}win}\PYG{p}{);}
+        \PYG{n}{my\PYGZus{}win} \PYG{o}{=} \PYG{n}{create\PYGZus{}newwin}\PYG{p}{(}\PYG{n}{height}\PYG{p}{,} \PYG{n}{width}\PYG{p}{,} \PYG{n}{starty}\PYG{p}{,} \PYG{o}{++}\PYG{n}{startx}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}UP}\PYG{p}{:}
+        \PYG{n}{destroy\PYGZus{}win}\PYG{p}{(}\PYG{n}{my\PYGZus{}win}\PYG{p}{);}
+        \PYG{n}{my\PYGZus{}win} \PYG{o}{=} \PYG{n}{create\PYGZus{}newwin}\PYG{p}{(}\PYG{n}{height}\PYG{p}{,} \PYG{n}{width}\PYG{p}{,} \PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{n}{starty}\PYG{p}{,} \PYG{n}{startx}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}DOWN}\PYG{p}{:}
+        \PYG{n}{destroy\PYGZus{}win}\PYG{p}{(}\PYG{n}{my\PYGZus{}win}\PYG{p}{);}
+        \PYG{n}{my\PYGZus{}win} \PYG{o}{=} \PYG{n}{create\PYGZus{}newwin}\PYG{p}{(}\PYG{n}{height}\PYG{p}{,} \PYG{n}{width}\PYG{p}{,} \PYG{o}{++}\PYG{n}{starty}\PYG{p}{,} \PYG{n}{startx}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+  \PYG{p}{\PYGZcb{}}
+
+  \PYG{n}{endwin}\PYG{p}{();}         \PYG{c+cm}{/* Fin del modo curses */}
+
+  \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{n}{WINDOW} \PYG{o}{*}\PYG{n+nf}{create\PYGZus{}newwin}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{height}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{width}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{starty}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+  \PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{local\PYGZus{}win}\PYG{p}{;}
+
+  \PYG{n}{local\PYGZus{}win} \PYG{o}{=} \PYG{n}{newwin}\PYG{p}{(}\PYG{n}{height}\PYG{p}{,} \PYG{n}{width}\PYG{p}{,} \PYG{n}{starty}\PYG{p}{,} \PYG{n}{startx}\PYG{p}{);}
+  \PYG{n}{box}\PYG{p}{(}\PYG{n}{local\PYGZus{}win}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{);}           \PYG{c+cm}{/* 0, 0 pone los caracteres por defecto}
+\PYG{c+cm}{                                   * para las lineas vertical y horizontal */}
+  \PYG{n}{wrefresh}\PYG{p}{(}\PYG{n}{local\PYGZus{}win}\PYG{p}{);}            \PYG{c+cm}{/* Muestra la caja */}
+
+  \PYG{k}{return} \PYG{n}{local\PYGZus{}win}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{destroy\PYGZus{}win}\PYG{p}{(}\PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{local\PYGZus{}win}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+  \PYG{c+cm}{/* box(local\PYGZus{}win, \PYGZsq{} \PYGZsq{}, \PYGZsq{} \PYGZsq{});    : Esto no produce el resultado deseado}
+\PYG{c+cm}{   * de borrar la ventana. Deja las cuatro esquinas como un feo residuo de la ventana.}
+\PYG{c+cm}{   */}
+  \PYG{n}{wborder}\PYG{p}{(}\PYG{n}{local\PYGZus{}win}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{} \PYGZsq{}}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{} \PYGZsq{}}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{} \PYGZsq{}}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{} \PYGZsq{}}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{} \PYGZsq{}}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{} \PYGZsq{}}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{} \PYGZsq{}}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{} \PYGZsq{}}\PYG{p}{);}
+  \PYG{c+cm}{/* Los parametros tomados son}
+\PYG{c+cm}{   * 1. win: la ventana sobre la que operar}
+\PYG{c+cm}{   * 2. ls: caracter a utilizar para el lado izquierdo de la ventada}
+\PYG{c+cm}{   * 3. rs: caracter a utilizar para el lado derecho de la ventana}
+\PYG{c+cm}{   * 4. ts: caracter a utilizar para el lado superior de la ventana}
+\PYG{c+cm}{   * 5. bs: caracter a utilizar para el lado inferior de la ventana}
+\PYG{c+cm}{   * 6. tl: caracter a utilizar para la esquina superior izquierda de la ventana}
+\PYG{c+cm}{   * 7. tr: caracter a utilizar para la esquina superior derecha de la ventana}
+\PYG{c+cm}{   * 8. bl: caracter a utilizar para la esquina inferior izquierda de la ventana}
+\PYG{c+cm}{   * 9. br: caracter a utilizar para la esquina inferior derecha de la ventana}
+\PYG{c+cm}{   */}
+  \PYG{n}{wrefresh}\PYG{p}{(}\PYG{n}{local\PYGZus{}win}\PYG{p}{);}
+  \PYG{n}{delwin}\PYG{p}{(}\PYG{n}{local\PYGZus{}win}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

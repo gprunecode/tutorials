@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{event}\PYG{p}{.}\PYG{n}{bstate} \PYG{o}{\PYGZam{}} \PYG{n}{BUTTON1\PYGZus{}PRESSED}\PYG{p}{)}
+    \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Boton izquierdo presionado\PYGZdq{}}\PYG{p}{);}
+\end{Verbatim}

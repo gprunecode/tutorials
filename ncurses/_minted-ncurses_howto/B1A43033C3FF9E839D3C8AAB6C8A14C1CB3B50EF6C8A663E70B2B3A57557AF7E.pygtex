@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{n}{printw}\PYG{p}{(}\PYG{n}{string}\PYG{p}{);}         \PYG{c+cm}{/* Imprime en stdscr en la posicion actual del cursor */}
+  \PYG{n}{mvprintw}\PYG{p}{(}\PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{n}{string}\PYG{p}{);} \PYG{c+cm}{/* Mueve a (y, x) luego imprime la cadena */}
+  \PYG{n}{wprintw}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{string}\PYG{p}{);}   \PYG{c+cm}{/* Imprime en la ventana win en la actual posicion del cursor}
+\PYG{c+cm}{                           * en la ventana */}
+  \PYG{n}{mvwprintw}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{n}{string}\PYG{p}{);} \PYG{c+cm}{/* Mueve a las coordenadas (y, x) relativas a la}
+\PYG{c+cm}{                                 * ventana y luego imprime */}
+\end{Verbatim}

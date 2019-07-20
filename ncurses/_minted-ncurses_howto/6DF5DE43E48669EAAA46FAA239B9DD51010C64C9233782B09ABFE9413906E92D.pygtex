@@ -1,0 +1,120 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}panel.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}string.h\PYGZgt{}}
+
+\PYG{c+cp}{\PYGZsh{}define NLINES 10}
+\PYG{c+cp}{\PYGZsh{}define NCOLS 40}
+
+\PYG{k+kt}{void} \PYG{n+nf}{init\PYGZus{}wins}\PYG{p}{(}\PYG{n}{WINDOW} \PYG{o}{**}\PYG{n}{wins}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{n}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{win\PYGZus{}show}\PYG{p}{(}\PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{win}\PYG{p}{,} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{label}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{label\PYGZus{}color}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{print\PYGZus{}in\PYGZus{}middle}\PYG{p}{(}\PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{win}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{starty}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{width}\PYG{p}{,} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{string}\PYG{p}{,} \PYG{n}{chtype} \PYG{n}{color}\PYG{p}{);}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{()}
+\PYG{p}{\PYGZob{}} \PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{my\PYGZus{}wins}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{];}
+  \PYG{n}{PANEL}  \PYG{o}{*}\PYG{n}{my\PYGZus{}panels}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{];}
+  \PYG{n}{PANEL}  \PYG{o}{*}\PYG{n}{top}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{ch}\PYG{p}{;}
+
+  \PYG{c+cm}{/* Inicializa curses */}
+  \PYG{n}{initscr}\PYG{p}{();}
+  \PYG{n}{start\PYGZus{}color}\PYG{p}{();}
+  \PYG{n}{cbreak}\PYG{p}{();}
+  \PYG{n}{noecho}\PYG{p}{();}
+  \PYG{n}{keypad}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);}
+
+  \PYG{c+cm}{/* Inicializa todos los colores */}
+  \PYG{n}{init\PYGZus{}pair}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}RED}\PYG{p}{,}   \PYG{n}{COLOR\PYGZus{}BLACK}\PYG{p}{);}
+  \PYG{n}{init\PYGZus{}pair}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}GREEN}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}BLACK}\PYG{p}{);}
+  \PYG{n}{init\PYGZus{}pair}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}BLUE}\PYG{p}{,}  \PYG{n}{COLOR\PYGZus{}BLACK}\PYG{p}{);}
+  \PYG{n}{init\PYGZus{}pair}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}CYAN}\PYG{p}{,}  \PYG{n}{COLOR\PYGZus{}BLACK}\PYG{p}{);}
+
+  \PYG{n}{init\PYGZus{}wins}\PYG{p}{(}\PYG{n}{my\PYGZus{}wins}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{);}
+
+  \PYG{c+cm}{/* Unir un panel a cada ventana */}      \PYG{c+cm}{/* Ordenar de abajo hacia arriba  */}
+  \PYG{n}{my\PYGZus{}panels}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{=} \PYG{n}{new\PYGZus{}panel}\PYG{p}{(}\PYG{n}{my\PYGZus{}wins}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]);}   \PYG{c+cm}{/* Agregar 0, orden: stdscr\PYGZhy{}0     */}
+  \PYG{n}{my\PYGZus{}panels}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{=} \PYG{n}{new\PYGZus{}panel}\PYG{p}{(}\PYG{n}{my\PYGZus{}wins}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]);}   \PYG{c+cm}{/* Agregar 1, orden: stdscr\PYGZhy{}0\PYGZhy{}1   */}
+  \PYG{n}{my\PYGZus{}panels}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]} \PYG{o}{=} \PYG{n}{new\PYGZus{}panel}\PYG{p}{(}\PYG{n}{my\PYGZus{}wins}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]);}   \PYG{c+cm}{/* Agregar 2, orden: stdscr\PYGZhy{}0\PYGZhy{}1\PYGZhy{}2 */}
+
+  \PYG{c+cm}{/* Crear el puntero de usuario al siguiente panel */}
+  \PYG{n}{set\PYGZus{}panel\PYGZus{}userptr}\PYG{p}{(}\PYG{n}{my\PYGZus{}panels}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{my\PYGZus{}panels}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]);}
+  \PYG{n}{set\PYGZus{}panel\PYGZus{}userptr}\PYG{p}{(}\PYG{n}{my\PYGZus{}panels}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{my\PYGZus{}panels}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]);}
+  \PYG{n}{set\PYGZus{}panel\PYGZus{}userptr}\PYG{p}{(}\PYG{n}{my\PYGZus{}panels}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{],} \PYG{n}{my\PYGZus{}panels}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]);}
+
+  \PYG{c+cm}{/* Actualizar el orden de apilamiento. El 2nd panel estara en la parte superior */}
+  \PYG{n}{update\PYGZus{}panels}\PYG{p}{();}
+
+  \PYG{c+cm}{/* Mostrar en la pantalla */}
+  \PYG{n}{attron}\PYG{p}{(}\PYG{n}{COLOR\PYGZus{}PAIR}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{));}
+  \PYG{n}{mvprintw}\PYG{p}{(}\PYG{n}{LINES} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Utilice tab para navegar a traves de las ventanas (F1 para Salir)\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{attroff}\PYG{p}{(}\PYG{n}{COLOR\PYGZus{}PAIR}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{));}
+  \PYG{n}{doupdate}\PYG{p}{();}
+
+  \PYG{n}{top} \PYG{o}{=} \PYG{n}{my\PYGZus{}panels}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{];}
+  \PYG{k}{while}\PYG{p}{((}\PYG{n}{ch} \PYG{o}{=} \PYG{n}{getch}\PYG{p}{())} \PYG{o}{!=} \PYG{n}{KEY\PYGZus{}F}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{))}
+  \PYG{p}{\PYGZob{}}   \PYG{k}{switch}\PYG{p}{(}\PYG{n}{ch}\PYG{p}{)}
+    \PYG{p}{\PYGZob{}}   \PYG{k}{case} \PYG{l+m+mi}{9}\PYG{o}{:}
+      \PYG{n}{top} \PYG{o}{=} \PYG{p}{(}\PYG{n}{PANEL} \PYG{o}{*}\PYG{p}{)}\PYG{n}{panel\PYGZus{}userptr}\PYG{p}{(}\PYG{n}{top}\PYG{p}{);}
+      \PYG{n}{top\PYGZus{}panel}\PYG{p}{(}\PYG{n}{top}\PYG{p}{);}
+      \PYG{k}{break}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+    \PYG{n}{update\PYGZus{}panels}\PYG{p}{();}
+    \PYG{n}{doupdate}\PYG{p}{();}
+  \PYG{p}{\PYGZcb{}}
+  \PYG{n}{endwin}\PYG{p}{();}
+  \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cm}{/* Coloca todas las ventanas */}
+\PYG{k+kt}{void} \PYG{n+nf}{init\PYGZus{}wins}\PYG{p}{(}\PYG{n}{WINDOW} \PYG{o}{**}\PYG{n}{wins}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{n}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{i}\PYG{p}{;}
+  \PYG{k+kt}{char} \PYG{n}{label}\PYG{p}{[}\PYG{l+m+mi}{80}\PYG{p}{];}
+
+  \PYG{n}{y} \PYG{o}{=} \PYG{l+m+mi}{2}\PYG{p}{;}
+  \PYG{n}{x} \PYG{o}{=} \PYG{l+m+mi}{10}\PYG{p}{;}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{n}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+  \PYG{p}{\PYGZob{}} \PYG{n}{wins}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{newwin}\PYG{p}{(}\PYG{n}{NLINES}\PYG{p}{,} \PYG{n}{NCOLS}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{);}
+    \PYG{n}{sprintf}\PYG{p}{(}\PYG{n}{label}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Ventana Numero \PYGZpc{}d\PYGZdq{}}\PYG{p}{,} \PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{);}
+    \PYG{n}{win\PYGZus{}show}\PYG{p}{(}\PYG{n}{wins}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{label}\PYG{p}{,} \PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{);}
+    \PYG{n}{y} \PYG{o}{+=} \PYG{l+m+mi}{3}\PYG{p}{;}
+    \PYG{n}{x} \PYG{o}{+=} \PYG{l+m+mi}{7}\PYG{p}{;}
+  \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cm}{/* Muestra la ventana con un borde y una etiqueta */}
+\PYG{k+kt}{void} \PYG{n+nf}{win\PYGZus{}show}\PYG{p}{(}\PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{win}\PYG{p}{,} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{label}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{label\PYGZus{}color}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{n}{starty}\PYG{p}{,} \PYG{n}{height}\PYG{p}{,} \PYG{n}{width}\PYG{p}{;}
+
+  \PYG{n}{getbegyx}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{starty}\PYG{p}{,} \PYG{n}{startx}\PYG{p}{);}
+  \PYG{n}{getmaxyx}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{height}\PYG{p}{,} \PYG{n}{width}\PYG{p}{);}
+
+  \PYG{n}{box}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{);}
+  \PYG{n}{mvwaddch}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{ACS\PYGZus{}LTEE}\PYG{p}{);}
+  \PYG{n}{mvwhline}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{ACS\PYGZus{}HLINE}\PYG{p}{,} \PYG{n}{width} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{2}\PYG{p}{);}
+  \PYG{n}{mvwaddch}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{width} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{ACS\PYGZus{}RTEE}\PYG{p}{);}
+
+  \PYG{n}{print\PYGZus{}in\PYGZus{}middle}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{width}\PYG{p}{,} \PYG{n}{label}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}PAIR}\PYG{p}{(}\PYG{n}{label\PYGZus{}color}\PYG{p}{));}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{print\PYGZus{}in\PYGZus{}middle}\PYG{p}{(}\PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{win}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{starty}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{width}\PYG{p}{,} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{string}\PYG{p}{,} \PYG{n}{chtype} \PYG{n}{color}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{length}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{;}
+  \PYG{k+kt}{float} \PYG{n}{temp}\PYG{p}{;}
+
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{win} \PYG{o}{==} \PYG{n+nb}{NULL}\PYG{p}{)}
+    \PYG{n}{win} \PYG{o}{=} \PYG{n}{stdscr}\PYG{p}{;}
+  \PYG{n}{getyx}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{);}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{startx} \PYG{o}{!=} \PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{n}{x} \PYG{o}{=} \PYG{n}{startx}\PYG{p}{;}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{starty} \PYG{o}{!=} \PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{n}{y} \PYG{o}{=} \PYG{n}{starty}\PYG{p}{;}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{width} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{n}{width} \PYG{o}{=} \PYG{l+m+mi}{80}\PYG{p}{;}
+
+  \PYG{n}{length} \PYG{o}{=} \PYG{n}{strlen}\PYG{p}{(}\PYG{n}{string}\PYG{p}{);}
+  \PYG{n}{temp} \PYG{o}{=} \PYG{p}{(}\PYG{n}{width} \PYG{o}{\PYGZhy{}} \PYG{n}{length}\PYG{p}{)}\PYG{o}{/} \PYG{l+m+mi}{2}\PYG{p}{;}
+  \PYG{n}{x} \PYG{o}{=} \PYG{n}{startx} \PYG{o}{+} \PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{temp}\PYG{p}{;}
+  \PYG{n}{wattron}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{color}\PYG{p}{);}
+  \PYG{n}{mvwprintw}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}\PYGZpc{}s\PYGZdq{}}\PYG{p}{,} \PYG{n}{string}\PYG{p}{);}
+  \PYG{n}{wattroff}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{color}\PYG{p}{);}
+  \PYG{n}{refresh}\PYG{p}{();}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

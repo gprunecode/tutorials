@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{ch} \PYG{o}{==} \PYG{n}{KEY\PYGZus{}LEFT}\PYG{p}{)}
+    \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Left arrow is pressed}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+\end{Verbatim}

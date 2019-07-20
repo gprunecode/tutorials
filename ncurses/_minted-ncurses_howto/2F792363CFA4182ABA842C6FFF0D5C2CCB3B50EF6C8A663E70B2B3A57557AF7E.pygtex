@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k+kt}{int} \PYG{n+nf}{set\PYGZus{}field\PYGZus{}userptr}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{,}
+                        \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{userptr}\PYG{p}{);}   \PYG{c+cm}{/* el puntero de usuario que desea asociar */}
+                                          \PYG{c+cm}{/* con el campo                            */}
+
+  \PYG{k+kt}{char} \PYG{o}{*}\PYG{n+nf}{field\PYGZus{}userptr}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{);}      \PYG{c+cm}{/* obtener el puntero de usuario del campo */}
+\end{Verbatim}

@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{n}{move}\PYG{p}{(}\PYG{n}{row}\PYG{p}{,} \PYG{n}{col}\PYG{p}{);}       \PYG{c+cm}{/* Mueve el cursor a la enesima fila y enesima columna */}
+  \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ch}\PYG{p}{);}
+\end{Verbatim}

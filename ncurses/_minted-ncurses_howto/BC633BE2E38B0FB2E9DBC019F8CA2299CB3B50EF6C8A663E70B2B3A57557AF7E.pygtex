@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k+kt}{int} \PYG{n+nf}{set\PYGZus{}field\PYGZus{}status}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{,}      \PYG{c+cm}{/* campo a modificar       */}
+                       \PYG{k+kt}{int} \PYG{n}{status}\PYG{p}{);}       \PYG{c+cm}{/* estado a entablecer     */}
+
+  \PYG{k+kt}{int} \PYG{n+nf}{field\PYGZus{}status}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{);}         \PYG{c+cm}{/* obtener estado de campo */}
+\end{Verbatim}

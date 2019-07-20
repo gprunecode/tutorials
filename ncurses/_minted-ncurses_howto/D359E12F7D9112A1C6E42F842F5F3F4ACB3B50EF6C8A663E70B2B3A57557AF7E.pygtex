@@ -1,0 +1,19 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k+kt}{int} \PYG{n+nf}{set\PYGZus{}field\PYGZus{}fore}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{,}        \PYG{c+cm}{/* campo a modificar                 */}
+                     \PYG{n}{chtype} \PYG{n}{attr}\PYG{p}{);}        \PYG{c+cm}{/* atributo a establecer             */}
+
+  \PYG{n}{chtype} \PYG{n+nf}{field\PYGZus{}fore}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{);}        \PYG{c+cm}{/* campo a consultar                 */}
+                                          \PYG{c+cm}{/* devuelve atributo de primer plano */}
+
+  \PYG{k+kt}{int} \PYG{n+nf}{set\PYGZus{}field\PYGZus{}back}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{,}        \PYG{c+cm}{/* campo a modificar                 */}
+                     \PYG{n}{chtype} \PYG{n}{attr}\PYG{p}{);}        \PYG{c+cm}{/* atributo a establecer             */}
+
+  \PYG{n}{chtype} \PYG{n+nf}{field\PYGZus{}back}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{);}        \PYG{c+cm}{/* campo a consultar                 */}
+                                          \PYG{c+cm}{/* devuelve atributo de fondo        */}
+
+  \PYG{k+kt}{int} \PYG{n+nf}{set\PYGZus{}field\PYGZus{}pad}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{,}         \PYG{c+cm}{/* campo a modificar                */}
+                    \PYG{k+kt}{int} \PYG{n}{pad}\PYG{p}{);}             \PYG{c+cm}{/* caracter de relleno a establecer */}
+
+  \PYG{n}{chtype} \PYG{n+nf}{field\PYGZus{}pad}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{);}         \PYG{c+cm}{/* campo a consultar                */}
+                                          \PYG{c+cm}{/* devuelve el caracter de relleno */}
+\end{Verbatim}

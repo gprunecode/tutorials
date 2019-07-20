@@ -1,0 +1,82 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}form.h\PYGZgt{}}
+
+\PYG{c+cp}{\PYGZsh{}define STARTX 15}
+\PYG{c+cp}{\PYGZsh{}define STARTY 4}
+\PYG{c+cp}{\PYGZsh{}define WIDTH 25}
+
+\PYG{c+cp}{\PYGZsh{}define N\PYGZus{}FIELDS 3}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{()\PYGZob{}}
+  \PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{[}\PYG{n}{N\PYGZus{}FIELDS}\PYG{p}{];}
+  \PYG{n}{FORM}  \PYG{o}{*}\PYG{n}{my\PYGZus{}form}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{ch}\PYG{p}{,} \PYG{n}{i}\PYG{p}{;}
+
+  \PYG{c+cm}{/* Inicializa curses */}
+  \PYG{n}{initscr}\PYG{p}{();}
+  \PYG{n}{cbreak}\PYG{p}{();}
+  \PYG{n}{noecho}\PYG{p}{();}
+  \PYG{n}{keypad}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);}
+
+  \PYG{c+cm}{/* Inicializa los campos */}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{N\PYGZus{}FIELDS} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+    \PYG{n}{field}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{new\PYGZus{}field}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{WIDTH}\PYG{p}{,} \PYG{n}{STARTY} \PYG{o}{+} \PYG{n}{i} \PYG{o}{*} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{STARTX}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{);}
+  \PYG{n}{field}\PYG{p}{[}\PYG{n}{N\PYGZus{}FIELDS} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{=} \PYG{n+nb}{NULL}\PYG{p}{;}
+
+  \PYG{c+cm}{/* Establecer las opciones de campo */}
+  \PYG{n}{set\PYGZus{}field\PYGZus{}back}\PYG{p}{(}\PYG{n}{field}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{A\PYGZus{}UNDERLINE}\PYG{p}{);}    \PYG{c+cm}{/* Imprime una linea pora la opcion       */}
+
+  \PYG{n}{field\PYGZus{}opts\PYGZus{}off}\PYG{p}{(}\PYG{n}{field}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{O\PYGZus{}ACTIVE}\PYG{p}{);}       \PYG{c+cm}{/* Este campo es una etiqueta estatica    */}
+  \PYG{n}{field\PYGZus{}opts\PYGZus{}off}\PYG{p}{(}\PYG{n}{field}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{O\PYGZus{}PUBLIC}\PYG{p}{);}       \PYG{c+cm}{/* Este es un campo estilo contraseña     */}
+  \PYG{n}{field\PYGZus{}opts\PYGZus{}off}\PYG{p}{(}\PYG{n}{field}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{O\PYGZus{}AUTOSKIP}\PYG{p}{);}     \PYG{c+cm}{/* Evita entrar en algun otro campo       */}
+  \PYG{c+cm}{/* despues de ingresar el ultimo caracter */}
+
+  \PYG{c+cm}{/* Crea el formulario y lo publica */}
+  \PYG{n}{my\PYGZus{}form} \PYG{o}{=} \PYG{n}{new\PYGZus{}form}\PYG{p}{(}\PYG{n}{field}\PYG{p}{);}
+  \PYG{n}{post\PYGZus{}form}\PYG{p}{(}\PYG{n}{my\PYGZus{}form}\PYG{p}{);}
+  \PYG{n}{refresh}\PYG{p}{();}
+
+  \PYG{n}{set\PYGZus{}field\PYGZus{}just}\PYG{p}{(}\PYG{n}{field}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{JUSTIFY\PYGZus{}CENTER}\PYG{p}{);} \PYG{c+cm}{/* Justificar al centro                   */}
+  \PYG{n}{set\PYGZus{}field\PYGZus{}buffer}\PYG{p}{(}\PYG{n}{field}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Este es un campo estatico\PYGZdq{}}\PYG{p}{);}
+
+  \PYG{c+cm}{/* Inicializa el campo  */}
+  \PYG{n}{mvprintw}\PYG{p}{(}\PYG{n}{STARTY}\PYG{p}{,} \PYG{n}{STARTX} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Campo 1:\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{mvprintw}\PYG{p}{(}\PYG{n}{STARTY} \PYG{o}{+} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{STARTX} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Campo 2:\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{refresh}\PYG{p}{();}
+
+  \PYG{c+cm}{/* Ciclo para optener solicitudes del usuario */}
+  \PYG{k}{while}\PYG{p}{(} \PYG{p}{(}\PYG{n}{ch} \PYG{o}{=} \PYG{n}{getch}\PYG{p}{())} \PYG{o}{!=} \PYG{n}{KEY\PYGZus{}F}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}  \PYG{p}{)\PYGZob{}}
+    \PYG{k}{switch}\PYG{p}{(} \PYG{n}{ch}  \PYG{p}{)\PYGZob{}}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}DOWN}\PYG{p}{:}
+        \PYG{c+cm}{/* Ir al siguiente campo */}
+        \PYG{n}{form\PYGZus{}driver}\PYG{p}{(}\PYG{n}{my\PYGZus{}form}\PYG{p}{,} \PYG{n}{REQ\PYGZus{}NEXT\PYGZus{}FIELD}\PYG{p}{);}
+        \PYG{c+cm}{/* Ir al final del buffer actual */}
+        \PYG{c+cm}{/* Deja en el ultimo caracter    */}
+        \PYG{n}{form\PYGZus{}driver}\PYG{p}{(}\PYG{n}{my\PYGZus{}form}\PYG{p}{,} \PYG{n}{REQ\PYGZus{}END\PYGZus{}LINE}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}UP}\PYG{p}{:}
+        \PYG{c+cm}{/* Ir al campo anterior */}
+        \PYG{n}{form\PYGZus{}driver}\PYG{p}{(}\PYG{n}{my\PYGZus{}form}\PYG{p}{,} \PYG{n}{REQ\PYGZus{}PREV\PYGZus{}FIELD}\PYG{p}{);}
+        \PYG{n}{form\PYGZus{}driver}\PYG{p}{(}\PYG{n}{my\PYGZus{}form}\PYG{p}{,} \PYG{n}{REQ\PYGZus{}END\PYGZus{}LINE}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{default}\PYG{o}{:}
+        \PYG{c+cm}{/* Si este es un caracter normal, se optiene */}
+        \PYG{c+cm}{/* Imprime                                   */}
+        \PYG{n}{form\PYGZus{}driver}\PYG{p}{(}\PYG{n}{my\PYGZus{}form}\PYG{p}{,} \PYG{n}{ch}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+
+    \PYG{p}{\PYGZcb{}}
+
+  \PYG{p}{\PYGZcb{}}
+
+  \PYG{c+cm}{/* Remueve el formulario y libera la memoria */}
+  \PYG{n}{unpost\PYGZus{}form}\PYG{p}{(}\PYG{n}{my\PYGZus{}form}\PYG{p}{);}
+  \PYG{n}{free\PYGZus{}form}\PYG{p}{(}\PYG{n}{my\PYGZus{}form}\PYG{p}{);}
+  \PYG{n}{free\PYGZus{}field}\PYG{p}{(}\PYG{n}{field}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]);}
+  \PYG{n}{free\PYGZus{}field}\PYG{p}{(}\PYG{n}{field}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]);}
+
+  \PYG{n}{endwin}\PYG{p}{();}
+  \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

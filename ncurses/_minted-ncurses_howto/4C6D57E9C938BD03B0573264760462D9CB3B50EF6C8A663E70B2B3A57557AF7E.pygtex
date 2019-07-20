@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k}{typedef} \PYG{k}{struct}
+  \PYG{p}{\PYGZob{}}
+    \PYG{k+kt}{short} \PYG{n}{id}\PYG{p}{;}         \PYG{c+cm}{/* ID para distinguir multiples dispositivos */}
+    \PYG{k+kt}{int} \PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{z}\PYG{p}{;}      \PYG{c+cm}{/* coordenadas del evento */}
+    \PYG{n}{mmask\PYGZus{}t} \PYG{n}{bstate}\PYG{p}{;}   \PYG{c+cm}{/* bits de estado del boton */}
+  \PYG{p}{\PYGZcb{}}
+\end{Verbatim}

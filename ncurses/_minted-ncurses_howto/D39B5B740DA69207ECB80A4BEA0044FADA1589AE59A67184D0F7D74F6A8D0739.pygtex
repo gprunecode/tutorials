@@ -1,0 +1,168 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}curses.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}stdlib.h\PYGZgt{}}
+
+\PYG{c+cp}{\PYGZsh{}define STARTX 9}
+\PYG{c+cp}{\PYGZsh{}define STARTY 3}
+\PYG{c+cp}{\PYGZsh{}define WIDTH  6}
+\PYG{c+cp}{\PYGZsh{}define HEIGHT 4}
+
+\PYG{c+cp}{\PYGZsh{}define TRACE\PYGZus{}VALUE TRACE\PYGZus{}MAXIMUM}
+
+\PYG{k+kt}{void} \PYG{n+nf}{board}\PYG{p}{(} \PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{win}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{starty}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{lines}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{cols}\PYG{p}{,}
+    \PYG{k+kt}{int} \PYG{n}{tile\PYGZus{}width}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{tile\PYGZus{}height}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{magic}\PYG{p}{(}\PYG{k+kt}{int} \PYG{o}{**}\PYG{p}{,} \PYG{k+kt}{int}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{print}\PYG{p}{(}\PYG{k+kt}{int} \PYG{o}{**}\PYG{p}{,} \PYG{k+kt}{int}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{magic\PYGZus{}board}\PYG{p}{(}\PYG{k+kt}{int} \PYG{o}{**}\PYG{n}{a}\PYG{p}{,}\PYG{k+kt}{int} \PYG{n}{n}\PYG{p}{);}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{argc}\PYG{p}{,} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{argv}\PYG{p}{[])}
+\PYG{p}{\PYGZob{}}
+
+  \PYG{k+kt}{int} \PYG{o}{**}\PYG{n}{a}\PYG{p}{,}\PYG{n}{n}\PYG{p}{,}\PYG{n}{i}\PYG{p}{;}
+
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{argc} \PYG{o}{!=} \PYG{l+m+mi}{2}\PYG{p}{)}
+  \PYG{p}{\PYGZob{}} \PYG{n}{printf}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Usage: \PYGZpc{}s \PYGZlt{}magic sqaure order\PYGZgt{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{argv}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]);}
+    \PYG{n}{exit}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{);}
+  \PYG{p}{\PYGZcb{}}
+  \PYG{n}{n} \PYG{o}{=} \PYG{n}{atoi}\PYG{p}{(}\PYG{n}{argv}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]);}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{n} \PYG{o}{\PYGZpc{}} \PYG{l+m+mi}{2} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)}
+  \PYG{p}{\PYGZob{}} \PYG{n}{printf}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Sorry !!! I don\PYGZsq{}t know how to create magic square of even order}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+    \PYG{n}{printf}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}The order should be an odd number}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+    \PYG{n}{exit}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{);}
+  \PYG{p}{\PYGZcb{}}
+  \PYG{n}{a} \PYG{o}{=} \PYG{p}{(}\PYG{k+kt}{int} \PYG{o}{**}\PYG{p}{)} \PYG{n}{malloc}\PYG{p}{(}\PYG{n}{n} \PYG{o}{*} \PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{int}\PYG{o}{*}\PYG{p}{));}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}\PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{n}\PYG{p}{;}\PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+    \PYG{n}{a}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{p}{(}\PYG{k+kt}{int} \PYG{o}{*}\PYG{p}{)}\PYG{n}{malloc}\PYG{p}{(}\PYG{n}{n} \PYG{o}{*} \PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{));}
+
+  \PYG{n}{magic}\PYG{p}{(}\PYG{n}{a}\PYG{p}{,}\PYG{n}{n}\PYG{p}{);}
+
+  \PYG{n}{initscr}\PYG{p}{();}
+  \PYG{n}{curs\PYGZus{}set}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{);}
+  \PYG{n}{noecho}\PYG{p}{();}
+  \PYG{n}{magic\PYGZus{}board}\PYG{p}{(}\PYG{n}{a}\PYG{p}{,}\PYG{n}{n}\PYG{p}{);}
+  \PYG{n}{getch}\PYG{p}{();}
+  \PYG{n}{endwin}\PYG{p}{();}
+
+  \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{magic}\PYG{p}{(}\PYG{k+kt}{int} \PYG{o}{**}\PYG{n}{a}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{n}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{k+kt}{int} \PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{,}\PYG{n}{k}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{row}\PYG{p}{,}\PYG{n}{col}\PYG{p}{;}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}\PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{n}\PYG{p}{;}\PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+    \PYG{k}{for}\PYG{p}{(}\PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}\PYG{n}{j} \PYG{o}{\PYGZlt{}} \PYG{n}{n}\PYG{p}{;}\PYG{o}{++}\PYG{n}{j}\PYG{p}{)}
+      \PYG{n}{a}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{j}\PYG{p}{]} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{;}
+  \PYG{n}{row} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+  \PYG{n}{col} \PYG{o}{=} \PYG{n}{n} \PYG{o}{/} \PYG{l+m+mi}{2}\PYG{p}{;}
+
+  \PYG{n}{k} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{;}
+  \PYG{n}{a}\PYG{p}{[}\PYG{n}{row}\PYG{p}{][}\PYG{n}{col}\PYG{p}{]} \PYG{o}{=} \PYG{n}{k}\PYG{p}{;}
+
+  \PYG{k}{while}\PYG{p}{(}\PYG{n}{k} \PYG{o}{!=} \PYG{n}{n} \PYG{o}{*} \PYG{n}{n}\PYG{p}{)}
+  \PYG{p}{\PYGZob{}}
+    \PYG{k}{if}\PYG{p}{(}\PYG{n}{row} \PYG{o}{==} \PYG{l+m+mi}{0} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{col} \PYG{o}{!=} \PYG{n}{n} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{)}
+    \PYG{p}{\PYGZob{}} \PYG{n}{row} \PYG{o}{=} \PYG{n}{n} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{;}
+      \PYG{n}{col} \PYG{o}{++}\PYG{p}{;}
+      \PYG{n}{a}\PYG{p}{[}\PYG{n}{row}\PYG{p}{][}\PYG{n}{col}\PYG{p}{]} \PYG{o}{=} \PYG{o}{++}\PYG{n}{k}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+    \PYG{k}{else} \PYG{k}{if}\PYG{p}{(}\PYG{n}{row} \PYG{o}{!=} \PYG{l+m+mi}{0} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{col} \PYG{o}{!=} \PYG{n}{n} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{)}
+    \PYG{p}{\PYGZob{}} \PYG{k}{if}\PYG{p}{(}\PYG{n}{a}\PYG{p}{[}\PYG{n}{row} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{][}\PYG{n}{col} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{==} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}
+      \PYG{p}{\PYGZob{}} \PYG{n}{row} \PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{p}{;}
+        \PYG{n}{col} \PYG{o}{++}\PYG{p}{;}
+        \PYG{n}{a}\PYG{p}{[}\PYG{n}{row}\PYG{p}{][}\PYG{n}{col}\PYG{p}{]} \PYG{o}{=} \PYG{o}{++}\PYG{n}{k}\PYG{p}{;}
+      \PYG{p}{\PYGZcb{}}
+      \PYG{k}{else}
+      \PYG{p}{\PYGZob{}}
+        \PYG{n}{row} \PYG{o}{++}\PYG{p}{;}
+        \PYG{n}{a}\PYG{p}{[}\PYG{n}{row}\PYG{p}{][}\PYG{n}{col}\PYG{p}{]} \PYG{o}{=} \PYG{o}{++}\PYG{n}{k}\PYG{p}{;}
+
+      \PYG{p}{\PYGZcb{}}
+    \PYG{p}{\PYGZcb{}}
+    \PYG{k}{else} \PYG{k}{if}\PYG{p}{(}\PYG{n}{row} \PYG{o}{!=} \PYG{l+m+mi}{0} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{col} \PYG{o}{==} \PYG{n}{n} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{)}
+    \PYG{p}{\PYGZob{}}
+      \PYG{n}{row} \PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{p}{;}
+      \PYG{n}{col} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+      \PYG{n}{a}\PYG{p}{[}\PYG{n}{row}\PYG{p}{][}\PYG{n}{col}\PYG{p}{]} \PYG{o}{=} \PYG{o}{++}\PYG{n}{k}\PYG{p}{;}
+
+    \PYG{p}{\PYGZcb{}}
+    \PYG{k}{else} \PYG{k}{if}\PYG{p}{(}\PYG{n}{row} \PYG{o}{==} \PYG{l+m+mi}{0} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{col} \PYG{o}{==} \PYG{n}{n} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{)}
+    \PYG{p}{\PYGZob{}} \PYG{n}{row} \PYG{o}{++}\PYG{p}{;}
+      \PYG{n}{a}\PYG{p}{[}\PYG{n}{row}\PYG{p}{][}\PYG{n}{col}\PYG{p}{]} \PYG{o}{=} \PYG{o}{++}\PYG{n}{k}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+
+
+  \PYG{p}{\PYGZcb{}}
+  \PYG{k}{return}\PYG{p}{;}
+
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{print}\PYG{p}{(}\PYG{k+kt}{int} \PYG{o}{**}\PYG{n}{a}\PYG{p}{,}\PYG{k+kt}{int} \PYG{n}{n}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{x}\PYG{p}{,}\PYG{n}{y}\PYG{p}{;}
+  \PYG{n}{x} \PYG{o}{=} \PYG{n}{STARTX}\PYG{p}{;}
+  \PYG{n}{y} \PYG{o}{=} \PYG{n}{STARTY}\PYG{p}{;}
+  \PYG{n}{mvprintw}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{30}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}MAGIC SQUARE\PYGZdq{}}\PYG{p}{);}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}\PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{n}\PYG{p}{;}\PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+  \PYG{p}{\PYGZob{}} \PYG{k}{for}\PYG{p}{(}\PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}\PYG{n}{j} \PYG{o}{\PYGZlt{}} \PYG{n}{n}\PYG{p}{;}\PYG{o}{++}\PYG{n}{j}\PYG{p}{)}
+    \PYG{p}{\PYGZob{}} \PYG{n}{mvprintw}\PYG{p}{(}\PYG{n}{y}\PYG{p}{,}\PYG{n}{x}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}\PYGZpc{}d\PYGZdq{}}\PYG{p}{,}\PYG{n}{a}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{j}\PYG{p}{]);}
+      \PYG{k}{if}\PYG{p}{(}\PYG{n}{n} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{9}\PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{+=} \PYG{l+m+mi}{4}\PYG{p}{;}
+      \PYG{k}{else}
+        \PYG{n}{x} \PYG{o}{+=} \PYG{l+m+mi}{6}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+    \PYG{n}{x} \PYG{o}{=} \PYG{n}{STARTX}\PYG{p}{;}
+    \PYG{k}{if}\PYG{p}{(}\PYG{n}{n} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{7}\PYG{p}{)}
+      \PYG{n}{y} \PYG{o}{+=} \PYG{l+m+mi}{2}\PYG{p}{;}
+    \PYG{k}{else}
+      \PYG{n}{y} \PYG{o}{+=} \PYG{l+m+mi}{3}\PYG{p}{;}
+  \PYG{p}{\PYGZcb{}}
+  \PYG{n}{refresh}\PYG{p}{();}
+\PYG{p}{\PYGZcb{}}
+\PYG{k+kt}{void} \PYG{n+nf}{board}\PYG{p}{(}\PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{win}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{starty}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{lines}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{cols}\PYG{p}{,}
+    \PYG{k+kt}{int} \PYG{n}{tile\PYGZus{}width}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{tile\PYGZus{}height}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{endy}\PYG{p}{,} \PYG{n}{endx}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{n}{j}\PYG{p}{;}
+
+  \PYG{n}{endy} \PYG{o}{=} \PYG{n}{starty} \PYG{o}{+} \PYG{n}{lines} \PYG{o}{*} \PYG{n}{tile\PYGZus{}height}\PYG{p}{;}
+  \PYG{n}{endx} \PYG{o}{=} \PYG{n}{startx} \PYG{o}{+} \PYG{n}{cols}  \PYG{o}{*} \PYG{n}{tile\PYGZus{}width}\PYG{p}{;}
+
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{j} \PYG{o}{=} \PYG{n}{starty}\PYG{p}{;} \PYG{n}{j} \PYG{o}{\PYGZlt{}=} \PYG{n}{endy}\PYG{p}{;} \PYG{n}{j} \PYG{o}{+=} \PYG{n}{tile\PYGZus{}height}\PYG{p}{)}
+    \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{n}{startx}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}=} \PYG{n}{endx}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+      \PYG{n}{mvwaddch}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{j}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{n}{ACS\PYGZus{}HLINE}\PYG{p}{);}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{n}{startx}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}=} \PYG{n}{endx}\PYG{p}{;} \PYG{n}{i} \PYG{o}{+=} \PYG{n}{tile\PYGZus{}width}\PYG{p}{)}
+    \PYG{k}{for}\PYG{p}{(}\PYG{n}{j} \PYG{o}{=} \PYG{n}{starty}\PYG{p}{;} \PYG{n}{j} \PYG{o}{\PYGZlt{}=} \PYG{n}{endy}\PYG{p}{;} \PYG{o}{++}\PYG{n}{j}\PYG{p}{)}
+      \PYG{n}{mvwaddch}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{j}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{n}{ACS\PYGZus{}VLINE}\PYG{p}{);}
+  \PYG{n}{mvwaddch}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{starty}\PYG{p}{,} \PYG{n}{startx}\PYG{p}{,} \PYG{n}{ACS\PYGZus{}ULCORNER}\PYG{p}{);}
+  \PYG{n}{mvwaddch}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{endy}\PYG{p}{,} \PYG{n}{startx}\PYG{p}{,} \PYG{n}{ACS\PYGZus{}LLCORNER}\PYG{p}{);}
+  \PYG{n}{mvwaddch}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{starty}\PYG{p}{,} \PYG{n}{endx}\PYG{p}{,} \PYG{n}{ACS\PYGZus{}URCORNER}\PYG{p}{);}
+  \PYG{n}{mvwaddch}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,}   \PYG{n}{endy}\PYG{p}{,} \PYG{n}{endx}\PYG{p}{,} \PYG{n}{ACS\PYGZus{}LRCORNER}\PYG{p}{);}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{j} \PYG{o}{=} \PYG{n}{starty} \PYG{o}{+} \PYG{n}{tile\PYGZus{}height}\PYG{p}{;} \PYG{n}{j} \PYG{o}{\PYGZlt{}=} \PYG{n}{endy} \PYG{o}{\PYGZhy{}} \PYG{n}{tile\PYGZus{}height}\PYG{p}{;} \PYG{n}{j} \PYG{o}{+=} \PYG{n}{tile\PYGZus{}height}\PYG{p}{)}
+  \PYG{p}{\PYGZob{}} \PYG{n}{mvwaddch}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{j}\PYG{p}{,} \PYG{n}{startx}\PYG{p}{,} \PYG{n}{ACS\PYGZus{}LTEE}\PYG{p}{);}
+    \PYG{n}{mvwaddch}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{j}\PYG{p}{,} \PYG{n}{endx}\PYG{p}{,} \PYG{n}{ACS\PYGZus{}RTEE}\PYG{p}{);}
+    \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{n}{startx} \PYG{o}{+} \PYG{n}{tile\PYGZus{}width}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}=} \PYG{n}{endx} \PYG{o}{\PYGZhy{}} \PYG{n}{tile\PYGZus{}width}\PYG{p}{;} \PYG{n}{i} \PYG{o}{+=} \PYG{n}{tile\PYGZus{}width}\PYG{p}{)}
+      \PYG{n}{mvwaddch}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{j}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{n}{ACS\PYGZus{}PLUS}\PYG{p}{);}
+  \PYG{p}{\PYGZcb{}}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{n}{startx} \PYG{o}{+} \PYG{n}{tile\PYGZus{}width}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}=} \PYG{n}{endx} \PYG{o}{\PYGZhy{}} \PYG{n}{tile\PYGZus{}width}\PYG{p}{;} \PYG{n}{i} \PYG{o}{+=} \PYG{n}{tile\PYGZus{}width}\PYG{p}{)}
+  \PYG{p}{\PYGZob{}} \PYG{n}{mvwaddch}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{starty}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{n}{ACS\PYGZus{}TTEE}\PYG{p}{);}
+    \PYG{n}{mvwaddch}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{endy}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{n}{ACS\PYGZus{}BTEE}\PYG{p}{);}
+  \PYG{p}{\PYGZcb{}}
+  \PYG{n}{wrefresh}\PYG{p}{(}\PYG{n}{win}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{magic\PYGZus{}board}\PYG{p}{(}\PYG{k+kt}{int} \PYG{o}{**}\PYG{n}{a}\PYG{p}{,}\PYG{k+kt}{int} \PYG{n}{n}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{,} \PYG{n}{deltax}\PYG{p}{,} \PYG{n}{deltay}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{n}{starty}\PYG{p}{;}
+
+  \PYG{n}{starty} \PYG{o}{=} \PYG{p}{(}\PYG{n}{LINES} \PYG{o}{\PYGZhy{}} \PYG{n}{n} \PYG{o}{*} \PYG{n}{HEIGHT}\PYG{p}{)} \PYG{o}{/} \PYG{l+m+mi}{2}\PYG{p}{;}
+  \PYG{n}{startx} \PYG{o}{=} \PYG{p}{(}\PYG{n}{COLS}  \PYG{o}{\PYGZhy{}} \PYG{n}{n} \PYG{o}{*} \PYG{n}{WIDTH}\PYG{p}{)} \PYG{o}{/} \PYG{l+m+mi}{2}\PYG{p}{;}
+  \PYG{n}{board}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{starty}\PYG{p}{,} \PYG{n}{startx}\PYG{p}{,} \PYG{n}{n}\PYG{p}{,} \PYG{n}{n}\PYG{p}{,} \PYG{n}{WIDTH}\PYG{p}{,} \PYG{n}{HEIGHT}\PYG{p}{);}
+  \PYG{n}{deltay} \PYG{o}{=} \PYG{n}{HEIGHT} \PYG{o}{/} \PYG{l+m+mi}{2}\PYG{p}{;}
+  \PYG{n}{deltax} \PYG{o}{=} \PYG{n}{WIDTH}  \PYG{o}{/} \PYG{l+m+mi}{2}\PYG{p}{;}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}\PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{n}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+    \PYG{k}{for}\PYG{p}{(}\PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{j} \PYG{o}{\PYGZlt{}} \PYG{n}{n}\PYG{p}{;} \PYG{o}{++}\PYG{n}{j}\PYG{p}{)}
+      \PYG{n}{mvprintw}\PYG{p}{(}\PYG{n}{starty} \PYG{o}{+} \PYG{n}{j} \PYG{o}{*} \PYG{n}{HEIGHT} \PYG{o}{+} \PYG{n}{deltay}\PYG{p}{,}
+          \PYG{n}{startx} \PYG{o}{+} \PYG{n}{i} \PYG{o}{*} \PYG{n}{WIDTH}  \PYG{o}{+} \PYG{n}{deltax}\PYG{p}{,}
+          \PYG{l+s}{\PYGZdq{}\PYGZpc{}d\PYGZdq{}}\PYG{p}{,} \PYG{n}{a}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{j}\PYG{p}{]);}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

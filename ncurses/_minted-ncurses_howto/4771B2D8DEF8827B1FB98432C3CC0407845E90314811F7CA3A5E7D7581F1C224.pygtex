@@ -1,0 +1,58 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}ncurses.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}stdlib.h\PYGZgt{}}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{argc}\PYG{p}{,} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{argv}\PYG{p}{[])}
+\PYG{p}{\PYGZob{}}
+  \PYG{k+kt}{int} \PYG{n}{ch}\PYG{p}{,} \PYG{n}{prev}\PYG{p}{,} \PYG{n}{row}\PYG{p}{,} \PYG{n}{col}\PYG{p}{;}
+  \PYG{n}{prev} \PYG{o}{=} \PYG{n}{EOF}\PYG{p}{;}
+  \PYG{k+kt}{FILE} \PYG{o}{*}\PYG{n}{fp}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{;}
+
+  \PYG{k}{if} \PYG{p}{(}\PYG{n}{argc} \PYG{o}{!=} \PYG{l+m+mi}{2}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+    \PYG{n}{printf}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Usage: \PYGZpc{}s \PYGZlt{}a c file name\PYGZgt{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{argv}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]);}
+    \PYG{n}{exit}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{);}
+  \PYG{p}{\PYGZcb{}}
+
+  \PYG{n}{fp} \PYG{o}{=} \PYG{n}{fopen}\PYG{p}{(}\PYG{n}{argv}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{l+s}{\PYGZdq{}r\PYGZdq{}}\PYG{p}{);}
+
+  \PYG{k}{if} \PYG{p}{(}\PYG{n}{fp} \PYG{o}{==} \PYG{n+nb}{NULL}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+    \PYG{n}{perror}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Cannot open input file\PYGZdq{}}\PYG{p}{);}
+    \PYG{n}{exit}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{);}
+  \PYG{p}{\PYGZcb{}}
+
+  \PYG{n}{initscr}\PYG{p}{();}                        \PYG{c+cm}{/* inicia el modo curses */}
+  \PYG{n}{getmaxyx}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{row}\PYG{p}{,} \PYG{n}{col}\PYG{p}{);}       \PYG{c+cm}{/* obtiene los limites de pantalla */}
+  \PYG{k}{while} \PYG{p}{((}\PYG{n}{ch} \PYG{o}{=} \PYG{n}{fgetc}\PYG{p}{(}\PYG{n}{fp}\PYG{p}{))} \PYG{o}{!=} \PYG{n}{EOF}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+    \PYG{n}{getyx}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{);}            \PYG{c+cm}{/* obtiene posicion actual del cursor */}
+    \PYG{k}{if} \PYG{p}{(}\PYG{n}{y} \PYG{o}{==} \PYG{p}{(}\PYG{n}{row} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{))} \PYG{p}{\PYGZob{}}
+      \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZlt{}\PYGZhy{}Press Any Key\PYGZhy{}\PYGZgt{}\PYGZdq{}}\PYG{p}{);}  \PYG{c+cm}{/* pide una pulsacion al usuario */}
+      \PYG{n}{getch}\PYG{p}{();}
+      \PYG{n}{clear}\PYG{p}{();}                      \PYG{c+cm}{/* limpia la pantalla */}
+      \PYG{n}{move}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{);}                   \PYG{c+cm}{/* comienza al inicio de la pantalla */}
+    \PYG{p}{\PYGZcb{}}
+    \PYG{k}{if} \PYG{p}{(}\PYG{n}{prev} \PYG{o}{==} \PYG{l+s+sc}{\PYGZsq{}/\PYGZsq{}} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{ch} \PYG{o}{==} \PYG{l+s+sc}{\PYGZsq{}*\PYGZsq{}}\PYG{p}{)} \PYG{p}{\PYGZob{}} \PYG{c+cm}{/* solamente cuando es / y *}
+\PYG{c+cm}{                                     * cambia a negrita */}
+      \PYG{n}{attron}\PYG{p}{(}\PYG{n}{A\PYGZus{}BOLD}\PYG{p}{);}               \PYG{c+cm}{/* activa negrita */}
+      \PYG{n}{getyx}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{);}          \PYG{c+cm}{/* obtiene posicion actual del cursor */}
+      \PYG{n}{move}\PYG{p}{(}\PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{);}                 \PYG{c+cm}{/* retrocede un espacio */}
+      \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZpc{}c\PYGZpc{}c\PYGZdq{}}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{}/\PYGZsq{}}\PYG{p}{,} \PYG{n}{ch}\PYG{p}{);}      \PYG{c+cm}{/* La impresion real sucede aqui */}
+    \PYG{p}{\PYGZcb{}}
+    \PYG{k}{else}
+      \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZpc{}c\PYGZdq{}}\PYG{p}{,} \PYG{n}{ch}\PYG{p}{);}
+    \PYG{n}{refresh}\PYG{p}{();}
+    \PYG{k}{if} \PYG{p}{(}\PYG{n}{prev} \PYG{o}{==} \PYG{l+s+sc}{\PYGZsq{}*\PYGZsq{}} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{ch} \PYG{o}{==} \PYG{l+s+sc}{\PYGZsq{}/\PYGZsq{}}\PYG{p}{)}
+      \PYG{n}{attroff}\PYG{p}{(}\PYG{n}{A\PYGZus{}BOLD}\PYG{p}{);}              \PYG{c+cm}{/* apagar una vez se ha alcanzado}
+\PYG{c+cm}{                                     * y luego */}
+    \PYG{n}{prev} \PYG{o}{=} \PYG{n}{ch}\PYG{p}{;}
+  \PYG{p}{\PYGZcb{}}
+
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZlt{}\PYGZhy{}Press Any Key\PYGZhy{}\PYGZgt{}\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{getch}\PYG{p}{();}
+
+  \PYG{n}{endwin}\PYG{p}{();}                         \PYG{c+cm}{/* Fin del modo curses */}
+  \PYG{n}{fclose}\PYG{p}{(}\PYG{n}{fp}\PYG{p}{);}
+
+  \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

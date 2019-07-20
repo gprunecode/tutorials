@@ -1,0 +1,225 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}curses.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}stdlib.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}string.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}time.h\PYGZgt{}}
+
+\PYG{c+cp}{\PYGZsh{}define HSIZE 60}
+\PYG{c+cp}{\PYGZsh{}define LENGTH 75}
+\PYG{c+cp}{\PYGZsh{}define WIDTH 10}
+\PYG{c+cp}{\PYGZsh{}define STARTX 1}
+\PYG{c+cp}{\PYGZsh{}define STARTY 5}
+\PYG{c+cp}{\PYGZsh{}define STATUSX 1}
+\PYG{c+cp}{\PYGZsh{}define STATUSY 25}
+
+\PYG{c+cp}{\PYGZsh{}define KEY\PYGZus{}F1 265}
+
+\PYG{k+kt}{int} \PYG{n+nf}{print\PYGZus{}menu}\PYG{p}{();}
+\PYG{k+kt}{void} \PYG{n+nf}{print\PYGZus{}byebye}\PYG{p}{();}
+\PYG{k+kt}{void} \PYG{n+nf}{create\PYGZus{}test\PYGZus{}string}\PYG{p}{();}
+\PYG{k+kt}{void} \PYG{n+nf}{print\PYGZus{}time}\PYG{p}{(}\PYG{k+kt}{time\PYGZus{}t} \PYG{n}{startt}\PYG{p}{,} \PYG{k+kt}{time\PYGZus{}t} \PYG{n}{endt}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{mistakes}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{print\PYGZus{}in\PYGZus{}middle}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{starty}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{width}\PYG{p}{,} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{string}\PYG{p}{,} \PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{win}\PYG{p}{);}
+
+\PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{groups}\PYG{p}{[]} \PYG{o}{=} \PYG{p}{\PYGZob{}}  \PYG{l+s}{\PYGZdq{}`123456\PYGZdq{}} \PYG{p}{,}
+            \PYG{l+s}{\PYGZdq{}7890\PYGZhy{}=\PYGZdq{}}  \PYG{p}{,}
+                      \PYG{l+s}{\PYGZdq{}\PYGZti{}!@\PYGZsh{}\PYGZdl{}\PYGZpc{}\PYGZca{}\PYGZdq{}} \PYG{p}{,}
+                                \PYG{l+s}{\PYGZdq{}\PYGZam{}*()\PYGZus{}+\PYGZdq{}}  \PYG{p}{,}
+                                          \PYG{l+s}{\PYGZdq{}\PYGZlt{}\PYGZgt{}?\PYGZdq{}}     \PYG{p}{,}
+                                                    \PYG{l+s}{\PYGZdq{},./}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s}{\PYGZdq{}}   \PYG{p}{,}
+                                                              \PYG{l+s}{\PYGZdq{}asdfg\PYGZdq{}}\PYG{p}{,}
+                                                                        \PYG{l+s}{\PYGZdq{}`\PYGZdq{}} \PYG{p}{\PYGZcb{}}
+\PYG{n}{op}\PYG{l+s}{\PYGZdq{},}
+            \PYG{l+s}{\PYGZdq{}tyur\PYGZdq{}}\PYG{p}{,}
+          \PYG{l+s}{\PYGZdq{}zxcv\PYGZdq{}}\PYG{p}{,}
+          \PYG{l+s}{\PYGZdq{}bnm\PYGZdq{}}\PYG{p}{,}
+          \PYG{p}{\PYGZcb{};}
+\PYG{k+kt}{int} \PYG{n}{n\PYGZus{}groups}\PYG{p}{;}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{()}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{choice}\PYG{p}{,} \PYG{n}{i}\PYG{p}{;}
+  \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{test\PYGZus{}array}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{ch} \PYG{o}{=} \PYG{n}{KEY\PYGZus{}F1}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{mistakes}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{;}
+  \PYG{k+kt}{time\PYGZus{}t} \PYG{n}{start\PYGZus{}t}\PYG{p}{,} \PYG{n}{end\PYGZus{}t}\PYG{p}{;}
+  \PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{typing\PYGZus{}win}\PYG{p}{;}
+  \PYG{k+kt}{char} \PYG{n}{string}\PYG{p}{[}\PYG{l+m+mi}{80}\PYG{p}{];}
+
+  \PYG{n}{string}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+sc}{\PYGZsq{}\PYGZbs{}0\PYGZsq{}}\PYG{p}{;}
+
+  \PYG{n}{initscr}\PYG{p}{();}
+  \PYG{n}{cbreak}\PYG{p}{();}
+  \PYG{n}{noecho}\PYG{p}{();}
+  \PYG{n}{keypad}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);}
+  \PYG{n}{intrflush}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{FALSE}\PYG{p}{);}
+
+  \PYG{n}{srandom}\PYG{p}{(}\PYG{n}{time}\PYG{p}{(}\PYG{n+nb}{NULL}\PYG{p}{));}
+  \PYG{n}{n\PYGZus{}groups} \PYG{o}{=} \PYG{k}{sizeof}\PYG{p}{(}\PYG{n}{groups}\PYG{p}{)} \PYG{o}{/} \PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{char} \PYG{o}{*}\PYG{p}{);}
+  \PYG{n}{test\PYGZus{}array} \PYG{o}{=} \PYG{p}{(}\PYG{k+kt}{char} \PYG{o}{*}\PYG{p}{)}\PYG{n}{calloc}\PYG{p}{(}\PYG{n}{HSIZE} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{char}\PYG{p}{));}
+
+  \PYG{k}{while}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}
+  \PYG{p}{\PYGZob{}}
+        \PYG{k}{if}\PYG{p}{(}\PYG{n}{ch} \PYG{o}{==} \PYG{n}{KEY\PYGZus{}F1}\PYG{p}{)}
+              \PYG{p}{\PYGZob{}} \PYG{n}{choice} \PYG{o}{=} \PYG{n}{print\PYGZus{}menu}\PYG{p}{();}
+                    \PYG{n}{choice} \PYG{o}{\PYGZhy{}=} \PYG{l+m+mi}{1}\PYG{p}{;}
+                    \PYG{k}{if}\PYG{p}{(}\PYG{n}{choice} \PYG{o}{==} \PYG{n}{n\PYGZus{}groups}\PYG{p}{)}
+                    \PYG{p}{\PYGZob{}} \PYG{n}{print\PYGZus{}byebye}\PYG{p}{();}
+                            \PYG{n}{free}\PYG{p}{(}\PYG{n}{test\PYGZus{}array}\PYG{p}{);}
+                            \PYG{n}{endwin}\PYG{p}{();}
+                            \PYG{n}{exit}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{);}
+                          \PYG{p}{\PYGZcb{}}
+                  \PYG{p}{\PYGZcb{}}
+            \PYG{n}{clear}\PYG{p}{();}
+                \PYG{n}{strcpy}\PYG{p}{(}\PYG{n}{string}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Typing window\PYGZdq{}}\PYG{p}{);}
+                    \PYG{n}{print\PYGZus{}in\PYGZus{}middle}\PYG{p}{(}\PYG{n}{STARTX}\PYG{p}{,} \PYG{n}{STARTY} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{LENGTH}\PYG{p}{,} \PYG{n}{string}\PYG{p}{,} \PYG{n+nb}{NULL}\PYG{p}{);}
+                        \PYG{n}{attron}\PYG{p}{(}\PYG{n}{A\PYGZus{}REVERSE}\PYG{p}{);}
+                            \PYG{n}{mvprintw}\PYG{p}{(}\PYG{n}{STATUSY}\PYG{p}{,} \PYG{n}{STATUSX}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Press F1 to Main Menu\PYGZdq{}}\PYG{p}{);}
+                                \PYG{n}{refresh}\PYG{p}{();}
+                                    \PYG{n}{attroff}\PYG{p}{(}\PYG{n}{A\PYGZus{}REVERSE}\PYG{p}{);}
+
+                                        \PYG{n}{create\PYGZus{}test\PYGZus{}string}\PYG{p}{(}\PYG{n}{test\PYGZus{}array}\PYG{p}{,} \PYG{n}{choice}\PYG{p}{);}
+                                            \PYG{n}{typing\PYGZus{}win} \PYG{o}{=} \PYG{n}{newwin}\PYG{p}{(}\PYG{n}{WIDTH}\PYG{p}{,} \PYG{n}{LENGTH}\PYG{p}{,} \PYG{n}{STARTY}\PYG{p}{,} \PYG{n}{STARTX}\PYG{p}{);}
+                                                \PYG{n}{keypad}\PYG{p}{(}\PYG{n}{typing\PYGZus{}win}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);}
+                                                    \PYG{n}{intrflush}\PYG{p}{(}\PYG{n}{typing\PYGZus{}win}\PYG{p}{,} \PYG{n}{FALSE}\PYG{p}{);}
+                                                        \PYG{n}{box}\PYG{p}{(}\PYG{n}{typing\PYGZus{}win}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{);}
+
+                                                            \PYG{n}{x} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{;}
+                                                                \PYG{n}{y} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{;}
+                                                                    \PYG{n}{mvwprintw}\PYG{p}{(}\PYG{n}{typing\PYGZus{}win}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}\PYGZpc{}s\PYGZdq{}}\PYG{p}{,} \PYG{n}{test\PYGZus{}array}\PYG{p}{);}
+                                                                        \PYG{n}{wrefresh}\PYG{p}{(}\PYG{n}{typing\PYGZus{}win}\PYG{p}{);}
+                                                                            \PYG{n}{y} \PYG{o}{+=} \PYG{l+m+mi}{1}\PYG{p}{;}
+
+                                                                                \PYG{n}{mistakes} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+                                                                                    \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+                                                                                        \PYG{n}{time}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{start\PYGZus{}t}\PYG{p}{);}
+                                                                                            \PYG{n}{wmove}\PYG{p}{(}\PYG{n}{typing\PYGZus{}win}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{);}
+                                                                                                \PYG{n}{wrefresh}\PYG{p}{(}\PYG{n}{typing\PYGZus{}win}\PYG{p}{);}
+                                                                                                    \PYG{n}{ch} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+                                                                                                        \PYG{k}{while}\PYG{p}{(}\PYG{n}{ch} \PYG{o}{!=} \PYG{n}{KEY\PYGZus{}F1} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{i} \PYG{o}{!=} \PYG{n}{HSIZE} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)}
+                                                                                                              \PYG{p}{\PYGZob{}} \PYG{n}{ch} \PYG{o}{=} \PYG{n}{wgetch}\PYG{p}{(}\PYG{n}{typing\PYGZus{}win}\PYG{p}{);}
+                                                                                                                    \PYG{n}{mvwprintw}\PYG{p}{(}\PYG{n}{typing\PYGZus{}win}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}\PYGZpc{}c\PYGZdq{}}\PYG{p}{,} \PYG{n}{ch}\PYG{p}{);}
+                                                                                                                    \PYG{n}{wrefresh}\PYG{p}{(}\PYG{n}{typing\PYGZus{}win}\PYG{p}{);}
+                                                                                                                    \PYG{o}{++}\PYG{n}{x}\PYG{p}{;}
+                                                                                                                    \PYG{k}{if}\PYG{p}{(}\PYG{n}{ch} \PYG{o}{==} \PYG{n}{test\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}
+                                                                                                                    \PYG{p}{\PYGZob{}} \PYG{o}{++}\PYG{n}{i}\PYG{p}{;}
+                                                                                                                            \PYG{k}{continue}\PYG{p}{;}
+                                                                                                                          \PYG{p}{\PYGZcb{}}
+                                                                                                                    \PYG{k}{else}
+                                                                                                                    \PYG{p}{\PYGZob{}} \PYG{o}{++}\PYG{n}{mistakes}\PYG{p}{;}
+                                                                                                                            \PYG{o}{++}\PYG{n}{i}\PYG{p}{;}
+                                                                                                                          \PYG{p}{\PYGZcb{}}
+                                                                                                                  \PYG{p}{\PYGZcb{}}
+
+                                                                                                            \PYG{n}{time}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{end\PYGZus{}t}\PYG{p}{);}
+                                                                                                                \PYG{n}{print\PYGZus{}time}\PYG{p}{(}\PYG{n}{start\PYGZus{}t}\PYG{p}{,} \PYG{n}{end\PYGZus{}t}\PYG{p}{,} \PYG{n}{mistakes}\PYG{p}{);}
+                                                                                                                  
+  \PYG{p}{\PYGZcb{}}
+  \PYG{n}{free}\PYG{p}{(}\PYG{n}{test\PYGZus{}array}\PYG{p}{);}
+  \PYG{n}{endwin}\PYG{p}{();}
+  \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+
+\PYG{k+kt}{int} \PYG{n+nf}{print\PYGZus{}menu}\PYG{p}{()}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{choice}\PYG{p}{,} \PYG{n}{i}\PYG{p}{;}
+
+  \PYG{n}{choice} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+  \PYG{k}{while}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}
+  \PYG{p}{\PYGZob{}} \PYG{n}{clear}\PYG{p}{();}
+      \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+      \PYG{n}{print\PYGZus{}in\PYGZus{}middle}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}* * *   Welcome to typing practice (Version 1.0) * * * \PYGZdq{}}\PYG{p}{,} \PYG{n+nb}{NULL}\PYG{p}{);}
+      \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n\PYGZbs{}n\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+      \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}\PYG{n}{i} \PYG{o}{\PYGZlt{}=} \PYG{n}{n\PYGZus{}groups} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+        \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}t}\PYG{l+s}{\PYGZpc{}3d: }\PYG{l+s+se}{\PYGZbs{}t}\PYG{l+s}{Practice \PYGZpc{}s}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{groups}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]);}
+      \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}t}\PYG{l+s}{\PYGZpc{}3d: }\PYG{l+s+se}{\PYGZbs{}t}\PYG{l+s}{Exit}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{);}
+  
+      \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n\PYGZbs{}n\PYGZbs{}t}\PYG{l+s}{Choice: \PYGZdq{}}\PYG{p}{);}
+      \PYG{n}{refresh}\PYG{p}{();}
+      \PYG{n}{echo}\PYG{p}{();}
+      \PYG{n}{scanw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZpc{}d\PYGZdq{}}\PYG{p}{,} \PYG{o}{\PYGZam{}}\PYG{n}{choice}\PYG{p}{);}
+      \PYG{n}{noecho}\PYG{p}{();}
+  
+      \PYG{k}{if}\PYG{p}{(}\PYG{n}{choice} \PYG{o}{\PYGZgt{}=} \PYG{l+m+mi}{1} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{choice} \PYG{o}{\PYGZlt{}=} \PYG{n}{n\PYGZus{}groups} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{else}
+      \PYG{p}{\PYGZob{}} \PYG{n}{attron}\PYG{p}{(}\PYG{n}{A\PYGZus{}REVERSE}\PYG{p}{);}
+            \PYG{n}{mvprintw}\PYG{p}{(}\PYG{n}{STATUSY}\PYG{p}{,} \PYG{n}{STATUSX}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Wrong choice}\PYG{l+s+se}{\PYGZbs{}t}\PYG{l+s}{Press any key to continue\PYGZdq{}}\PYG{p}{);}
+            \PYG{n}{attroff}\PYG{p}{(}\PYG{n}{A\PYGZus{}REVERSE}\PYG{p}{);}
+            \PYG{n}{getch}\PYG{p}{();}
+          \PYG{p}{\PYGZcb{}}
+    \PYG{p}{\PYGZcb{}}
+  \PYG{k}{return} \PYG{n}{choice}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{create\PYGZus{}test\PYGZus{}string}\PYG{p}{(}\PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{test\PYGZus{}array}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{choice}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{i}\PYG{p}{,} \PYG{n}{index}\PYG{p}{,} \PYG{n}{length}\PYG{p}{;}
+
+  \PYG{n}{length} \PYG{o}{=} \PYG{n}{strlen}\PYG{p}{(}\PYG{n}{groups}\PYG{p}{[}\PYG{n}{choice}\PYG{p}{]);}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}\PYG{n}{i} \PYG{o}{\PYGZlt{}=} \PYG{n}{HSIZE} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+  \PYG{p}{\PYGZob{}} \PYG{k}{if}\PYG{p}{(}\PYG{n}{i}\PYG{o}{\PYGZpc{}}\PYG{l+m+mi}{5} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)}
+        \PYG{n}{test\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+sc}{\PYGZsq{} \PYGZsq{}}\PYG{p}{;}
+      \PYG{k}{else}
+      \PYG{p}{\PYGZob{}} \PYG{n}{index} \PYG{o}{=} \PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)(}\PYG{n}{random}\PYG{p}{()} \PYG{o}{\PYGZpc{}} \PYG{n}{length}\PYG{p}{);}
+            \PYG{n}{test\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{groups}\PYG{p}{[}\PYG{n}{choice}\PYG{p}{][}\PYG{n}{index}\PYG{p}{];}
+          \PYG{p}{\PYGZcb{}}
+    \PYG{p}{\PYGZcb{}}
+  \PYG{n}{test\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+sc}{\PYGZsq{}\PYGZbs{}0\PYGZsq{}}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{print\PYGZus{}byebye}\PYG{p}{()}
+\PYG{p}{\PYGZob{}} \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{print\PYGZus{}in\PYGZus{}middle}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}Thank you for using my typing tutor}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{n+nb}{NULL}\PYG{p}{);}
+  \PYG{n}{print\PYGZus{}in\PYGZus{}middle}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}Bye Bye ! ! !}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{n+nb}{NULL}\PYG{p}{);}
+  \PYG{n}{refresh}\PYG{p}{();}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{print\PYGZus{}time}\PYG{p}{(}\PYG{k+kt}{time\PYGZus{}t} \PYG{n}{start\PYGZus{}t}\PYG{p}{,} \PYG{k+kt}{time\PYGZus{}t} \PYG{n}{end\PYGZus{}t}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{mistakes}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{long} \PYG{k+kt}{int} \PYG{n}{diff}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{h}\PYG{p}{,}\PYG{n}{m}\PYG{p}{,}\PYG{n}{s}\PYG{p}{;}
+  \PYG{k+kt}{float} \PYG{n}{wpm}\PYG{p}{;}
+
+  \PYG{n}{diff} \PYG{o}{=} \PYG{n}{end\PYGZus{}t} \PYG{o}{\PYGZhy{}} \PYG{n}{start\PYGZus{}t}\PYG{p}{;}
+  \PYG{n}{wpm} \PYG{o}{=} \PYG{p}{((}\PYG{n}{HSIZE} \PYG{o}{/} \PYG{l+m+mi}{5}\PYG{p}{)}\PYG{o}{/}\PYG{p}{(}\PYG{k+kt}{double}\PYG{p}{)}\PYG{n}{diff}\PYG{p}{)}\PYG{o}{*}\PYG{l+m+mi}{60}\PYG{p}{;}
+
+  \PYG{n}{h} \PYG{o}{=} \PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)(}\PYG{n}{diff} \PYG{o}{/} \PYG{l+m+mi}{3600}\PYG{p}{);}
+    \PYG{n}{diff} \PYG{o}{\PYGZhy{}=} \PYG{n}{h} \PYG{o}{*} \PYG{l+m+mi}{3600}\PYG{p}{;}
+  \PYG{n}{m} \PYG{o}{=} \PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)(}\PYG{n}{diff} \PYG{o}{/} \PYG{l+m+mi}{60}\PYG{p}{);}
+  \PYG{n}{diff} \PYG{o}{\PYGZhy{}=} \PYG{n}{m} \PYG{o}{*} \PYG{l+m+mi}{60}\PYG{p}{;}
+  \PYG{n}{s} \PYG{o}{=} \PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{diff}\PYG{p}{;}
+
+  \PYG{n}{attron}\PYG{p}{(}\PYG{n}{A\PYGZus{}REVERSE}\PYG{p}{);}
+  \PYG{n}{mvprintw}\PYG{p}{(}\PYG{n}{STATUSY}\PYG{p}{,} \PYG{n}{STATUSX}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Mistakes made : \PYGZpc{}d time taken: \PYGZpc{}d:\PYGZpc{}d:\PYGZpc{}d WPM : \PYGZpc{}.2f    Press any Key to continue\PYGZdq{}}\PYG{p}{,} \PYG{n}{mistakes}\PYG{p}{,} \PYG{n}{h}\PYG{p}{,} \PYG{n}{m}\PYG{p}{,} \PYG{n}{s}\PYG{p}{,} \PYG{n}{wpm}\PYG{p}{);}
+  \PYG{n}{attroff}\PYG{p}{(}\PYG{n}{A\PYGZus{}REVERSE}\PYG{p}{);}
+
+  \PYG{n}{refresh}\PYG{p}{();}
+  \PYG{n}{getch}\PYG{p}{();}
+
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cm}{/* \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{} *}
+\PYG{c+cm}{ *  * startx = 0 means at present x                   *}
+\PYG{c+cm}{ *   * starty = 0 means at present y                  *}
+\PYG{c+cm}{ *    * win = NULL means take stdscr                  *}
+\PYG{c+cm}{ *     * \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{} */}
+
+\PYG{k+kt}{void} \PYG{n+nf}{print\PYGZus{}in\PYGZus{}middle}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{starty}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{width}\PYG{p}{,} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{string}\PYG{p}{,} \PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{win}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{length}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{;}
+  \PYG{k+kt}{float} \PYG{n}{temp}\PYG{p}{;}
+
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{win} \PYG{o}{==} \PYG{n+nb}{NULL}\PYG{p}{)}
+    \PYG{n}{win} \PYG{o}{=} \PYG{n}{stdscr}\PYG{p}{;}
+  \PYG{n}{getyx}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{);}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{startx} \PYG{o}{!=} \PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{n}{x} \PYG{o}{=} \PYG{n}{startx}\PYG{p}{;}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{starty} \PYG{o}{!=} \PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{n}{y} \PYG{o}{=} \PYG{n}{starty}\PYG{p}{;}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{width} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{n}{width} \PYG{o}{=} \PYG{l+m+mi}{80}\PYG{p}{;}
+
+  \PYG{n}{length} \PYG{o}{=} \PYG{n}{strlen}\PYG{p}{(}\PYG{n}{string}\PYG{p}{);}
+  \PYG{n}{temp} \PYG{o}{=} \PYG{p}{(}\PYG{n}{width} \PYG{o}{\PYGZhy{}} \PYG{n}{length}\PYG{p}{)}\PYG{o}{/} \PYG{l+m+mi}{2}\PYG{p}{;}
+  \PYG{n}{x} \PYG{o}{=} \PYG{n}{startx} \PYG{o}{+} \PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{temp}\PYG{p}{;}
+  \PYG{n}{mvwprintw}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}\PYGZpc{}s\PYGZdq{}}\PYG{p}{,} \PYG{n}{string}\PYG{p}{);}
+  \PYG{n}{refresh}\PYG{p}{();}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

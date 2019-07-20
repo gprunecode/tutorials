@@ -1,0 +1,39 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}panel.h\PYGZgt{}}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{()}
+\PYG{p}{\PYGZob{}} \PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{my\PYGZus{}wins}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{];}
+  \PYG{n}{PANEL}  \PYG{o}{*}\PYG{n}{my\PYGZus{}panels}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{];}
+  \PYG{k+kt}{int} \PYG{n}{lines} \PYG{o}{=} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{n}{cols} \PYG{o}{=} \PYG{l+m+mi}{40}\PYG{p}{,} \PYG{n}{y} \PYG{o}{=} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{x} \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{p}{,} \PYG{n}{i}\PYG{p}{;}
+
+  \PYG{n}{initscr}\PYG{p}{();}
+  \PYG{n}{cbreak}\PYG{p}{();}
+  \PYG{n}{noecho}\PYG{p}{();}
+
+  \PYG{c+cm}{/* Creacion de ventanas para los paneles */}
+  \PYG{n}{my\PYGZus{}wins}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{=} \PYG{n}{newwin}\PYG{p}{(}\PYG{n}{lines}\PYG{p}{,} \PYG{n}{cols}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{);}
+  \PYG{n}{my\PYGZus{}wins}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{=} \PYG{n}{newwin}\PYG{p}{(}\PYG{n}{lines}\PYG{p}{,} \PYG{n}{cols}\PYG{p}{,} \PYG{n}{y} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{x} \PYG{o}{+} \PYG{l+m+mi}{5}\PYG{p}{);}
+  \PYG{n}{my\PYGZus{}wins}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]} \PYG{o}{=} \PYG{n}{newwin}\PYG{p}{(}\PYG{n}{lines}\PYG{p}{,} \PYG{n}{cols}\PYG{p}{,} \PYG{n}{y} \PYG{o}{+} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{x} \PYG{o}{+} \PYG{l+m+mi}{10}\PYG{p}{);}
+
+  \PYG{c+cm}{/*}
+\PYG{c+cm}{   *    * Creacion de bordes alrededor de las ventanas para ver el efecto}
+\PYG{c+cm}{   *       * de los paneles}
+\PYG{c+cm}{   *          */}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{3}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+    \PYG{n}{box}\PYG{p}{(}\PYG{n}{my\PYGZus{}wins}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{);}
+
+  \PYG{c+cm}{/* Unir un panel a cada ventana */}      \PYG{c+cm}{/* ordenar de abajo hacia arriba  */}
+  \PYG{n}{my\PYGZus{}panels}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{=} \PYG{n}{new\PYGZus{}panel}\PYG{p}{(}\PYG{n}{my\PYGZus{}wins}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]);}   \PYG{c+cm}{/* agregar 0, orden: stdscr\PYGZhy{}0     */}
+  \PYG{n}{my\PYGZus{}panels}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{=} \PYG{n}{new\PYGZus{}panel}\PYG{p}{(}\PYG{n}{my\PYGZus{}wins}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]);}   \PYG{c+cm}{/* agregar 1, orden: stdscr\PYGZhy{}0\PYGZhy{}1   */}
+  \PYG{n}{my\PYGZus{}panels}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]} \PYG{o}{=} \PYG{n}{new\PYGZus{}panel}\PYG{p}{(}\PYG{n}{my\PYGZus{}wins}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]);}   \PYG{c+cm}{/* agregar 2, orden: stdscr\PYGZhy{}0\PYGZhy{}1\PYGZhy{}2 */}
+
+  \PYG{c+cm}{/* Actualizar en orden de apilamiento. El 2nd panel estara en la cima     */}
+  \PYG{n}{update\PYGZus{}panels}\PYG{p}{();}
+
+  \PYG{c+cm}{/* Mostrar en la pantalla */}
+  \PYG{n}{doupdate}\PYG{p}{();}
+
+  \PYG{n}{getch}\PYG{p}{();}
+  \PYG{n}{endwin}\PYG{p}{();}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

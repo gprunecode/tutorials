@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{n}{FIELDTYPE} \PYG{o}{*}\PYG{n+nf}{field\PYGZus{}type}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{);}      \PYG{c+cm}{/* campo a consultar       */}
+\end{Verbatim}

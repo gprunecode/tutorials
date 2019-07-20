@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k+kt}{int} \PYG{n}{set\PYGZus{}field\PYGZus{}type}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{,}          \PYG{c+cm}{/* campo a modificar         */}
+                     \PYG{n}{TYPE\PYGZus{}ENUM}\PYG{p}{,}             \PYG{c+cm}{/* tipo asociado             */}
+                     \PYG{k+kt}{char} \PYG{o}{**}\PYG{n}{valuelist}\PYG{p}{;}      \PYG{c+cm}{/* lista de valores posibles */}
+                     \PYG{k+kt}{int} \PYG{n}{checkcase}\PYG{p}{;}         \PYG{c+cm}{/* sensible a mayusculas?    */}
+                     \PYG{k+kt}{int} \PYG{n}{checkunique}\PYG{p}{);}      \PYG{c+cm}{/* coincidencia unica?       */}
+\end{Verbatim}

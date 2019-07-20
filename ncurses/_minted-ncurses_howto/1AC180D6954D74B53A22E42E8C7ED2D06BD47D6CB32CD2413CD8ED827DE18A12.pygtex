@@ -1,0 +1,46 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}stdlib.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}string.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}ncurses.h\PYGZgt{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{print\PYGZus{}in\PYGZus{}middle}\PYG{p}{(}\PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{win}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{starty}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{width}\PYG{p}{,} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{string}\PYG{p}{);}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{argc}\PYG{p}{,} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{argv}\PYG{p}{[])}
+\PYG{p}{\PYGZob{}}
+  \PYG{n}{initscr}\PYG{p}{();}                \PYG{c+cm}{/* Inica el modo curses     */}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{has\PYGZus{}colors}\PYG{p}{()} \PYG{o}{==} \PYG{n}{FALSE}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      \PYG{n}{endwin}\PYG{p}{();}
+      \PYG{n}{printf}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Tu terminal no soporta color}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+      \PYG{n}{exit}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{);}
+    \PYG{p}{\PYGZcb{}}
+  \PYG{n}{start\PYGZus{}color}\PYG{p}{();}            \PYG{c+cm}{/* Inicia el color          */}
+  \PYG{n}{init\PYGZus{}pair}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}RED}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}BLACK}\PYG{p}{);}
+
+  \PYG{n}{attron}\PYG{p}{(}\PYG{n}{COLOR\PYGZus{}PAIR}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{));}
+  \PYG{n}{print\PYGZus{}in\PYGZus{}middle}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{LINES} \PYG{o}{/} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Voila !!! En color ...\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{attroff}\PYG{p}{(}\PYG{n}{COLOR\PYGZus{}PAIR}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{));}
+  \PYG{n}{getch}\PYG{p}{();}
+  \PYG{n}{endwin}\PYG{p}{();}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{print\PYGZus{}in\PYGZus{}middle}\PYG{p}{(}\PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{win}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{starty}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{width}\PYG{p}{,} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{string}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+  \PYG{k+kt}{int} \PYG{n}{length}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{;}
+  \PYG{k+kt}{float} \PYG{n}{temp}\PYG{p}{;}
+
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{win} \PYG{o}{==} \PYG{n+nb}{NULL}\PYG{p}{)}
+    \PYG{n}{win} \PYG{o}{=} \PYG{n}{stdscr}\PYG{p}{;}
+  \PYG{n}{getyx}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{);}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{startx} \PYG{o}{!=} \PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{n}{x} \PYG{o}{=} \PYG{n}{startx}\PYG{p}{;}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{starty} \PYG{o}{!=} \PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{n}{y} \PYG{o}{=} \PYG{n}{starty}\PYG{p}{;}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{width} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{n}{width} \PYG{o}{=} \PYG{l+m+mi}{80}\PYG{p}{;}
+
+  \PYG{n}{length} \PYG{o}{=} \PYG{n}{strlen}\PYG{p}{(}\PYG{n}{string}\PYG{p}{);}
+  \PYG{n}{temp} \PYG{o}{=} \PYG{p}{(}\PYG{n}{width} \PYG{o}{\PYGZhy{}} \PYG{n}{length}\PYG{p}{)}\PYG{o}{/} \PYG{l+m+mi}{2}\PYG{p}{;}
+  \PYG{n}{x} \PYG{o}{=} \PYG{n}{startx} \PYG{o}{+} \PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{temp}\PYG{p}{;}
+  \PYG{n}{mvwprintw}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}\PYGZpc{}s\PYGZdq{}}\PYG{p}{,} \PYG{n}{string}\PYG{p}{);}
+  \PYG{n}{refresh}\PYG{p}{();}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

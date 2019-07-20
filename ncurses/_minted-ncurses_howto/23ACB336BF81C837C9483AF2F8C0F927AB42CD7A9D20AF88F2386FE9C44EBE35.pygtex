@@ -1,0 +1,31 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}ncurses.h\PYGZgt{}}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{(}\PYG{k+kt}{void}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{k+kt}{int} \PYG{n}{ch}\PYG{p}{;}
+
+  \PYG{n}{initscr}\PYG{p}{();}                    \PYG{c+cm}{/* Inicia el modo curses */}
+  \PYG{n}{raw}\PYG{p}{();}                        \PYG{c+cm}{/* Desactiva buffer de linea */}
+  \PYG{n}{noecho}\PYG{p}{();}                     \PYG{c+cm}{/* Sin echo() al hacer getch */}
+
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Pulse cualquier caracter para verlo remarcado}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{ch} \PYG{o}{=} \PYG{n}{getch}\PYG{p}{();}                 \PYG{c+cm}{/* Si no ha llamado a raw() tenemos que}
+\PYG{c+cm}{                                 * pulsar enter antes que llegue al programa */}
+  \PYG{k}{if} \PYG{p}{(}\PYG{n}{ch} \PYG{o}{==} \PYG{n}{KEY\PYGZus{}F}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{))}
+    \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}F1 Key pressed\PYGZdq{}}\PYG{p}{);}   \PYG{c+cm}{/* Sin habilitar keypad esto no llegara a nosotros */}
+                                \PYG{c+cm}{/* Sin noecho() algunos caracteres feos de escape podrian}
+\PYG{c+cm}{                                 * ser impresos */}
+  \PYG{k}{else} \PYG{p}{\PYGZob{}}
+    \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}La tecla pulsada es \PYGZdq{}}\PYG{p}{);}
+    \PYG{n}{attron}\PYG{p}{(}\PYG{n}{A\PYGZus{}BOLD}\PYG{p}{);}
+    \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZpc{}c\PYGZdq{}}\PYG{p}{,} \PYG{n}{ch}\PYG{p}{);}
+    \PYG{n}{attroff}\PYG{p}{(}\PYG{n}{A\PYGZus{}BOLD}\PYG{p}{);}
+  \PYG{p}{\PYGZcb{}}
+  \PYG{n}{refresh}\PYG{p}{();}                    \PYG{c+cm}{/* Imprime en la pantalla real */}
+  \PYG{n}{getch}\PYG{p}{();}                      \PYG{c+cm}{/* Espera entrada de usuario */}
+  \PYG{n}{endwin}\PYG{p}{();}                     \PYG{c+cm}{/* Termina modo curses */}
+
+  \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

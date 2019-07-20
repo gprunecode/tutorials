@@ -1,0 +1,104 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}curses.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}menu.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}stdlib.h\PYGZgt{}}
+
+\PYG{c+cp}{\PYGZsh{}define ARRAY\PYGZus{}SIZE(a) (sizeof(a) / sizeof(a[0]))}
+\PYG{c+cp}{\PYGZsh{}define CTRLD   4}
+
+\PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{choices}\PYG{p}{[]} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+  \PYG{l+s}{\PYGZdq{}Opcion 1\PYGZdq{}}\PYG{p}{,}  \PYG{l+s}{\PYGZdq{}Opcion 2\PYGZdq{}}\PYG{p}{,}  \PYG{l+s}{\PYGZdq{}Opcion 3\PYGZdq{}}\PYG{p}{,}  \PYG{l+s}{\PYGZdq{}Opcion 4\PYGZdq{}}\PYG{p}{,}  \PYG{l+s}{\PYGZdq{}Opcion 5\PYGZdq{}}\PYG{p}{,}
+  \PYG{l+s}{\PYGZdq{}Opcion 6\PYGZdq{}}\PYG{p}{,}  \PYG{l+s}{\PYGZdq{}Opcion 7\PYGZdq{}}\PYG{p}{,}  \PYG{l+s}{\PYGZdq{}Opcion 8\PYGZdq{}}\PYG{p}{,}  \PYG{l+s}{\PYGZdq{}Opcion 9\PYGZdq{}}\PYG{p}{,}  \PYG{l+s}{\PYGZdq{}Opcion 10\PYGZdq{}}\PYG{p}{,}
+  \PYG{l+s}{\PYGZdq{}Opcion 11\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Opcion 12\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Opcion 13\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Opcion 14\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Opcion 15\PYGZdq{}}\PYG{p}{,}
+  \PYG{l+s}{\PYGZdq{}Opcion 16\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Opcion 17\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Opcion 18\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Opcion 19\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Opcion 20\PYGZdq{}}\PYG{p}{,}
+  \PYG{l+s}{\PYGZdq{}Salir\PYGZdq{}}\PYG{p}{,}
+  \PYG{p}{(}\PYG{k+kt}{char} \PYG{o}{*}\PYG{p}{)}\PYG{n+nb}{NULL}\PYG{p}{,}
+
+\PYG{p}{\PYGZcb{};}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{()\PYGZob{}}
+  \PYG{n}{ITEM} \PYG{o}{**}\PYG{n}{my\PYGZus{}items}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{c}\PYG{p}{;}
+  \PYG{n}{MENU} \PYG{o}{*}\PYG{n}{my\PYGZus{}menu}\PYG{p}{;}
+  \PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{my\PYGZus{}menu\PYGZus{}win}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{n\PYGZus{}choices}\PYG{p}{,} \PYG{n}{i}\PYG{p}{;}
+
+  \PYG{c+cm}{/* Tnicializa curses */}
+  \PYG{n}{initscr}\PYG{p}{();}
+  \PYG{n}{start\PYGZus{}color}\PYG{p}{();}
+  \PYG{n}{cbreak}\PYG{p}{();}
+  \PYG{n}{noecho}\PYG{p}{();}
+  \PYG{n}{keypad}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);}
+  \PYG{n}{init\PYGZus{}pair}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}RED}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}BLACK}\PYG{p}{);}
+  \PYG{n}{init\PYGZus{}pair}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}CYAN}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}BLACK}\PYG{p}{);}
+
+  \PYG{c+cm}{/* Crea los elementos */}
+  \PYG{n}{n\PYGZus{}choices} \PYG{o}{=} \PYG{n}{ARRAY\PYGZus{}SIZE}\PYG{p}{(}\PYG{n}{choices}\PYG{p}{);}
+  \PYG{n}{my\PYGZus{}items} \PYG{o}{=} \PYG{p}{(}\PYG{n}{ITEM} \PYG{o}{**}\PYG{p}{)}\PYG{n}{calloc}\PYG{p}{(}\PYG{n}{n\PYGZus{}choices}\PYG{p}{,} \PYG{k}{sizeof}\PYG{p}{(}\PYG{n}{ITEM} \PYG{o}{*}\PYG{p}{));}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{n\PYGZus{}choices}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+    \PYG{n}{my\PYGZus{}items}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{new\PYGZus{}item}\PYG{p}{(}\PYG{n}{choices}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{choices}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]);}
+
+  \PYG{c+cm}{/* Crea el menu */}
+  \PYG{n}{my\PYGZus{}menu} \PYG{o}{=} \PYG{n}{new\PYGZus{}menu}\PYG{p}{((}\PYG{n}{ITEM} \PYG{o}{**}\PYG{p}{)}\PYG{n}{my\PYGZus{}items}\PYG{p}{);}
+
+  \PYG{c+cm}{/* Configura la opcion del menu para no mostar la descripcion */}
+  \PYG{n}{menu\PYGZus{}opts\PYGZus{}off}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{,} \PYG{n}{O\PYGZus{}SHOWDESC}\PYG{p}{);}
+
+  \PYG{c+cm}{/* Crea la ventana que sera asociada al menu */}
+  \PYG{n}{my\PYGZus{}menu\PYGZus{}win} \PYG{o}{=} \PYG{n}{newwin}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{70}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{);}
+  \PYG{n}{keypad}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu\PYGZus{}win}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);}
+
+  \PYG{c+cm}{/* Establece la vetana principal y la subventana */}
+  \PYG{n}{set\PYGZus{}menu\PYGZus{}win}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{,} \PYG{n}{my\PYGZus{}menu\PYGZus{}win}\PYG{p}{);}
+  \PYG{n}{set\PYGZus{}menu\PYGZus{}sub}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{,} \PYG{n}{derwin}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu\PYGZus{}win}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{,} \PYG{l+m+mi}{68}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{));}
+  \PYG{n}{set\PYGZus{}menu\PYGZus{}format}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{);}
+  \PYG{n}{set\PYGZus{}menu\PYGZus{}mark}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{,} \PYG{l+s}{\PYGZdq{} * \PYGZdq{}}\PYG{p}{);}
+
+  \PYG{c+cm}{/* Imprime un margen alrededor de la ventana pricipal e imprime el titulo */}
+  \PYG{n}{box}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu\PYGZus{}win}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{);}
+
+  \PYG{n}{attron}\PYG{p}{(}\PYG{n}{COLOR\PYGZus{}PAIR}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{));}
+  \PYG{n}{mvprintw}\PYG{p}{(}\PYG{n}{LINES} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Use PageUp y PageDown para el desplazamiento\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{mvprintw}\PYG{p}{(}\PYG{n}{LINES} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Use Las flechas para navegar (F1 Para Salir)\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{attroff}\PYG{p}{(}\PYG{n}{COLOR\PYGZus{}PAIR}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{));}
+  \PYG{n}{refresh}\PYG{p}{();}
+
+  \PYG{c+cm}{/* Publica el menu */}
+  \PYG{n}{post\PYGZus{}menu}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{);}
+  \PYG{n}{wrefresh}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu\PYGZus{}win}\PYG{p}{);}
+
+  \PYG{k}{while}\PYG{p}{((}\PYG{n}{c} \PYG{o}{=} \PYG{n}{wgetch}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu\PYGZus{}win}\PYG{p}{))} \PYG{o}{!=} \PYG{n}{KEY\PYGZus{}F}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{))\PYGZob{}}
+    \PYG{k}{switch}\PYG{p}{(}\PYG{n}{c}\PYG{p}{)\PYGZob{}}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}DOWN}\PYG{p}{:}
+        \PYG{n}{menu\PYGZus{}driver}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{,} \PYG{n}{REQ\PYGZus{}DOWN\PYGZus{}ITEM}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}UP}\PYG{p}{:}
+        \PYG{n}{menu\PYGZus{}driver}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{,} \PYG{n}{REQ\PYGZus{}UP\PYGZus{}ITEM}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}LEFT}\PYG{p}{:}
+        \PYG{n}{menu\PYGZus{}driver}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{,} \PYG{n}{REQ\PYGZus{}LEFT\PYGZus{}ITEM}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}RIGHT}\PYG{p}{:}
+        \PYG{n}{menu\PYGZus{}driver}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{,} \PYG{n}{REQ\PYGZus{}RIGHT\PYGZus{}ITEM}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}NPAGE}\PYG{p}{:}
+        \PYG{n}{menu\PYGZus{}driver}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{,} \PYG{n}{REQ\PYGZus{}SCR\PYGZus{}DPAGE}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}PPAGE}\PYG{p}{:}
+        \PYG{n}{menu\PYGZus{}driver}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{,} \PYG{n}{REQ\PYGZus{}SCR\PYGZus{}UPAGE}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+
+    \PYG{p}{\PYGZcb{}}
+    \PYG{n}{wrefresh}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu\PYGZus{}win}\PYG{p}{);}
+
+  \PYG{p}{\PYGZcb{}}
+
+  \PYG{c+cm}{/* Remueve el menu y libera toda la memoria tomada */}
+  \PYG{n}{unpost\PYGZus{}menu}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{);}
+  \PYG{n}{free\PYGZus{}menu}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{);}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{n\PYGZus{}choices}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+    \PYG{n}{free\PYGZus{}item}\PYG{p}{(}\PYG{n}{my\PYGZus{}items}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]);}
+  \PYG{n}{endwin}\PYG{p}{();}
+
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

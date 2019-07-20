@@ -1,0 +1,59 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}stdlib.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}curses.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}menu.h\PYGZgt{}}
+
+\PYG{c+cp}{\PYGZsh{}define ARRAY\PYGZus{}SIZE(a) (sizeof(a) / sizeof(a[0]))}
+\PYG{c+cp}{\PYGZsh{}define CTRLD   4}
+
+\PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{choices}\PYG{p}{[]} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+  \PYG{l+s}{\PYGZdq{}Eleccion 1\PYGZdq{}}\PYG{p}{,}
+  \PYG{l+s}{\PYGZdq{}Eleccion 2\PYGZdq{}}\PYG{p}{,}
+  \PYG{l+s}{\PYGZdq{}Eleccion 3\PYGZdq{}}\PYG{p}{,}
+  \PYG{l+s}{\PYGZdq{}Eleccion 4\PYGZdq{}}\PYG{p}{,}
+  \PYG{l+s}{\PYGZdq{}Salir\PYGZdq{}}\PYG{p}{,}
+
+\PYG{p}{\PYGZcb{};}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{()}
+\PYG{p}{\PYGZob{}} \PYG{n}{ITEM} \PYG{o}{**}\PYG{n}{my\PYGZus{}items}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{c}\PYG{p}{;}
+  \PYG{n}{MENU} \PYG{o}{*}\PYG{n}{my\PYGZus{}menu}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{n\PYGZus{}choices}\PYG{p}{,} \PYG{n}{i}\PYG{p}{;}
+  \PYG{n}{ITEM} \PYG{o}{*}\PYG{n}{cur\PYGZus{}item}\PYG{p}{;}
+
+
+  \PYG{n}{initscr}\PYG{p}{();}
+  \PYG{n}{cbreak}\PYG{p}{();}
+  \PYG{n}{noecho}\PYG{p}{();}
+  \PYG{n}{keypad}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);}
+
+  \PYG{n}{n\PYGZus{}choices} \PYG{o}{=} \PYG{n}{ARRAY\PYGZus{}SIZE}\PYG{p}{(}\PYG{n}{choices}\PYG{p}{);}
+  \PYG{n}{my\PYGZus{}items} \PYG{o}{=} \PYG{p}{(}\PYG{n}{ITEM} \PYG{o}{**}\PYG{p}{)}\PYG{n}{calloc}\PYG{p}{(}\PYG{n}{n\PYGZus{}choices} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{k}{sizeof}\PYG{p}{(}\PYG{n}{ITEM} \PYG{o}{*}\PYG{p}{));}
+
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{n\PYGZus{}choices}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+    \PYG{n}{my\PYGZus{}items}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{new\PYGZus{}item}\PYG{p}{(}\PYG{n}{choices}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{choices}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]);}
+  \PYG{n}{my\PYGZus{}items}\PYG{p}{[}\PYG{n}{n\PYGZus{}choices}\PYG{p}{]} \PYG{o}{=} \PYG{p}{(}\PYG{n}{ITEM} \PYG{o}{*}\PYG{p}{)}\PYG{n+nb}{NULL}\PYG{p}{;}
+
+  \PYG{n}{my\PYGZus{}menu} \PYG{o}{=} \PYG{n}{new\PYGZus{}menu}\PYG{p}{((}\PYG{n}{ITEM} \PYG{o}{**}\PYG{p}{)}\PYG{n}{my\PYGZus{}items}\PYG{p}{);}
+  \PYG{n}{mvprintw}\PYG{p}{(}\PYG{n}{LINES} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}F1 para Salir\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{post\PYGZus{}menu}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{);}
+  \PYG{n}{refresh}\PYG{p}{();}
+
+  \PYG{k}{while}\PYG{p}{((}\PYG{n}{c} \PYG{o}{=} \PYG{n}{getch}\PYG{p}{())} \PYG{o}{!=} \PYG{n}{KEY\PYGZus{}F}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{))}
+  \PYG{p}{\PYGZob{}}   \PYG{k}{switch}\PYG{p}{(}\PYG{n}{c}\PYG{p}{)}
+    \PYG{p}{\PYGZob{}}   \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}DOWN}\PYG{p}{:}
+      \PYG{n}{menu\PYGZus{}driver}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{,} \PYG{n}{REQ\PYGZus{}DOWN\PYGZus{}ITEM}\PYG{p}{);}
+      \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}UP}\PYG{p}{:}
+      \PYG{n}{menu\PYGZus{}driver}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{,} \PYG{n}{REQ\PYGZus{}UP\PYGZus{}ITEM}\PYG{p}{);}
+      \PYG{k}{break}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+  \PYG{p}{\PYGZcb{}}
+
+  \PYG{n}{free\PYGZus{}item}\PYG{p}{(}\PYG{n}{my\PYGZus{}items}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]);}
+  \PYG{n}{free\PYGZus{}item}\PYG{p}{(}\PYG{n}{my\PYGZus{}items}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]);}
+  \PYG{n}{free\PYGZus{}menu}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{);}
+  \PYG{n}{endwin}\PYG{p}{();}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

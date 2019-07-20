@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k+kt}{int} \PYG{n+nf}{field\PYGZus{}info}\PYG{p}{(}     \PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{,}              \PYG{c+cm}{/* campo a extraer datos                */}
+                      \PYG{k+kt}{int} \PYG{o}{*}\PYG{n}{height}\PYG{p}{,} \PYG{o}{*}\PYG{k+kt}{int} \PYG{n}{width}\PYG{p}{,}   \PYG{c+cm}{/* tamaño de campo                      */}
+                      \PYG{k+kt}{int} \PYG{o}{*}\PYG{n}{top}\PYG{p}{,} \PYG{k+kt}{int} \PYG{o}{*}\PYG{n}{left}\PYG{p}{,}       \PYG{c+cm}{/* esquina superior izquierda           */}
+                      \PYG{k+kt}{int} \PYG{o}{*}\PYG{n}{offscreen}\PYG{p}{,}            \PYG{c+cm}{/* numero de columnas fuera de pantalla */}
+                      \PYG{k+kt}{int} \PYG{o}{*}\PYG{n}{nbuf}\PYG{p}{);}                \PYG{c+cm}{/* numero de buffers de trabajo         */}
+\end{Verbatim}

@@ -1,0 +1,110 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}curses.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}stdlib.h\PYGZgt{}}
+
+\PYG{k+kt}{int} \PYG{n}{STARTX} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{k+kt}{int} \PYG{n}{STARTY} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{k+kt}{int} \PYG{n}{ENDX} \PYG{o}{=} \PYG{l+m+mi}{79}\PYG{p}{;}
+\PYG{k+kt}{int} \PYG{n}{ENDY} \PYG{o}{=} \PYG{l+m+mi}{24}\PYG{p}{;}
+
+\PYG{c+cp}{\PYGZsh{}define CELL\PYGZus{}CHAR \PYGZsq{}\PYGZsh{}\PYGZsq{}}
+\PYG{c+cp}{\PYGZsh{}define TIME\PYGZus{}OUT  300}
+
+\PYG{k}{typedef} \PYG{k}{struct} \PYG{n}{\PYGZus{}state} \PYG{p}{\PYGZob{}}
+  \PYG{k+kt}{int} \PYG{n}{oldstate}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{newstate}\PYG{p}{;}
+
+\PYG{p}{\PYGZcb{}}\PYG{n}{state}\PYG{p}{;}
+
+\PYG{k+kt}{void} \PYG{n+nf}{display}\PYG{p}{(}\PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{win}\PYG{p}{,} \PYG{n}{state} \PYG{o}{**}\PYG{n}{area}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{starty}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{endx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{endy}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{calc}\PYG{p}{(}\PYG{n}{state} \PYG{o}{**}\PYG{n}{area}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{x}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{y}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{update\PYGZus{}state}\PYG{p}{(}\PYG{n}{state} \PYG{o}{**}\PYG{n}{area}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{starty}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{endx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{endy}\PYG{p}{);}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{()}
+\PYG{p}{\PYGZob{}} \PYG{n}{state} \PYG{o}{**}\PYG{n}{workarea}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{i}\PYG{p}{,} \PYG{n}{j}\PYG{p}{;}
+
+  \PYG{n}{initscr}\PYG{p}{();}
+  \PYG{n}{cbreak}\PYG{p}{();}
+  \PYG{n}{timeout}\PYG{p}{(}\PYG{n}{TIME\PYGZus{}OUT}\PYG{p}{);}
+  \PYG{n}{keypad}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);}
+
+  \PYG{n}{ENDX} \PYG{o}{=} \PYG{n}{COLS} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{;}
+  \PYG{n}{ENDY} \PYG{o}{=} \PYG{n}{LINES} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{;}
+
+  \PYG{n}{workarea} \PYG{o}{=} \PYG{p}{(}\PYG{n}{state} \PYG{o}{**}\PYG{p}{)}\PYG{n}{calloc}\PYG{p}{(}\PYG{n}{COLS}\PYG{p}{,} \PYG{k}{sizeof}\PYG{p}{(}\PYG{n}{state} \PYG{o}{*}\PYG{p}{));}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}\PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{COLS}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+    \PYG{n}{workarea}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{p}{(}\PYG{n}{state} \PYG{o}{*}\PYG{p}{)}\PYG{n}{calloc}\PYG{p}{(}\PYG{n}{LINES}\PYG{p}{,} \PYG{k}{sizeof}\PYG{p}{(}\PYG{n}{state}\PYG{p}{));}
+
+  \PYG{c+cm}{/* For inverted U */}
+  \PYG{n}{workarea}\PYG{p}{[}\PYG{l+m+mi}{39}\PYG{p}{][}\PYG{l+m+mi}{15}\PYG{p}{].}\PYG{n}{newstate} \PYG{o}{=} \PYG{n}{TRUE}\PYG{p}{;}
+  \PYG{n}{workarea}\PYG{p}{[}\PYG{l+m+mi}{40}\PYG{p}{][}\PYG{l+m+mi}{15}\PYG{p}{].}\PYG{n}{newstate} \PYG{o}{=} \PYG{n}{TRUE}\PYG{p}{;}
+  \PYG{n}{workarea}\PYG{p}{[}\PYG{l+m+mi}{41}\PYG{p}{][}\PYG{l+m+mi}{15}\PYG{p}{].}\PYG{n}{newstate} \PYG{o}{=} \PYG{n}{TRUE}\PYG{p}{;}
+  \PYG{n}{workarea}\PYG{p}{[}\PYG{l+m+mi}{39}\PYG{p}{][}\PYG{l+m+mi}{16}\PYG{p}{].}\PYG{n}{newstate} \PYG{o}{=} \PYG{n}{TRUE}\PYG{p}{;}
+  \PYG{n}{workarea}\PYG{p}{[}\PYG{l+m+mi}{39}\PYG{p}{][}\PYG{l+m+mi}{17}\PYG{p}{].}\PYG{n}{newstate} \PYG{o}{=} \PYG{n}{TRUE}\PYG{p}{;}
+  \PYG{n}{workarea}\PYG{p}{[}\PYG{l+m+mi}{41}\PYG{p}{][}\PYG{l+m+mi}{16}\PYG{p}{].}\PYG{n}{newstate} \PYG{o}{=} \PYG{n}{TRUE}\PYG{p}{;}
+  \PYG{n}{workarea}\PYG{p}{[}\PYG{l+m+mi}{41}\PYG{p}{][}\PYG{l+m+mi}{17}\PYG{p}{].}\PYG{n}{newstate} \PYG{o}{=} \PYG{n}{TRUE}\PYG{p}{;}
+  \PYG{n}{update\PYGZus{}state}\PYG{p}{(}\PYG{n}{workarea}\PYG{p}{,} \PYG{n}{STARTX}\PYG{p}{,} \PYG{n}{STARTY}\PYG{p}{,} \PYG{n}{ENDX}\PYG{p}{,} \PYG{n}{ENDY}\PYG{p}{);}
+
+  \PYG{c+cm}{/* For block  */}
+  \PYG{c+cm}{/*}
+\PYG{c+cm}{   *  workarea[37][13].newstate = TRUE;}
+\PYG{c+cm}{   *    workarea[37][14].newstate = TRUE;}
+\PYG{c+cm}{   *      workarea[38][13].newstate = TRUE;}
+\PYG{c+cm}{   *        workarea[38][14].newstate = TRUE;}
+\PYG{c+cm}{   *          update\PYGZus{}state(workarea, STARTX, STARTY, ENDX, ENDY);}
+\PYG{c+cm}{   *          */}
+  \PYG{n}{display}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{workarea}\PYG{p}{,} \PYG{n}{STARTX}\PYG{p}{,} \PYG{n}{STARTY}\PYG{p}{,} \PYG{n}{ENDX}\PYG{p}{,} \PYG{n}{ENDY}\PYG{p}{);}
+  \PYG{k}{while}\PYG{p}{(}\PYG{n}{getch}\PYG{p}{()} \PYG{o}{!=} \PYG{n}{KEY\PYGZus{}F}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{))}
+  \PYG{p}{\PYGZob{}} \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{n}{STARTX}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}=} \PYG{n}{ENDX}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+    \PYG{k}{for}\PYG{p}{(}\PYG{n}{j} \PYG{o}{=} \PYG{n}{STARTY}\PYG{p}{;} \PYG{n}{j} \PYG{o}{\PYGZlt{}=} \PYG{n}{ENDY}\PYG{p}{;} \PYG{o}{++}\PYG{n}{j}\PYG{p}{)}
+      \PYG{n}{calc}\PYG{p}{(}\PYG{n}{workarea}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{n}{j}\PYG{p}{);}
+    \PYG{n}{update\PYGZus{}state}\PYG{p}{(}\PYG{n}{workarea}\PYG{p}{,} \PYG{n}{STARTX}\PYG{p}{,} \PYG{n}{STARTY}\PYG{p}{,} \PYG{n}{ENDX}\PYG{p}{,} \PYG{n}{ENDY}\PYG{p}{);}
+    \PYG{n}{display}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,}  \PYG{n}{workarea}\PYG{p}{,} \PYG{n}{STARTX}\PYG{p}{,} \PYG{n}{STARTY}\PYG{p}{,} \PYG{n}{ENDX}\PYG{p}{,} \PYG{n}{ENDY}\PYG{p}{);}
+  \PYG{p}{\PYGZcb{}}
+
+  \PYG{n}{endwin}\PYG{p}{();}
+  \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{display}\PYG{p}{(}\PYG{n}{WINDOW} \PYG{o}{*}\PYG{n}{win}\PYG{p}{,} \PYG{n}{state} \PYG{o}{**}\PYG{n}{area}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{starty}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{endx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{endy}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{i}\PYG{p}{,} \PYG{n}{j}\PYG{p}{;}
+  \PYG{n}{wclear}\PYG{p}{(}\PYG{n}{win}\PYG{p}{);}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{n}{startx}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}=} \PYG{n}{endx}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+    \PYG{k}{for}\PYG{p}{(}\PYG{n}{j} \PYG{o}{=} \PYG{n}{starty}\PYG{p}{;}\PYG{n}{j} \PYG{o}{\PYGZlt{}=} \PYG{n}{endy}\PYG{p}{;} \PYG{o}{++}\PYG{n}{j}\PYG{p}{)}
+      \PYG{k}{if}\PYG{p}{(}\PYG{n}{area}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{j}\PYG{p}{].}\PYG{n}{newstate} \PYG{o}{==} \PYG{n}{TRUE}\PYG{p}{)}
+        \PYG{n}{mvwaddch}\PYG{p}{(}\PYG{n}{win}\PYG{p}{,} \PYG{n}{j}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{n}{CELL\PYGZus{}CHAR}\PYG{p}{);}
+  \PYG{n}{wrefresh}\PYG{p}{(}\PYG{n}{win}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{calc}\PYG{p}{(}\PYG{n}{state} \PYG{o}{**}\PYG{n}{area}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{i}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{j}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{neighbours}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{newstate}\PYG{p}{;}
+
+  \PYG{n}{neighbours}  \PYG{o}{=}
+    \PYG{n}{area}\PYG{p}{[(}\PYG{n}{i} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1} \PYG{o}{+} \PYG{n}{COLS}\PYG{p}{)} \PYG{o}{\PYGZpc{}} \PYG{n}{COLS}\PYG{p}{][}\PYG{n}{j}\PYG{p}{].}\PYG{n}{oldstate}   \PYG{o}{+}
+    \PYG{n}{area}\PYG{p}{[(}\PYG{n}{i} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1} \PYG{o}{+} \PYG{n}{COLS}\PYG{p}{)} \PYG{o}{\PYGZpc{}} \PYG{n}{COLS}\PYG{p}{][(}\PYG{n}{j} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1} \PYG{o}{+} \PYG{n}{LINES}\PYG{p}{)} \PYG{o}{\PYGZpc{}} \PYG{n}{LINES}\PYG{p}{].}\PYG{n}{oldstate}   \PYG{o}{+}
+    \PYG{n}{area}\PYG{p}{[(}\PYG{n}{i} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1} \PYG{o}{+} \PYG{n}{COLS}\PYG{p}{)} \PYG{o}{\PYGZpc{}} \PYG{n}{COLS}\PYG{p}{][(}\PYG{n}{j} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{\PYGZpc{}} \PYG{n}{LINES}\PYG{p}{].}\PYG{n}{oldstate}   \PYG{o}{+}
+    \PYG{n}{area}\PYG{p}{[(}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{\PYGZpc{}} \PYG{n}{COLS}\PYG{p}{][}\PYG{n}{j}\PYG{p}{].}\PYG{n}{oldstate}    \PYG{o}{+}
+    \PYG{n}{area}\PYG{p}{[(}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{\PYGZpc{}} \PYG{n}{COLS}\PYG{p}{][(}\PYG{n}{j} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1} \PYG{o}{+} \PYG{n}{LINES}\PYG{p}{)} \PYG{o}{\PYGZpc{}} \PYG{n}{LINES}\PYG{p}{].}\PYG{n}{oldstate}  \PYG{o}{+}
+    \PYG{n}{area}\PYG{p}{[(}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{\PYGZpc{}} \PYG{n}{COLS}\PYG{p}{][(}\PYG{n}{j} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{\PYGZpc{}} \PYG{n}{LINES}\PYG{p}{].}\PYG{n}{oldstate}  \PYG{o}{+}
+    \PYG{n}{area}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][(}\PYG{n}{j} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1} \PYG{o}{+} \PYG{n}{LINES}\PYG{p}{)} \PYG{o}{\PYGZpc{}} \PYG{n}{LINES}\PYG{p}{].}\PYG{n}{oldstate}   \PYG{o}{+}
+    \PYG{n}{area}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][(}\PYG{n}{j} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{\PYGZpc{}} \PYG{n}{LINES}\PYG{p}{].}\PYG{n}{oldstate}\PYG{p}{;}
+
+  \PYG{n}{newstate} \PYG{o}{=} \PYG{n}{FALSE}\PYG{p}{;}
+  \PYG{k}{if}\PYG{p}{(}\PYG{n}{area}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{j}\PYG{p}{].}\PYG{n}{oldstate} \PYG{o}{==} \PYG{n}{TRUE} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{p}{(}\PYG{n}{neighbours} \PYG{o}{==} \PYG{l+m+mi}{2} \PYG{o}{||} \PYG{n}{neighbours} \PYG{o}{==} \PYG{l+m+mi}{3}\PYG{p}{))}
+    \PYG{n}{newstate} \PYG{o}{=} \PYG{n}{TRUE}\PYG{p}{;}
+  \PYG{k}{else}
+    \PYG{k}{if}\PYG{p}{(}\PYG{n}{area}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{j}\PYG{p}{].}\PYG{n}{oldstate} \PYG{o}{==} \PYG{n}{FALSE} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{neighbours} \PYG{o}{==} \PYG{l+m+mi}{3}\PYG{p}{)}
+      \PYG{n}{newstate} \PYG{o}{=} \PYG{n}{TRUE}\PYG{p}{;}
+  \PYG{n}{area}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{j}\PYG{p}{].}\PYG{n}{newstate} \PYG{o}{=} \PYG{n}{newstate}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{update\PYGZus{}state}\PYG{p}{(}\PYG{n}{state} \PYG{o}{**}\PYG{n}{area}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{starty}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{endx}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{endy}\PYG{p}{)}
+\PYG{p}{\PYGZob{}} \PYG{k+kt}{int} \PYG{n}{i}\PYG{p}{,} \PYG{n}{j}\PYG{p}{;}
+
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{n}{startx}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}=} \PYG{n}{endx}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+    \PYG{k}{for}\PYG{p}{(}\PYG{n}{j} \PYG{o}{=} \PYG{n}{starty}\PYG{p}{;} \PYG{n}{j} \PYG{o}{\PYGZlt{}=} \PYG{n}{endy}\PYG{p}{;} \PYG{o}{++}\PYG{n}{j}\PYG{p}{)}
+      \PYG{n}{area}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{j}\PYG{p}{].}\PYG{n}{oldstate} \PYG{o}{=} \PYG{n}{area}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{j}\PYG{p}{].}\PYG{n}{newstate}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

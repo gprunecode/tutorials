@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{n}{attron}\PYG{p}{(}\PYG{n}{A\PYGZus{}REVERSE} \PYG{o}{|} \PYG{n}{A\PYGZus{}BLINK}\PYG{p}{);}
+\end{Verbatim}

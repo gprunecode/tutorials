@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k+kt}{int} \PYG{n}{form\PYGZus{}driver}\PYG{p}{(}\PYG{n}{FORM} \PYG{o}{*}\PYG{n}{form}\PYG{p}{,}     \PYG{c+cm}{/* formulario en el que operar */}
+                  \PYG{k+kt}{int} \PYG{n}{request}\PYG{p}{)}    \PYG{c+cm}{/* codigo de solicitud         */}
+\end{Verbatim}

@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k+kt}{int} \PYG{n+nf}{move\PYGZus{}field}\PYG{p}{(}    \PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{,}              \PYG{c+cm}{/* campo a modificar                */}
+                     \PYG{k+kt}{int} \PYG{n}{top}\PYG{p}{,} \PYG{k+kt}{int} \PYG{n}{left}\PYG{p}{);}        \PYG{c+cm}{/* nueva esquina superior izquierda */}
+\end{Verbatim}

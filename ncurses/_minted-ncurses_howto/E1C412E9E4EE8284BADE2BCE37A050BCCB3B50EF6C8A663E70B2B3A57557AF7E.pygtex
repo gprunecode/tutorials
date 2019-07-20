@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{n}{init\PYGZus{}color}\PYG{p}{(}\PYG{n}{COLOR\PYGZus{}RED}\PYG{p}{,} \PYG{l+m+mi}{700}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{);}
+  \PYG{c+cm}{/* param 1     : nombre de color}
+\PYG{c+cm}{  * param 2, 3, 4 : contenido rgb min = 0, max = 1000 */}
+\end{Verbatim}

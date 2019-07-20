@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k+kt}{int} \PYG{n+nf}{set\PYGZus{}new\PYGZus{}page}\PYG{p}{(}\PYG{n}{FIELD} \PYG{o}{*}\PYG{n}{field}\PYG{p}{,}        \PYG{c+cm}{/* Campo en el cual poner o quitar el salto de pagina */}
+                   \PYG{k+kt}{bool} \PYG{n}{new\PYGZus{}page\PYGZus{}flag}\PYG{p}{);} \PYG{c+cm}{/* debe ser TRUE para colocar el salto                */}
+\end{Verbatim}

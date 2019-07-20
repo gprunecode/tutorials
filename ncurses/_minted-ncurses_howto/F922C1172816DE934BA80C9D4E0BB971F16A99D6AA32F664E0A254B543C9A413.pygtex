@@ -1,0 +1,121 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}ncurses.h\PYGZgt{}}
+
+\PYG{k}{typedef} \PYG{k}{struct} \PYG{n}{\PYGZus{}win\PYGZus{}border\PYGZus{}struct} \PYG{p}{\PYGZob{}}
+  \PYG{n}{chtype} \PYG{n}{ls}\PYG{p}{,} \PYG{n}{rs}\PYG{p}{,} \PYG{n}{ts}\PYG{p}{,} \PYG{n}{bs}\PYG{p}{,} \PYG{n}{tl}\PYG{p}{,} \PYG{n}{tr}\PYG{p}{,} \PYG{n}{bl}\PYG{p}{,} \PYG{n}{br}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}} \PYG{n}{WIN\PYGZus{}BORDER}\PYG{p}{;}
+
+\PYG{k}{typedef} \PYG{k}{struct} \PYG{n}{\PYGZus{}WIN\PYGZus{}struct} \PYG{p}{\PYGZob{}}
+  \PYG{k+kt}{int} \PYG{n}{startx}\PYG{p}{,} \PYG{n}{starty}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{height}\PYG{p}{,} \PYG{n}{width}\PYG{p}{;}
+  \PYG{n}{WIN\PYGZus{}BORDER} \PYG{n}{border}\PYG{p}{;}
+
+\PYG{p}{\PYGZcb{}} \PYG{n}{WIN}\PYG{p}{;}
+
+\PYG{k+kt}{void} \PYG{n+nf}{init\PYGZus{}win\PYGZus{}params}\PYG{p}{(}\PYG{n}{WIN} \PYG{o}{*}\PYG{n}{p\PYGZus{}win}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{print\PYGZus{}win\PYGZus{}params}\PYG{p}{(}\PYG{n}{WIN} \PYG{o}{*}\PYG{n}{p\PYGZus{}win}\PYG{p}{);}
+\PYG{k+kt}{void} \PYG{n+nf}{create\PYGZus{}box}\PYG{p}{(}\PYG{n}{WIN} \PYG{o}{*}\PYG{n}{win}\PYG{p}{,} \PYG{k+kt}{bool} \PYG{n}{flag}\PYG{p}{);}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{argc}\PYG{p}{,} \PYG{k}{const} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{argv}\PYG{p}{[])}
+\PYG{p}{\PYGZob{}}
+  \PYG{n}{WIN} \PYG{n}{win}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{ch}\PYG{p}{;}
+
+  \PYG{n}{initscr}\PYG{p}{();}              \PYG{c+cm}{/* Inicia el modo curses */}
+  \PYG{n}{start\PYGZus{}color}\PYG{p}{();}          \PYG{c+cm}{/* Inicial la funcioalidad de color */}
+  \PYG{n}{cbreak}\PYG{p}{();}               \PYG{c+cm}{/* Desactivar el buffer de linea,}
+\PYG{c+cm}{                           * pasarte todo el control a mi */}
+  \PYG{n}{keypad}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);}   \PYG{c+cm}{/* Necesario para habilitar F1 */}
+  \PYG{n}{noecho}\PYG{p}{();}
+  \PYG{n}{init\PYGZus{}pair}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}CYAN}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}BLACK}\PYG{p}{);}
+
+  \PYG{c+cm}{/* Inicializa los parametros de ventana */}
+  \PYG{n}{init\PYGZus{}win\PYGZus{}params}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{win}\PYG{p}{);}
+  \PYG{n}{print\PYGZus{}win\PYGZus{}params}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{win}\PYG{p}{);}
+
+  \PYG{n}{attron}\PYG{p}{(}\PYG{n}{COLOR\PYGZus{}PAIR}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{));}
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Pulse F1 para salir\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{refresh}\PYG{p}{();}
+  \PYG{n}{attroff}\PYG{p}{(}\PYG{n}{COLOR\PYGZus{}PAIR}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{));}
+
+  \PYG{n}{create\PYGZus{}box}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{win}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);}
+  \PYG{k}{while} \PYG{p}{((}\PYG{n}{ch} \PYG{o}{=} \PYG{n}{getch}\PYG{p}{())} \PYG{o}{!=} \PYG{n}{KEY\PYGZus{}F}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{))} \PYG{p}{\PYGZob{}}
+    \PYG{k}{switch} \PYG{p}{(}\PYG{n}{ch}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}LEFT}\PYG{p}{:}
+        \PYG{n}{create\PYGZus{}box}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{win}\PYG{p}{,} \PYG{n}{FALSE}\PYG{p}{);}
+        \PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{n}{win}\PYG{p}{.}\PYG{n}{startx}\PYG{p}{;}
+        \PYG{n}{create\PYGZus{}box}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{win}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}RIGHT}\PYG{p}{:}
+        \PYG{n}{create\PYGZus{}box}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{win}\PYG{p}{,} \PYG{n}{FALSE}\PYG{p}{);}
+        \PYG{o}{++}\PYG{n}{win}\PYG{p}{.}\PYG{n}{startx}\PYG{p}{;}
+        \PYG{n}{create\PYGZus{}box}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{win}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}UP}\PYG{p}{:}
+        \PYG{n}{create\PYGZus{}box}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{win}\PYG{p}{,} \PYG{n}{FALSE}\PYG{p}{);}
+        \PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{n}{win}\PYG{p}{.}\PYG{n}{starty}\PYG{p}{;}
+        \PYG{n}{create\PYGZus{}box}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{win}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}DOWN}\PYG{p}{:}
+        \PYG{n}{create\PYGZus{}box}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{win}\PYG{p}{,} \PYG{n}{FALSE}\PYG{p}{);}
+        \PYG{o}{++}\PYG{n}{win}\PYG{p}{.}\PYG{n}{starty}\PYG{p}{;}
+        \PYG{n}{create\PYGZus{}box}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{win}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+  \PYG{p}{\PYGZcb{}}
+  \PYG{n}{endwin}\PYG{p}{();}                 \PYG{c+cm}{/* Fin del modo curses */}
+
+  \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{init\PYGZus{}win\PYGZus{}params}\PYG{p}{(}\PYG{n}{WIN} \PYG{o}{*}\PYG{n}{p\PYGZus{}win}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+  \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{height} \PYG{o}{=} \PYG{l+m+mi}{3}\PYG{p}{;}
+  \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{width} \PYG{o}{=} \PYG{l+m+mi}{10}\PYG{p}{;}
+  \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{starty} \PYG{o}{=} \PYG{p}{(}\PYG{n}{LINES} \PYG{o}{\PYGZhy{}} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{height}\PYG{p}{)}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{;}
+  \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{startx} \PYG{o}{=} \PYG{p}{(}\PYG{n}{COLS} \PYG{o}{\PYGZhy{}} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{width}\PYG{p}{)}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{;}
+
+  \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{border}\PYG{p}{.}\PYG{n}{ls} \PYG{o}{=} \PYG{l+s+sc}{\PYGZsq{}|\PYGZsq{}}\PYG{p}{;}
+  \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{border}\PYG{p}{.}\PYG{n}{rs} \PYG{o}{=} \PYG{l+s+sc}{\PYGZsq{}|\PYGZsq{}}\PYG{p}{;}
+  \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{border}\PYG{p}{.}\PYG{n}{ts} \PYG{o}{=} \PYG{l+s+sc}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{;}
+  \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{border}\PYG{p}{.}\PYG{n}{bs} \PYG{o}{=} \PYG{l+s+sc}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{;}
+  \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{border}\PYG{p}{.}\PYG{n}{tl} \PYG{o}{=} \PYG{l+s+sc}{\PYGZsq{}+\PYGZsq{}}\PYG{p}{;}
+  \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{border}\PYG{p}{.}\PYG{n}{tr} \PYG{o}{=} \PYG{l+s+sc}{\PYGZsq{}+\PYGZsq{}}\PYG{p}{;}
+  \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{border}\PYG{p}{.}\PYG{n}{bl} \PYG{o}{=} \PYG{l+s+sc}{\PYGZsq{}+\PYGZsq{}}\PYG{p}{;}
+  \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{border}\PYG{p}{.}\PYG{n}{br} \PYG{o}{=} \PYG{l+s+sc}{\PYGZsq{}+\PYGZsq{}}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{print\PYGZus{}win\PYGZus{}params}\PYG{p}{(}\PYG{n}{WIN} \PYG{o}{*}\PYG{n}{p\PYGZus{}win}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+\PYG{c+cp}{\PYGZsh{}ifdef \PYGZus{}DEBUG}
+  \PYG{n}{mvprintw}\PYG{p}{(}\PYG{l+m+mi}{25}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}\PYGZpc{}d \PYGZpc{}d \PYGZpc{}d \PYGZpc{}d\PYGZdq{}}\PYG{p}{,} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{startx}\PYG{p}{,} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{starty}\PYG{p}{,}
+           \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{width}\PYG{p}{,} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{height}\PYG{p}{);}
+  \PYG{n}{refresh}\PYG{p}{();}
+\PYG{c+cp}{\PYGZsh{}endif}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{create\PYGZus{}box}\PYG{p}{(}\PYG{n}{WIN} \PYG{o}{*}\PYG{n}{p\PYGZus{}win}\PYG{p}{,} \PYG{k+kt}{bool} \PYG{n}{flag}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+  \PYG{k+kt}{int} \PYG{n}{i}\PYG{p}{,} \PYG{n}{j}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{w}\PYG{p}{,} \PYG{n}{h}\PYG{p}{;}
+
+  \PYG{n}{x} \PYG{o}{=} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{startx}\PYG{p}{;}
+  \PYG{n}{y} \PYG{o}{=} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{starty}\PYG{p}{;}
+  \PYG{n}{w} \PYG{o}{=} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{width}\PYG{p}{;}
+  \PYG{n}{h} \PYG{o}{=} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{height}\PYG{p}{;}
+
+  \PYG{k}{if} \PYG{p}{(}\PYG{n}{flag} \PYG{o}{==} \PYG{n}{TRUE}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+    \PYG{n}{mvaddch}\PYG{p}{(}\PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{border}\PYG{p}{.}\PYG{n}{tl}\PYG{p}{);}
+    \PYG{n}{mvaddch}\PYG{p}{(}\PYG{n}{y}\PYG{p}{,} \PYG{n}{x} \PYG{o}{+} \PYG{n}{w}\PYG{p}{,} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{border}\PYG{p}{.}\PYG{n}{tr}\PYG{p}{);}
+    \PYG{n}{mvaddch}\PYG{p}{(}\PYG{n}{y} \PYG{o}{+} \PYG{n}{h}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{border}\PYG{p}{.}\PYG{n}{bl}\PYG{p}{);}
+    \PYG{n}{mvaddch}\PYG{p}{(}\PYG{n}{y} \PYG{o}{+} \PYG{n}{h}\PYG{p}{,} \PYG{n}{x} \PYG{o}{+} \PYG{n}{w}\PYG{p}{,} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{border}\PYG{p}{.}\PYG{n}{br}\PYG{p}{);}
+    \PYG{n}{mvhline}\PYG{p}{(}\PYG{n}{y}\PYG{p}{,} \PYG{n}{x} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{border}\PYG{p}{.}\PYG{n}{ts}\PYG{p}{,} \PYG{n}{w} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{);}
+    \PYG{n}{mvhline}\PYG{p}{(}\PYG{n}{y} \PYG{o}{+} \PYG{n}{h}\PYG{p}{,} \PYG{n}{x} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{border}\PYG{p}{.}\PYG{n}{bs}\PYG{p}{,} \PYG{n}{w} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{);}
+    \PYG{n}{mvvline}\PYG{p}{(}\PYG{n}{y} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{border}\PYG{p}{.}\PYG{n}{ls}\PYG{p}{,} \PYG{n}{h} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{);}
+    \PYG{n}{mvvline}\PYG{p}{(}\PYG{n}{y} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{x} \PYG{o}{+} \PYG{n}{w}\PYG{p}{,} \PYG{n}{p\PYGZus{}win} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{border}\PYG{p}{.}\PYG{n}{rs}\PYG{p}{,} \PYG{n}{h} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{);}
+  \PYG{p}{\PYGZcb{}}
+  \PYG{k}{else}
+    \PYG{k}{for} \PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{j} \PYG{o}{=} \PYG{n}{y}\PYG{p}{;} \PYG{n}{j} \PYG{o}{\PYGZlt{}=} \PYG{n}{y} \PYG{o}{+} \PYG{n}{h}\PYG{p}{;} \PYG{n}{j}\PYG{o}{++}\PYG{p}{)}
+      \PYG{k}{for} \PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{n}{x}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}=} \PYG{n}{x} \PYG{o}{+} \PYG{n}{w}\PYG{p}{;} \PYG{n}{i}\PYG{o}{++}\PYG{p}{)}
+        \PYG{n}{mvaddch}\PYG{p}{(}\PYG{n}{j}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{l+s+sc}{\PYGZsq{} \PYGZsq{}}\PYG{p}{);}
+
+  \PYG{n}{refresh}\PYG{p}{();}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

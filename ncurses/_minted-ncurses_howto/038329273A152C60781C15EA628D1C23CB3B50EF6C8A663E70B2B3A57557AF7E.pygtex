@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{n}{field\PYGZus{}opts\PYGZus{}off}\PYG{p}{(}\PYG{n}{field\PYGZus{}pointer}\PYG{p}{,} \PYG{n}{O\PYGZus{}STATIC}\PYG{p}{);}
+\end{Verbatim}

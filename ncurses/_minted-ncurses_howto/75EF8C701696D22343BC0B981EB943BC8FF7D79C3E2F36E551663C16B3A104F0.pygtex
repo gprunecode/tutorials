@@ -1,0 +1,98 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}curses.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}menu.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}stdlib.h\PYGZgt{}}
+
+\PYG{c+cp}{\PYGZsh{}define ARRAY\PYGZus{}SIZE(a) (sizeof(a) / sizeof(a[0]))}
+\PYG{c+cp}{\PYGZsh{}define CTRLD   4}
+
+\PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{choices}\PYG{p}{[]} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+  \PYG{l+s}{\PYGZdq{}Opcion 1\PYGZdq{}}\PYG{p}{,}
+  \PYG{l+s}{\PYGZdq{}Opcion 2\PYGZdq{}}\PYG{p}{,}
+  \PYG{l+s}{\PYGZdq{}Opcion 3\PYGZdq{}}\PYG{p}{,}
+  \PYG{l+s}{\PYGZdq{}Opcion 4\PYGZdq{}}\PYG{p}{,}
+  \PYG{l+s}{\PYGZdq{}Opcion 5\PYGZdq{}}\PYG{p}{,}
+  \PYG{l+s}{\PYGZdq{}Opcion 6\PYGZdq{}}\PYG{p}{,}
+  \PYG{l+s}{\PYGZdq{}Opcion 7\PYGZdq{}}\PYG{p}{,}
+  \PYG{l+s}{\PYGZdq{}Salir\PYGZdq{}}\PYG{p}{,}
+
+\PYG{p}{\PYGZcb{};}
+
+\PYG{k+kt}{void} \PYG{n+nf}{func}\PYG{p}{(}\PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{name}\PYG{p}{);}
+
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{()\PYGZob{}}
+  \PYG{n}{ITEM} \PYG{o}{**}\PYG{n}{my\PYGZus{}items}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{c}\PYG{p}{;}
+  \PYG{n}{MENU} \PYG{o}{*}\PYG{n}{my\PYGZus{}menu}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{n\PYGZus{}choices}\PYG{p}{,} \PYG{n}{i}\PYG{p}{;}
+  \PYG{n}{ITEM} \PYG{o}{*}\PYG{n}{cur\PYGZus{}item}\PYG{p}{;}
+
+  \PYG{c+cm}{/* Inicializa curses */}
+  \PYG{n}{initscr}\PYG{p}{();}
+  \PYG{n}{start\PYGZus{}color}\PYG{p}{();}
+  \PYG{n}{cbreak}\PYG{p}{();}
+  \PYG{n}{noecho}\PYG{p}{();}
+  \PYG{n}{keypad}\PYG{p}{(}\PYG{n}{stdscr}\PYG{p}{,} \PYG{n}{TRUE}\PYG{p}{);}
+  \PYG{n}{init\PYGZus{}pair}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}RED}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}BLACK}\PYG{p}{);}
+  \PYG{n}{init\PYGZus{}pair}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}GREEN}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}BLACK}\PYG{p}{);}
+  \PYG{n}{init\PYGZus{}pair}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}MAGENTA}\PYG{p}{,} \PYG{n}{COLOR\PYGZus{}BLACK}\PYG{p}{);}
+
+  \PYG{c+cm}{/* Inicializa los elementos */}
+  \PYG{n}{n\PYGZus{}choices} \PYG{o}{=} \PYG{n}{ARRAY\PYGZus{}SIZE}\PYG{p}{(}\PYG{n}{choices}\PYG{p}{);}
+  \PYG{n}{my\PYGZus{}items} \PYG{o}{=} \PYG{p}{(}\PYG{n}{ITEM} \PYG{o}{**}\PYG{p}{)}\PYG{n}{calloc}\PYG{p}{(}\PYG{n}{n\PYGZus{}choices} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{k}{sizeof}\PYG{p}{(}\PYG{n}{ITEM} \PYG{o}{*}\PYG{p}{));}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{n\PYGZus{}choices}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)\PYGZob{}}
+    \PYG{n}{my\PYGZus{}items}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{new\PYGZus{}item}\PYG{p}{(}\PYG{n}{choices}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{choices}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]);}
+    \PYG{c+cm}{/* Establece el puntero de usuario */}
+    \PYG{n}{set\PYGZus{}item\PYGZus{}userptr}\PYG{p}{(}\PYG{n}{my\PYGZus{}items}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{func}\PYG{p}{);}
+
+  \PYG{p}{\PYGZcb{}}
+  \PYG{n}{my\PYGZus{}items}\PYG{p}{[}\PYG{n}{n\PYGZus{}choices}\PYG{p}{]} \PYG{o}{=} \PYG{p}{(}\PYG{n}{ITEM} \PYG{o}{*}\PYG{p}{)}\PYG{n+nb}{NULL}\PYG{p}{;}
+
+  \PYG{c+cm}{/* Crea el menu */}
+  \PYG{n}{my\PYGZus{}menu} \PYG{o}{=} \PYG{n}{new\PYGZus{}menu}\PYG{p}{((}\PYG{n}{ITEM} \PYG{o}{**}\PYG{p}{)}\PYG{n}{my\PYGZus{}items}\PYG{p}{);}
+
+  \PYG{c+cm}{/* Publica el menu */}
+  \PYG{n}{mvprintw}\PYG{p}{(}\PYG{n}{LINES} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Presione \PYGZlt{}ENTER\PYGZgt{} para ver la opcion seleccionada\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{mvprintw}\PYG{p}{(}\PYG{n}{LINES} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Flechas Arriba y Abajo para navegar (F1 para Salir)\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{post\PYGZus{}menu}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{);}
+  \PYG{n}{refresh}\PYG{p}{();}
+
+  \PYG{k}{while}\PYG{p}{((}\PYG{n}{c} \PYG{o}{=} \PYG{n}{getch}\PYG{p}{())} \PYG{o}{!=} \PYG{n}{KEY\PYGZus{}F}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{))\PYGZob{}}
+    \PYG{k}{switch}\PYG{p}{(}\PYG{n}{c}\PYG{p}{)\PYGZob{}}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}DOWN}\PYG{p}{:}
+        \PYG{n}{menu\PYGZus{}driver}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{,} \PYG{n}{REQ\PYGZus{}DOWN\PYGZus{}ITEM}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{case} \PYG{n+nl}{KEY\PYGZus{}UP}\PYG{p}{:}
+        \PYG{n}{menu\PYGZus{}driver}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{,} \PYG{n}{REQ\PYGZus{}UP\PYGZus{}ITEM}\PYG{p}{);}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{k}{case} \PYG{l+m+mi}{10}\PYG{o}{:} \PYG{c+cm}{/* Enter */}
+        \PYG{p}{\PYGZob{}} \PYG{n}{ITEM} \PYG{o}{*}\PYG{n}{cur}\PYG{p}{;}
+          \PYG{k+kt}{void} \PYG{p}{(}\PYG{o}{*}\PYG{n}{p}\PYG{p}{)(}\PYG{k+kt}{char} \PYG{o}{*}\PYG{p}{);}
+
+          \PYG{n}{cur} \PYG{o}{=} \PYG{n}{current\PYGZus{}item}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{);}
+          \PYG{n}{p} \PYG{o}{=} \PYG{n}{item\PYGZus{}userptr}\PYG{p}{(}\PYG{n}{cur}\PYG{p}{);}
+          \PYG{n}{p}\PYG{p}{((}\PYG{k+kt}{char} \PYG{o}{*}\PYG{p}{)}\PYG{n}{item\PYGZus{}name}\PYG{p}{(}\PYG{n}{cur}\PYG{p}{));}
+          \PYG{n}{pos\PYGZus{}menu\PYGZus{}cursor}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{);}
+          \PYG{k}{break}\PYG{p}{;}
+        \PYG{p}{\PYGZcb{}}
+        \PYG{k}{break}\PYG{p}{;}
+
+    \PYG{p}{\PYGZcb{}}
+
+  \PYG{p}{\PYGZcb{}}
+
+  \PYG{n}{unpost\PYGZus{}menu}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{);}
+  \PYG{k}{for}\PYG{p}{(}\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{n\PYGZus{}choices}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+    \PYG{n}{free\PYGZus{}item}\PYG{p}{(}\PYG{n}{my\PYGZus{}items}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]);}
+  \PYG{n}{free\PYGZus{}menu}\PYG{p}{(}\PYG{n}{my\PYGZus{}menu}\PYG{p}{);}
+  \PYG{n}{endwin}\PYG{p}{();}
+
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void} \PYG{n+nf}{func}\PYG{p}{(}\PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{name}\PYG{p}{)\PYGZob{}}
+  \PYG{n}{move}\PYG{p}{(}\PYG{l+m+mi}{20}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{);}
+  \PYG{n}{clrtoeol}\PYG{p}{();}
+  \PYG{n}{mvprintw}\PYG{p}{(}\PYG{l+m+mi}{20}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}El elemento seleccionado es : \PYGZpc{}s\PYGZdq{}}\PYG{p}{,} \PYG{n}{name}\PYG{p}{);}
+
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

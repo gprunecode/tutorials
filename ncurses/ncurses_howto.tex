@@ -1,0 +1,2575 @@
+%%
+%% (
+%%  )\ )                             (
+%%  (()/(   (            (             )\  )   (
+%%   /(_))  ))\   (       ))\  (   (   (()/(   ))\
+%%   (_))  /((_)  )\  )  /((_) )\  )\   ((_))/((_)
+%%   | _ \(_))(  _(_/( (_) )  ((_)((_)  _| |(_))
+%%   |   /| || || ' \))/ -_)/ _|/ _ \/ _` |/ -_)
+%%   |_|_\ \_,_||_||_| \___|\__|\___/\__,_|\___|
+%%
+
+\documentclass{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+%\usepackage{slashbox}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx} % Paquete para incluir imágenes en el documento LaTeX
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  filecolor=magenta,
+  urlcolor=cyan,
+}
+\urlstyle{same}
+\usepackage{varwidth}
+
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+
+\usepackage{multirow}
+
+\usepackage[a4paper,rmargin=1.5cm,lmargin=1.5cm,top=1.5cm,bottom=1.5cm]{geometry}
+
+\usepackage{pdfpages}
+
+\usepackage{xcolor}
+\usepackage{minted}
+\setminted[cpp]{frame=lines, framesep=2mm, baselinestretch=1.2, rulecolor=\color{black!80},
+                bgcolor=DarkGray,fontsize=\normalsize}
+\usemintedstyle[cpp]{monokai}
+\setminted[python3]{frame=lines, framesep=2mm, baselinestretch=1.2, rulecolor=\color{black!80}, bgcolor=DarkGray}
+\usemintedstyle[python]{paraiso-dark}
+\setminted[./pseudocode.py:PseudocodeLexer -x]{frame=lines, framesep=2mm, baselinestretch=1.2,
+            rulecolor=\color{black!30}, bgcolor=LightGray, fontsize=\normalsize}
+\usemintedstyle[./pseudocode.py:PseudocodeLexer -x]{rainbow_dash}
+\setminted[bash]{baselinestretch=1.2,rulecolor=\color{black!30},bgcolor=LightGray}
+\definecolor{LightGray}{gray}{0.98}
+\definecolor{DarkGray}{gray}{0.1}
+\definecolor{MidGray}{gray}{0.8}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\setlength{\parindent}{0px}  % Setea la indentacion de la primera linea de cada parrafo a cero pixeles.
+
+
+\title{Resolución de la novena semana}
+\author{@RuneCode}
+
+\begin{document}
+%% Portada
+\includepdf{./portada/portada.pdf}
+
+
+%% ####################################################################################
+%%    Inicio del Documento
+%% ####################################################################################
+\section{Introducción}%
+En los viejos tiempos de los terminales de teletipo, los terminales estaban
+lejos de las computadoras y se conectaban a ellos a través de cables seriales.
+los terminales podrían ser configurados mediante el envío de una serie de
+bytes. Todas las capacidades (tales como mover el cursor a una nueva ubicación,
+borrar parte de la pantalla, el desplazamiento de pantalla, cambio de modos,
+etc.) de los terminales se puede acceder a través de esta serie de bytes. Estas
+secuencias de control generalmente se llaman secuencias de escape, ya que
+comenzar con un carácter de escape(0x1B). Incluso hoy en día, con la adecuada
+emulación, podemos enviar secuencias de escape a el emulador y lograr el mismo
+efecto en una ventana de terminal.\\
+
+Suponga que desea imprimir una línea en color. Pruebe a escribir esto en su
+consola.\\
+
+\mint{bash}|echo "^[[0;31;40mIn Color""]]"|
+
+El primer carácter es un carácter de escape, que aparece como los caracteres $\wedge$
+y $[$. Para poder imprimirlo, hay que pulsar CTRL+V y luego la tecla ESC. Todos
+los demás son caracteres imprimibles normales. Usted debe ser capaz de ver la
+cadena “In Color” en rojo. Se mantiene de esa forma y para volver de nuevo al
+tipo de modo original.
+
+\mint{bash}|echo "^[[0;37;40m""]]"|
+
+Ahora, ¿qué significan estos caracteres mágicos? Difíciles de comprender?
+Incluso podrían ser diferentes para diferentes terminales. Asi que los
+diseñadores de UNIX inventaron un mecanismo denominado \textbf{termcap}. Es un
+archivo que enumera todas las capacidades de un terminal en particular, junto
+con las secuencias de escape necesarias para conseguir un efecto particular.\\
+Años más tarde, este fue reemplazado por \textbf{terminfo}. Sin ahondar
+demasiado en detalles, este mecanismo permite a los programas de aplicación
+consultar la base de datos terminfo y obtener los caracteres de control para
+ser enviados a un terminal o emulador de terminal.
+
+\subsection{¿Qué es Ncurses?}%
+Usted podría preguntarse, el significado de toda esta algarabia técnica. En el
+escenario anterior, todos los programas de aplicación se supone consultan
+terminfo y realizan las cosas necesarias (envío de caracteres de control,
+etc.). Pronto se hizo difícil gestionar toda esta complejidad y esto dio a luz
+a ‘CURSES’. Curses es un juego de palabras del nombre “cursor optimization”
+(optimización del cursor). La libreria Curses forma un envoltorio para trabajar
+encima de los códigos de terminal puros, y proporciona una API (Application
+Programming Interface) altamente flexible y eficiente. Proporciona funciones
+para mover el cursor, crear ventanas, producir colores, jugar con el ratón,
+etc. Los programas de aplicación no necesitan preocuparse por las capacidades
+subyacentes del terminal.\\
+
+Entonces, ¿qué es NCURSES? NCURSES es un clon del original Sistem V Release 4.0
+(SVr4) curses. Es una biblioteca de libre disposición, totalmente compatible
+con la versión anterior de curses. En breve, es una libreria de funciones que
+maneja la pantalla de una aplicación en terminales de celdas de caracter. En el
+resto del documento, la términos curses y ncurses se utilizan indistintamente.\\
+
+Una historia detallada de NCURSES se puede encontrar en el archivo NEWS dentro
+del codigo fuente. El paquete actual es mantenido por
+\href{to:dickey@his.com}{Thomas Dickey}. Puede contactar con los mantenedores
+en \href{to:bug-ncurses@gnu.org}{bug-ncurses@gnu.org}.\\
+
+\subsection{¿Qué podemos hacer con Ncurses?}%
+Ncurses no sólo crea una envoltura sobre las capacidades del terminal, también
+le da un marco sólido para crear una bonita UI (User Interface/interfaz de
+usuario) en modo texto. Proporciona funciones para crear ventanas etc. Sus
+bibliotecas hermanas \textbf{panel}, \textbf{menu} y \textbf{form} proporcionan
+una extensión a la biblioteca básica curses. Estas bibliotecas por lo general
+vienen tambien con Curses. Uno puede crear aplicaciones que contienen múltiples
+ventanas, menús, paneles y formularios. Las ventanas se pueden manejar
+independientemente, pueden proporcionar ‘deslizabilidad’ e incluso pueden
+ocultarse.\\
+
+Los menús ofrecen al usuario una fácil opción de selección de comandos. Los
+formularios facilitan la entrada de datos y ventanas de visualización. Los
+paneles extienden las capacidades de ncurses para hacer frente a ventanas
+superpuestas y apiladas.\\
+
+Estas son sólo algunas de las cosas básicas que podemos hacer con ncurses. A
+medida que avancemos, veremos todas las capacidades de estas librerias.\\
+
+\subsection{Objetivo / Alcance del documento}%
+Este documento pretende ser una guía “Todo en Uno” para la programación con
+ncurses y sus librerias hermanas. Nos graduamos desde un simple programa “Hola
+Mundo” a una forma más compleja de manipulación. Se asume una nula experiencia
+previa en ncurses. La escritura es informal, pero se proporciona una gran
+cantidad de detalles de cada uno de los ejemplos.
+
+\subsection{Acerca de los programas}%
+Todos los programas en el documento están disponibles en forma de empaquetado
+\href{http://www.tldp.org/HOWTO/NCURSES-Programming-HOWTO/ncurses_programs.tar.gz}{aquí}.
+Descomprima y desempaquete.\\
+
+Hay un Makefile de nivel superior en el directorio principal. Este construye
+todos los archivos y pone los ejecutables listos para su uso en el directorio
+demo/exe. También puede construir los programas selectivamente mediante el make
+del directorio correspondiente. Cada directorio contiene un archivo README
+explicando el propósito de cada archivo c en el directorio.\\
+
+Para cada ejemplo, he incluido el nombre de ruta relativo al directorio de
+ejemplos.\\
+
+Todos los programas son liberados bajo la misma licencia usada para ncurses
+(estilo MIT). Esto le da la capacidad de hacer cualquier cosa ademas de
+reclamar todo como suyo. Siéntase libre de utilizarlos en sus programas, según
+convenga.\\
+
+\subsection{Otros formatos del documento}%
+Esta guía también está disponible en otros formatos varios en el sitio
+tldp.org. Aquí están los enlaces a otros formatos de este documento.
+\subsubsection{Formato de fácil acceso desde tldp.org}%
+\begin{itemize}
+  \item \href{http://www.ibiblio.org/pub/Linux/docs/HOWTO/other-formats/pdf/NCURSES-Programming-HOWTO.pdf}{Acrobat PDF Format}
+  \item \href{http://www.ibiblio.org/pub/Linux/docs/HOWTO/other-formats/ps/NCURSES-Programming-HOWTO.ps.gz}{PostScript Format}
+  \item \href{http://www.ibiblio.org/pub/Linux/docs/HOWTO/other-formats/html/NCURSES-Programming-HOWTO-html.tar.gz}{In multiple HTML pages}
+  \item \href{http://www.ibiblio.org/pub/Linux/docs/HOWTO/other-formats/html_single/NCURSES-Programming-HOWTO.html}{In One big HTML format}
+\end{itemize}
+
+\subsection{Créditos}%
+Doy las gracias a \href{sharath_1@usa.net}{Sharath} y Emre Akbas por ayudarme
+con algunas secciones. La introducción fue escrita inicialmente por sharath. La
+Reescribí con algunos extractos tomados de su trabajo inicial. Emre ayudó a
+escribir las secciones printw y scanw.\\
+
+Los equivalentes Perl de los programas de ejemplo son aportados por
+\href{Aratnaweera@virtusa.com}{Anuradha Ratnaweera}.\\
+
+Luego viene \href{parimi@ece.arizona.edu}{Ravi Parimi}, mi querido amigo, que
+ha estado en este proyecto antes de escribir ni una línea. Constantemente me ha
+bombardeado con sugerencias y ha revisado pacientemente todo el texto. Él
+también comprobó cada programa en Linux y Solaris.\\
+
+\subsection{Derechos de Autor}%
+Copyright {\copyright} 2001 by Pradeep Padala.\\
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the “Software”), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, distribute with modifications,
+sublicense, and/or sell copies of the Software, and to permit persons to whom
+the Software is furnished to do so, subject to the following conditions:\\
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.\\
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ABOVE COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\\
+
+Except as contained in this notice, the name(s) of the above copyright holders
+shall not be used in advertising or otherwise to promote the sale, use or other
+dealings in this Software without prior written authorization.\\
+
+\section{Hola Mundo!!!}%
+Bienvenido al mundo de curses. Antes de sumergimos en la libreria y mirar en
+sus diversas características, vamos a escribir un programa simple y decir hola
+al mundo.\\
+
+\subsection{Compilar con la librería NCURSES}%
+Para utilizar las funciones de la libreria ncurses, usted tiene que incluir
+ncurses.h en sus programas. Para enlazar el programa con ncurses la bandera
+-lncurses debe ser agregada.
+
+\begin{minted}{cpp}
+  #include <ncurses.h>
+  .
+  .
+  .
+\end{minted}
+
+Compilacion y enlace: gcc $<$archivo de programa$>$ -lncurses\\
+
+%C++
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/basics/hello_world.c}{*Ejemplo 1. El programa Hello World!!!}
+\inputminted{cpp}{./cpp/001_hello_world.cpp}
+
+\subsection{Disección}%
+El programa anterior inmprime “Hello World !!!” a la pantalla y termina. Este
+programa muestra cómo inicializar curses, manipular la pantalla y finalizar el
+modo curses. Vamos a diseccionar línea por línea.\\
+
+\subsubsection{Acerca de initscr()}%
+La funcion initscr() inicializa el terminal en modo de curses. En algunas
+implementaciones, se borra la pantalla y presenta una pantalla en blanco. Para
+cualquier manipulación de pantalla utilizando el paquete curses este ha de ser
+llamado primero. Esta función inicializa el sistema curses y asigna memoria
+para la ventana actual (llamanda \textbf{stdscr}) y algunas otras estructuras
+de datos. En casos extremos esta función puede fallar por falta de memoria
+para almacenar las estructuras de datos de la libreria curses.\\
+
+Una vez hecho esto, podemos hacer una variedad de inicializaciones para
+personalizar nuestros ajustes a curses. Estos detalles serán explicados. Más
+adelante.\\
+
+\subsubsection{La misteriosa refresh()}%
+La siguiente línea printw imprime la cadena “Hello World !!!” en el pantalla.
+Esta función es análoga al printf normal en todos aspectos excepto que imprime
+los datos en una ventana llamada stdscr en las coordenadas (y,x) actuales. Al
+inicio nuestras coordenadas actuales están en 0,0 la cadena se imprime en la
+esquina izquierda de la ventana.\\
+
+Esto nos lleva al misterioso refresh(). Cuando llamamos a printw los datos se
+escriben realmente en una ventana imaginaria, esto no actualiza la pantalla
+todavía. El trabajo de printw es actualizar algunas banderas y estructuras de
+datos y escribir los datos a el buffer correspondiente a stdscr. Con el fin de
+mostrar esto en pantalla, deberá llamar a refresh() y decirle al sistema de
+curses que debe volcar el contenido en pantalla.\\
+
+La filosofía detrás de todo esto es permitir al programador hacer varias
+actualizaciones en la pantalla o ventana imaginaria y hacer un refresco una vez
+terminada toda la actualización de pantalla. refresh() comprueba la ventana y
+actualiza sólo la porción que ha cambiado. Esto mejora el rendimiento y también
+ofrece una mayor flexibilidad. Pero a veces es frustrante para los
+principiantes. Un error común cometido por los principiantes es olvidar llamar
+a refresh() después de que hacer algunas actualizacions mediante funciones de
+clase printw(). A veces todavía lo olvido añadir :-)\\
+
+\subsubsection{Acerca de endwin()}%
+Y, finalmente, no se olvide poner fin al modo curses. De lo contrario su
+terminal puede comportarse de forma extraña después de cerrar el programa.
+endwin() libera la memoria tomada por el sub-sistema de curses y sus
+estructuras de datos y pone el terminal en modo normal. Esta función debe ser
+llamada después de que haya terminado con el modo de curses.
+
+\section{Los detalles sangrientos}%
+Ahora que hemos visto cómo escribir un programa sencillo vamos a entrar en
+detalles. Hay muchas funciones que ayudan a personalizar lo que se ve en
+pantalla y muchas características que pueden tener un uso completo.\\
+
+Aquí vamos…
+
+\section{Inicialización $<<$@INIT$>>$}%
+Ahora sabemos que para inicializar el sistema curses la funcion initscr() ha de
+ser llamada. Hay funciones que pueden ser llamadas después de esta
+inicialización para personalizar nuestra sesión de curses. Podemos cuestionar
+al sistema curses para configurar el terminal en modo raw o inicializar el
+color o el ratón, etc$\cdots$ Vamos a discutir algunas de las funciones que
+normalmente se llaman inmediatamente después de initscr();
+
+\subsection{Funciones de inicialización}%
+\subsubsection{raw() and cbreak()}%
+Normalmente, el terminal maneja buffers de caracteres que el usuario escribe
+hasta que se encuentra una línea nueva o retorno de carro. Pero la mayoria de
+programas requiere que los caracteres estén disponibles tan pronto como los
+escribe el usuario. Las dos funciones anteriores se utilizan para desactivar el
+buffer de línea. La diferencia entre estas dos funciones es la forma en que los
+caracteres de control como suspender (CTRL-Z), interrumpir y quitar (CTRL-C) se
+pasan al programa. En el modo raw() los caracteres pasan directamente al
+programa sin generar una señal. En el modo cbreak() estos caracteres de control
+son interpretados como cualquier otro carácter por el controlador de terminal.
+Personalmente prefiero usar raw() ya que puedo ejercer un mayor control de lo
+que hace el usuario.
+
+\subsubsection{echo() and noecho()}%
+Estas funciones controlan el eco de caracteres generados por el usuario al
+terminal. noecho() desactiva el eco. La posible razón para hacer esto es
+mejorar el control sobre el eco o suprimir el eco innecesario al tomar la
+entrada del usuario mediante funciones getch(). La mayor parte de los programas
+interactivos llaman a noecho() en la inicialización y realizan el eco de
+caracteres de manera controlada. Esto le da al programador la flexibilidad de
+imprimir caracteres en cualquier lugar en la ventana sin actualizar las
+coordenadas actuales (y, x).
+
+\subsubsection{keypad()}%
+Este es mi función de inicialización favorita. Habilita la lectura de teclas de
+función como F1, F2, teclas de direccion, etc. Casi todos los programa
+interactivos permiten esto, Las teclas de dirección son una parte importante de
+cualquier interfaz de usuario. Coloque keypad(stdscr, TRUE) para habilitar esta
+función en la pantalla (stdscr). Usted aprenderá más sobre gestión de teclas en
+secciones posteriores de este documento.
+
+\subsubsection{halfdelay()}%
+Esta función, aunque no se utiliza muy a menudo, en ocaciones suele ser de
+utilidad. halfdelay() es llamada para activar el modo de espera medio, que es
+similar al modo cbreak() en el que los caracteres escritos estan disponibles de
+inmediato para el programa. Sin embargo, espera ‘X’ décimas de segundo por la
+entrada y luego devuelve ERR, si no hay entrada disponible. ‘X’ es el valor de
+tiempo de espera pasado a la función halfdelay(). Esta función es útil cuando
+se pide entrada al usuario, y si no responde en cierto tiempo, podemos hacer
+algo más. Un ejemplo posible es un tiempo de espera en la solicitud de
+contraseña.
+
+\subsection{Otras funciones de inicialización}%
+Hay algunas funciones más que se llaman en la inicialización para personalizar
+el comportamiento de curses. No se utilizan tan ampliamente como las
+mencionadas anteriormente. Algunas de estas se explican donde es apropiado.
+
+\subsection{Un ejemplo}%
+Vamos a escribir un programa que permitirá aclarar el uso de éstas funciones.\\
+
+%C++
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/basics/init_func_example.c}{*Ejemplo 2. Funciones de inicialización} 
+\inputminted{cpp}{./cpp/002_funciones_inicializacion.cpp}
+
+Este programa se explica por sí mismo. Pero hago uso de funciones que aun no se
+han explicado. La función getch() se utiliza para obtener un caracter del
+usuario. Es equivalente un getchar() normal excepto que puede deshabilitar el
+buffer de línea para evitar <enter> después de la entrada. Para más información
+sobre getch() y lectura de teclas eche un vistazo a la seccion gestion de
+teclado. Las funciones attron y attroff se utilizan para cambiar y desactivar
+algunos atributos respectivamente. En el ejemplo son usadas para imprimir el
+carácter en negrita. Estas funciones se explican en detalle más adelante.
+
+\section{Una indicación acerca de las Ventanas}%
+Antes de sumergirse en las innumerables funciones de ncurses, permítanme
+aclarar algunas cosas acerca de las ventanas. Las ventanas se explican en
+detalle en la siguientes secciones.\\
+
+Una ventana es una pantalla imaginaria definida por el sistema de curses. una
+ventana no significa una ventana bordeada que por lo general se ven en
+plataformas Win9X. Cuando inicializa curses, se crea una ventana por defecto
+llamada stdscr que representa su pantalla de 80x25 (o el tamaño de ventana en
+el que se está ejecutando). Si está realizando tareas simples como imprimir
+algunas cadenas, lectura de entrada, etc., puede utilizar con seguridad esta
+única ventana para todos los propósitos. También se pueden crear ventanas y
+llamar a funciones que trabajan de forma explícita en una ventana especificada.\\
+
+Por ejemplo, si usted llama a.
+
+\begin{minted}{cpp}
+  printw("Hola ahi!!!");
+  refresh();
+\end{minted}
+
+Imprime la cadena en stdscr en la posicion actual del cursor. Del mismo modo la
+llamada a refresh(), funciona sólo en stdscr.\\
+
+Digamos que ha creado ventanas entonces tiene que llamar a una función con una
+‘w’ añadida a la función habitual.
+
+\begin{minted}{cpp}
+  wprintw(win, "Hola ahi!!!");
+  wrefresh(win);
+\end{minted}
+
+Como se verá en el resto del documento, Los nombres de funcione siguen la misma
+convención. Para cada función por lo general hay tres funciones más.
+
+\begin{minted}{cpp}
+  printw(string);         /* Imprime en stdscr en la posicion actual del cursor */
+  mvprintw(y, x, string); /* Mueve a (y, x) luego imprime la cadena */
+  wprintw(win, string);   /* Imprime en la ventana win en la actual posicion del cursor
+                           * en la ventana */
+  mvwprintw(win, y, x, string); /* Mueve a las coordenadas (y, x) relativas a la
+                                 * ventana y luego imprime */
+\end{minted}
+
+Por lo general, las funciones sin-w son macros que se expanden a la
+correspondiente funcion-w con stdscr como parámetro de ventana.
+
+\section{Funciones de Salida}%
+Supongo que no puede esperar más para ver algo de acción. De nuevo a nuestra
+odisea de funciones. Ahora que curses esta inicializado, vamos a interactuar
+con el mundo.\\
+
+Hay tres clases de funciones que se pueden utilizar para manejar la salida en
+la pantalla.\\
+
+\begin{itemize}
+  \item Clase addch(): Imprimir carácter individual con atributos
+  \item Clase printw(): Imprimir salida con formato similar a printf()
+  \item Clase addstr(): Imprimir cadenas
+\end{itemize}
+
+Estas funciones se pueden utilizar indistintamente y es cuestión de estilo
+elegir la clase a utilizar. Veamos cada una a detalle.
+
+\subsection{Clase de funciones addch()}%
+Estas funciones colocan un solo carácter en la posicion del cursor y avanzan
+la posición del cursor. Puede dar el carácter a imprimir pero por lo general se
+utilizan para imprimir un caracter con algunos atributos. Los atributos se
+explican a detalle en posteriores secciones del documento. Si un caracter está
+asociado a un atributo (negrita, vídeo inverso, etc.), cuando curses imprime el
+carácter, este se imprime con ese atributo.\\
+
+A fin de combinar un caracter con algunos atributos, tiene dos Opciones:\\
+
+- Con el operador OR enmascarar un solo caracter y la macro del atributo deseado.
+Estas macros de atributos se encuentran en el archivo de cabecera ncurses.h.
+Por ejemplo, si desea imprimir un carácter ch (de tipo char) negrita y
+subrayado, llamaría a addch() de la siguiente manera.
+
+\begin{minted}{cpp}
+  addch(ch | A_BOLD | A_UNDERLINE);
+\end{minted}
+
+- Mediante funciones como attrset(), attron(), attroff(). Estas funciones se
+explican en la sección Attributos. Brevemente, se pueden manipular los
+atributos actuales de una ventana dada. Una vez establecidos, el carácter
+impreso está asociado con los atributos hasta que se desactivan.\\
+
+Adicionalmente, curses proporciona algunos caracteres especiales para gráficos
+basados en caracteres. Puede dibujar tablas, líneas horizontales o
+verticales, etc. Puede encontrar todos los caracteres disponibles en el archivo
+de cabecera ncurses.h. Intente buscando macros que inicien con ACS\_ en dicho
+archivo.
+
+\subsection{mvaddch(), waddch(), mvwaddch()}%
+\textbf{mvaddch()} se utiliza para mover el cursor a un punto dado, y luego imprimir.
+Por tanto, las llamadas:mvaddch() se utiliza para mover el cursor a un punto
+dado, y luego imprimir. Por tanto, las llamadas:
+
+\begin{minted}{cpp}
+  move(row, col);       /* Mueve el cursor a la enesima fila y enesima columna */
+  addch(ch);
+\end{minted}
+
+Puede ser reemplazado por
+
+\begin{minted}{cpp}
+  mvaddch(row, col, ch);
+\end{minted}
+
+\textbf{waddch()} es similar a addch(), excepto que añade un carácter a una ventana
+dada. (Tenga en cuenta que addch() añade un carácter a la ventana stdscr.)\\
+
+De manera similar la función \textbf{mvwaddch()} se utiliza para añadir un carácter a la
+ventana dada en las coordenadas dadas.\\
+
+Ahora, estamos familiarizados con la función de salida basico addch(). Pero, si
+queremos imprimir una cadena, sera muy molesto imprimirla carácter a carácter.
+Afortunadamente, ncurses provee funciones similares a printf y puts.
+
+\subsection{Clase de funciones printw()}%
+Estas funciones son similares a printf() con la capacidad añadida de imprimir
+en cualquier posición de la pantalla.
+
+\subsubsection{printw() y mvprintw()}%
+Estas dos funciones operan similar a printf(). \textbf{mvprintw()} se utiliza para mover
+el cursor a una posición y luego imprimir. Si quiere puede mover el cursor y
+luego imprimir utilizando la función printw(), primero utilice move() y luego
+printw() aunque no veo ningún punto para evitar el uso de mvprintw(), la
+flexibilidad de manejo es tuya.
+
+\subsubsection{wprintw() y mvwprintw()}%
+Estas dos funciones son similares a las de dos de arriba, excepto que imprimen
+en la correspondiente ventana dada como argumento.
+
+\subsubsection{vwprintw()}%
+Esta función es similar a vprintf(). Se puede utilizar para imprimir un número
+variable de argumentos.
+
+\subsubsection{Un ejemplo sencillo de printw}%
+
+%C++
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/basics/printw_example.c}{*Ejemplo 3. Un ejemplo sencillo de printw}
+\inputminted{cpp}{./cpp/003_printw.cpp}
+
+El Programa anterior demuestra lo fácil que es utilizar printw. Simplemente
+pase las coordenadas y el mensaje a mostrar en pantalla, y luego haga lo que
+quiera.\\
+
+El programa anterior introduce una nueva función getmaxyx(), una macro definida
+en ncurses.h. Entrega el número de columnas y el número de filas en una ventana
+dada. getmaxyx() hace esto actulalizando las variables que le son dadas. Ya que
+getmaxyx() no es una función no pase punteros en ella, solo entregue dos
+variables entero.
+
+\subsection{Clase de funciones addstr()}%
+\textbf{addstr()} se utiliza para poner una cadena de caracteres en una ventana
+determinada. Esta función es similar a llamar a addch() una vez por cada
+carácter de una cadena dada. Esto es cierto para todas las funciones de salida.
+Hay otras funciones de esta familia como mvaddstr(), mvwaddstr() y waddstr(),
+que obedecen la convención de nomenclatura de curses. (por ejemplo mvaddstr()
+es similar a las respectivas llamadas move() y luego addstr().) Otra de las
+funciones de esta familia es addnstr(), que adicionalmente toma un parámetro
+entero (llamado n). Esta función pone almenos n caracteres en el pantalla. Si n
+es negativo, entonces se añadirá toda la cadena.
+
+\subsection{Una palabra de advertencia}%
+Todas estas funciones toman en sus argumentos la coordenada y primero y x
+despues. Un error común de los principiantes es pasar x, y en ese orden. Si
+está haciendo demasiadas manipulaciones de coordenadas (y, x), considere
+dividir la pantalla en ventanas y manipular cada una por separado. Las ventanas
+se explican en la sección Ventanas.
+
+\section{Funciones de entrada}%
+Bueno, la impresión sin toma de entrada, es aburrida. Veamos las funciones que
+nos permiten tomar la entrada de usuario. Estas funciones también pueden ser
+divididas en tres categorías.
+
+\begin{itemize}
+  \item Clase getch(): Obtener un caracter
+  \item Clase scanw(): Obtener entrada con formato
+  \item Clase getstr(): Obtener cadenas
+\end{itemize}
+
+\subsection{Clase de funciones getch()}%
+Estas funciones leen un solo carácter de la terminal. Pero hay varios hechos
+sutiles a considerar. Por ejemplo, si no utiliza la función cbreak(), curses no
+leerán sus caracteres de entrada forma continua, solo empezara a leerlos sólo
+después de encontrar un caracter de nueva linea o un EOF. Con el fin de evitar
+esto, debe utilizarse la funcion cbreak() para que los caracteres están
+disponibles a su prograba inmediatamente. Otra función muy utilizada es
+noecho(). Como el nombre sugiere, cuando esta función es activada (usada), los
+caracteres pulsados por el usuario no se mostrarán en la pantalla. Las dos
+funciones cbreak() y noecho() son ejemplos típicos de gestión del teclado. Las
+funciones de este género se explican en la sección gestion del teclado.
+
+\subsection{clase de funciones scanw()}%
+Estas funciones son similares a scanf() con la capacidad añadida de conseguir
+la entrada desde cualquier lugar de la pantalla.
+
+\subsubsection{scanw() y mvscanw}%
+El uso de estas funciones es similar al de sscanf(), donde la línea a escanear
+es proporcionada por la funcien wgetstr(). Es decir, estas funciones llaman a
+la funcion wgetstr() (explicada más adelante) y utilizan la línea resultante de
+un escaneo.
+
+\subsubsection{wscanw() y mvwscanw()}%
+Estas son similares a las dos funciones anteriores excepto que leen desde una
+ventana, que se suministra como uno de los argumentos a estas funciones.
+
+\subsubsection{vwscanw()}%
+Esta función es similar a vscanf(). Se puede utilizar cuando se va a escanear
+una número variable de argumentos.
+
+\subsection{Clase de funciones getstr()}%
+Estas funciones se utilizan para obtener cadenas desde la terminal.
+Esencialmente, esta función realiza la misma tarea que la que se lograría con
+una serie de llamadas a getch() hasta recibir nueva línea, retorno de carro, o
+fin de archivo. La cadena de caracteres resultante es apuntada por str, El cual
+es un puntero a carácter proporcionado por el usuario.
+
+\subsection{Algunos ejemplos}%
+
+%C++
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/basics/scanw_example.c}{*Ejemplo 4. Un ejemplo sencillo de scanw*}
+\inputminted{cpp}{./cpp/004_scanw.cpp}
+
+\section{Atributos $<<$@ATTRIB$>>$}%
+Hemos visto un ejemplo de cómo se pueden utilizar atributos para imprimir
+caracteres con algunos efectos especiales. Cuando los atributos se establecen
+con prudencia, pueden presentar información de manera sencilla y comprensible.
+El siguiente programa toma un archivo C como entrada e imprime el archivo con
+comentarios en negrita. Escanea a través del código.\\
+
+%C++
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/basics/simple_attr.c}{*Ejemplo 5. Un ejemplo sencillo de atributos*}
+\inputminted{cpp}{./cpp/005_atributos.cpp}
+
+No se inquiete con toda esa inicialización y otras mierdas. Concéntrese en el
+bucle while. Se lee cada carácter en el archivo y se busca el patrón /*. Una
+vez visto el patrón, cambia el atributo a BOLD con attron(). Cuando se obtiene
+el patrón */ se desactiva mediante attroff().\\
+
+El programa anterior también nos presenta dos funciones útiles getyx() y
+move(). La primera función obtiene las coordenadas actuales del cursor en las
+variables y, x. Ya que getyx() es una macro no tenemos que pasar punteros a
+variables. La función move() mueve el cursor a las coordenadas que le son
+dadas.\\
+
+El programa anterior es realmente muy simple ya que no hace mucho. Con estas
+líneas se podría escribir un programa más útil que lea un archivo C, lo analice
+e imprima en diferentes colores. Podría incluso extenderlo a otros lenguajes.\\
+
+\subsection{Los detalles}%
+Entremos en más detalles sobre los atributos. Las funciones attron(),
+attroff(), attrset(), y sus funciones hermanas attr\_get() etc… se utilizan
+para encender/apagar atributos, obtener atributos y dar una presetracion
+colorida.\\
+
+Las funciones attron y attroff toman una máscara de bits de atributos para
+encenderlos o apagarlos, respectivamente. Los siguientes atributos de video,
+definidos en $<$curses.h$>$ pueden ser pasados a estas funciones.
+
+\begin{itemize}
+  \item A\_NORMAL \tab Visualizacion normal (sin resaltar)
+  \item A\_STANDOUT \tab Mejor modo del terminal para resaltado
+  \item A\_UNDERLINE \tab Subrayado
+  \item A\_REVERSE \tab Video inverso
+  \item A\_BLINK \tab Intermitente
+  \item A\_DIM \tab Mitad de brillo
+  \item A\_BOLD \tab Brillo extra o negrita
+  \item A\_PROTECT \tab Modo protegido
+  \item A\_INVIS \tab En modo Invisible o en blanco
+  \item A\_ALTCHARSET \tab Juego de caracteres alternativo
+  \item A\_CHARTEXT \tab Mascara de bits para extraer el caracter
+  \item COLOR\_PAIR(n) \tab Par de color numero /n/
+\end{itemize}
+
+El último es el más colorido :-) Los colores se explican en las secciones
+siguentes.\\
+
+Con OR(|) podemos poner cualquier número de los atributos anteriores para
+obtener un efecto combinado. Si querías vídeo inverso con caracteres
+parpadeantes puedes usar.\\
+
+
+\begin{minted}{cpp}
+  attron(A_REVERSE | A_BLINK);
+\end{minted}
+
+\subsection{attron() vs attrset()}%
+Entonces ¿cuál es la diferencia entre attron() y attrset()? attrset establece
+los atributos de la ventana mientras que attron simplemente enciende el
+atributo que le es dado. Así attrset() anula totalmente los atributos que la
+ventana tenía anteriormente y establece nuevos atributos. Del mismo modo
+attroff() simplemente se apaga el atributo que se le da como argumento. Esto
+nos da la flexibilidad de gestiónar los atributos facilmente. Pero si se
+utilizan descuidadamente puede perder la pista de que atributos tiene la
+ventana y distorsionar la pantalla. Esto es especialmente cierto cuando maneja
+menús con colores y resaltado. Así que determine una política constante y
+adhierase a ella. Siempre puede utilizar standend() (que es equivalente a
+attrset(A\_NORMAL)) para apagar todos los atributos y regresar al modo normal.
+
+\subsection{attr\_get()}%
+La función attr\_get() obtiene los atributos y colores actuales de la ventana.
+Aunque tal vez la utilice tan a menudo como las funciones anteriores, es útil
+para escanear áreas de la pantalla. Digamos que queríamos realizar alguna
+actualización compleja en la pantalla y no estamos seguros de cuales atributos
+estan asociados a cada carácter. En ese caso puede utilizadar esta función en
+conjunto con attrset o attron para producir el efecto deseado.
+
+\subsection{Funciones attr\_}%
+Hay una serie de funciones como attr\_set(), attr\_on, etc.. Estas son similares
+a las funciones anteriores, excepto que toman parámetros de tipo attr\_t.
+
+\subsection{funciones wattr}%
+Para cada una de las funciones anteriores tenemos una función correspondiente
+con ‘w’, que opera en una ventana en particular. Las funciones anteriores
+operar en stdscr.
+
+\subsection{funciones chgat()}%
+La función chgat() aparece al final de la página man curs\_attr. En realidad, es
+una utilidad. Puede utilizar esta función para establecer los atributos de un
+grupo de caracteres sin moverse. Con ello quiero decir!!! sin mover el cursor
+:-) Esto cambia los atributos de un determinado número de caracteres a partir
+de la ubicación actual del cursor.\\
+
+Pasando -1 como numero de caracteres actualiza hasta el final de línea. Si
+desea cambiar los atributos a los caracteres de la posición actual hasta el fin
+de línea, sólo utilice:
+
+\begin{minted}{cpp}
+  chgat(-1, A_REVERSE, 0, NULL);
+\end{minted}
+
+Esta función es útil cuando se cambian los atributos de caracteres que ya estan
+en pantalla. Valla al caracter desde el que desea cambiar y modifique el
+atributo.\\
+
+Las otras funciones wchgat(), mvchgat(), mvwchgat() se comportan de manera
+similar excepto que las funciones “w” operan en un ventana concreta. Las
+funciones mv primero mueven el cursor y a continuación realizan el trabajo
+dado. chgat en realidad es una macro que se sustituye por wchgat() con stdscr
+como ventana. La mayor parte de las funciones de sin “w” son macros.\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/basics/with_chgat.c}{*Ejemplo 6. Ejemplo de uso para chgat()*}
+\inputminted{cpp}{./cpp/006_chgat.cpp}
+
+Este ejemplo también nos introduce en el mundo de color de curses. Los colores
+serán explicadas en detalle más adelante. Utilice 0 para ningún color.
+
+\section{Ventanas $<<$@WINDOWS$>>$}%
+Las ventanas forman el concepto más importante en curses. Has visto la ventana
+estándar stdscr en la cual todas funciones anteriores operan de forma
+implícita. Ahora para hacer el diseño incluso de una GUI sencilla, recurriremos
+al uso de ventanas. La principal razón para utilizar ventanas es para manipular
+partes de la pantalla por separado, abtenietdo asi un mejor redimiento,
+actualizando sólo las ventanas que necesitan cambiar y para un diseño mejor. Yo
+diría que la última razón es la más importante para utilizar ventanas. Usted
+siempre debe luchar por un diseño de sus programas mejor y más fácil de
+gestionar. Si esta escribiendo grandes y complejas GUIs esto es de fundamental
+importancia antes de empezar a hacer cualquier cosa.
+
+\subsection{Lo basico}%
+Puede crear una ventana llamando a la función newwin(). Esto en realidad no
+crea nada en la pantalla. Asigna memoria a una estructura para manipular la
+ventana y actualiza la estructura con los datos relativos a la ventana como su
+tamaño, inicioy, iniciox etc.. De ahí que en curses, una ventana sea sólo una
+abstracción imaginaria de una ventana, que se puede manipular independiente de
+las demás partes de la pantalla. La funcion newwin() devuelve un puntero a la
+estructura WINDOW, el cual puede pasar a funciones relacionadas con ventanas
+como wprintw() etc.. Finalmente la ventana puede ser destruida con delwin().
+Esto libera la memoria asociada con la estructura WINDOW.
+
+\subsection{Que haya una Ventana!!!}%
+Lo divertido es, crear una ventana y no poder verla. Comencemos mostrando la
+ventana. La función box() sirve para dibujar un borde alrededor de la ventana.
+Vamos a explorar esta y otras funciones con más detalle en este ejemplo.\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/basics/win_border.c}{*Ejemplo 7. Borde en ventana}
+\inputminted{cpp}{./cpp/007_borde_en_ventana.cpp}
+
+\subsection{Explicación}%
+No grites. Sé que es un ejemplo grande. Pero tengo que explicar algunas cosas
+importantes aquí :-). Este programa crea una ventana rectangular que se puede
+mover con las teclas de flecha izquierda, derecha, arriba y abajo. Con la
+creacion y destruccion repetida de ventanas cuando el usuario presiona una
+tecla. No valla más allá de los límites de la pantalla. La comprobación de
+estos límites se deja como un ejercicio para el lector. Vamos a diseccionar
+línea por línea.\\
+
+El funcion create\_newwin() crea una ventana con newwin() y muestra un borde
+alrededor con box(). La función destroy\_win() primero borra la ventana de
+pantalla pintando un borde con el caracter ’ ’ y luego llama a delwin() para
+liberar la memoria. Dependiendo de la tecla que el usuario presiona, se cambia
+starty o startx y se crea una nueva ventana.\\
+
+Como puede ver en destroy\_win, he usado wborder() en lugar de box(). La razón
+está escrita en los comentarios (Te lo perdiste. Lo se. Lee el codigo :-)).
+wborder() dibuja un borde alrededor de la ventana con los caracteres dados para
+las 4 esquinas y las 4 líneas. Para decirlo claramente, si llama a wborder()
+como a continuación:
+
+\begin{minted}{cpp}
+  wborder(win, '|', '|', '-', '-', '+', '+', '+', '+');
+\end{minted}
+
+\subsection{Las otras cosas en el ejemplo}%
+También puede ver que en los ejemplos anteriores, he utilizado las variables
+COLS y LINES que se inicializan con el tamaño de pantalla después de llamar a
+initscr(). Pueden ser útiles para obtener las dimensiones de la pantalla y para
+localizar las cordenadas al centro de la pantalla. Como siempre la función
+getch() obtiene informacion del teclado y de acuerdo a esta se hace el trabajo
+correspondiente. Este tipo de switch-case es muy común en todos los programas
+basados en GUI.
+
+\subsection{Otras funciones de Borde}%
+El programa anterior es muy ineficiente ya que a cada pulsación, se destruye
+una ventana y se crea otra. Así que vamos a escribir un programa más eficiente
+que utiliza otras funciones relacionadas con bordes.\\
+
+El siguiente programa utiliza mvhline() y mvvline() para lograr un efecto
+similar. Estas dos funciones son simples. Crean un línea horizontal o vertical
+de la longitud especificada en la posición especificada.\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/basics/other_border.c}{Ejemplo 8. Más funciones de borde}
+\inputminted{cpp}{./cpp/008_borde.cpp}
+
+\section{Colores $<<$@color$>>$}%
+\subsection{Lo basico}%
+La vida parece aburrida sin colores. curses tiene un buen mecanismo para el
+manejo de colores. Vamos a entrar de lleno con un pequeño programa.\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/basics/simple_color.c}{*Ejemplo 9. Un ejemplo simpre de color*}
+\inputminted{cpp}{./cpp/009_color.cpp}
+
+Como puede ver, para empezar a utilizar el color, primero debe llamar a la
+función start\_color(). Después de eso, puede utilizar las capacidades de color
+de su terminal utilizando distintas funciones. Pasa averiguar si un terminal
+tiene capacidades de color o no, puede utilizar la funcion has\_colors(), que
+devuelve FALSE si el terminal no soporta color.\\
+
+curses inicializa todos los colores admitidos por el terminal cuando llama a
+start\_color(). Estos estan accesibles mediante constantes como COLOR\_BLACK,
+etc. Ahora para realizar un manejo efectivo de colores, debe definir pares. Los
+colores siempre se utilizan en pares. Esto significa hacer uso de la función
+init\_pair() para definir el color de el frente y el fondo para un numero de
+pares deseado. Después los pares pueden ser utilizados como un atributo normal
+con la funcion COLOR\_PAIR(). Esto puede parecer incómodo al inicio. Pero esta
+elegante solución nos permite gestionar pares de colores muy facilmente. Para
+apreciarlo, mire el codigo fuente de “dialog”, una utilidad para mostrar
+cuadros de diálogo en scripts de shell. Los desarrolladores definen todas las
+combinaciones de color que se podiran necesitar y son inicializas al inicio.
+Esto fácilita establecer atributos y acceder a parejas ya definidas como
+constantes.\\
+
+Los siguientes colores están definidos en curses.h. Usted puede hacer uso de
+estos como parámetros para las distintas funciones de color.\\
+
+\begin{itemize}
+  \item COLOR\_BLACK   0
+  \item COLOR\_RED     1
+  \item COLOR\_GREEN   2
+  \item COLOR\_YELLOW  3
+  \item COLOR\_BLUE    4
+  \item COLOR\_MAGENTA 5
+  \item COLOR\_CYAN    6
+  \item COLOR\_WHITE   7
+\end{itemize}
+
+\subsection{Cambio en Definiciones de Color}%
+Puede utilizar la función init\_color() para cambiar los valores RGB definidos
+por curses inicialmente. Digamos que quiere aligerar la intensidad del color
+rojo para una minúscula. Entonces puede utilizar esta función como
+
+\begin{minted}{cpp}
+  init_color(COLOR_RED, 700, 0, 0);
+  /* param 1     : nombre de color
+  * param 2, 3, 4 : contenido rgb min = 0, max = 1000 */
+\end{minted}
+
+Si el terminal no puede cambiar las definiciones de color, la función devuelve
+ERR. Puede utilizar la función can\_change\_color() para conocer si el terminal
+tiene la capacidad de cambiar el contenido de color o no. El contenido rgb se
+escala de 0 a 1000. Inicialmente COLOR\_RED es definido con un contenido de
+1,000(r), 0(g), 0(b).
+
+\subsection{Contenido en color}%
+Puede utilizar las funciones color\_content() y pair\_content() para conocer
+el contenido de color y la combinacion de frente y fondo de un par.
+
+\section{Comunicandonos con el teclado $<<$@KEYS$>>$}%
+\subsection{Lo basico}%
+Ningun GUI está completo sin una fuerte interfaz de usuario y para interactuar
+con el usuario, un programa curses debe ser sensible a la pulsacion de teclas o
+las acciones del ratón realizadas por el usuario. Vamos a tratar con las teclas
+primero.\\
+
+Como se ha visto en casi todos los ejemplos anteriores, es muy fácil obtener la
+entrada de teclado del usuario. Una manera simple de conseguir pulsaciones del
+teclado es utilizar la funcion getch(). El modo cbreak debe estar habilitado
+para leer las teclas individualmente en lugar de lineas completas de texto (que
+por lo general terminan con un retorno de carro). Debe habilitar keypad para
+obtener las teclas de funcion, flecha, etc. Vea la sección Inicialización para
+más detalles.\\
+
+getch() devuelve un entero correspondiente a la tecla pulsada. Si es un
+caracter normal, el valor entero será equivalente a el caracter. De lo
+contrario, devuelve un número que pueda ser igualado con las constantes
+definidas en curses.h. Por ejemplo, si el usuario presiona F1, el entero
+devuelto es 265. Esto se puede comprobar con la macro KEY\_F() defina en
+curses.h. Esto vuelve la lectura portáble y fácil de manejar.
+
+Por ejemplo, si llama a getch() como
+
+\begin{minted}{cpp}
+  int ch;
+  ch = getch();
+\end{minted}
+
+getch() esperará a que el usuario presione una tecla, (a menos que especique un
+tiempo de espera) y cuando el usuario pulsa una tecla, se devuelve el entero
+correspondiente . A continuación, puede comprobar el valor correspondiente
+devuelto con las constantes definidas en curses.h contra las teclas que
+deseadas.\\
+
+El siguiente fragmento de código hara ese trabajo.
+
+\begin{minted}{cpp}
+  if(ch == KEY_LEFT)
+    printw("Left arrow is pressed\n");
+\end{minted}
+
+Vamos a escribir un pequeño programa que crea un menú navegable con las flechas
+arriba y abajo.
+
+\subsection{Ejemplo simple de uso de teclado}%
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/basics/simple_key.c}{*Ejemplo 10. Uso sencillo del teclado*}
+\inputminted{cpp}{./cpp/010_uso_teclado.cpp}
+
+\section{Interfaz con el ratón}%
+Ahora hemos visto cómo obtener informacion del teclado, hagamos los mismo desde
+el ratón. Por lo general, cada interfaz de usuario permite al usuario
+interactuar con ambos, teclado y ratón.
+\subsection{Lo basico}%
+Antes de hacer cualquier otra cosa, los eventos que desea recibir deben ser
+habilitados con mousemask().
+
+\begin{minted}{cpp}
+  mousemask( mmask_t newmask,     /* Los eventos que quiere escuchar */
+             mmask_t *oldmask );  /* La anterior mascara de eventos */
+\end{minted}
+
+El primer parámetro de la función anterior es una máscara de bits de los
+eventos que le gustaría escuchar. Por defecto, todos los eventos están
+apagados. La máscara de bits ALL\_MOUSE\_EVENTS se puede utilizar para obtener
+todos los eventos.\\
+
+Las siguientes son todas las máscaras de eventos:
+
+\begin{table}[htbp]
+  \begin{center}
+    \begin{tabular}{|l|l|}
+      \hline
+      Name & Descripcion \\
+      \hline \hline
+      BUTTON1\_PRESSED & boton 1 del mouse abajo \\ \hline
+      BUTTON1\_RELEASED & boton 1 del mouse arriba \\ \hline
+      BUTTON1\_CLICKED & boton 1 del mouse clic \\ \hline
+      BUTTON1\_DOUBLE\_CLICKED &  boton 1 del mouse doble clic \\ \hline
+      BUTTON1\_TRIPLE\_CLICKED &  boton 1 del mouse triple clic \\ \hline
+      BUTTON2\_PRESSED & boton 2 del mouse abajo \\ \hline
+      BUTTON2\_RELEASED &  boton 2 del mouse arriba \\ \hline
+      BUTTON2\_CLICKED & boton 2 del mouse clic \\ \hline
+      BUTTON2\_DOUBLE\_CLICKED &  boton 2 del mouse doble clic \\ \hline
+      BUTTON2\_TRIPLE\_CLICKED &  boton 2 del mouse triple clic \\ \hline
+      BUTTON3\_PRESSED & boton 3 del mouse abajo \\ \hline
+      BUTTON3\_RELEASED &  boton 3 del mouse arriba \\ \hline
+      BUTTON3\_CLICKED & boton 3 del mouse clic \\ \hline
+      BUTTON3\_DOUBLE\_CLICKED &  boton 3 del mouse doble clic \\ \hline
+      BUTTON3\_TRIPLE\_CLICKED &  boton 3 del mouse triple clic \\ \hline
+      BUTTON4\_PRESSED & boton 4 del mouse abajo \\ \hline
+      BUTTON4\_RELEASED &  boton 4 del mouse up \\ \hline
+      BUTTON4\_CLICKED & boton 4 del mouse clic \\ \hline
+      BUTTON4\_DOUBLE\_CLICKED &  boton 4 del mouse doble clic \\ \hline
+      BUTTON4\_TRIPLE\_CLICKED &  boton 4 del mouse triple clic \\ \hline
+      BUTTON\_SHIFT &  se pulso shift durante el cambio de estado del boton \\ \hline
+      BUTTON\_CTRL & se pulso control durante el cambio de estado del boton \\ \hline
+      BUTTON\_ALT &  se pulso alt durante el cambio de estado del boton \\ \hline
+      ALL\_MOUSE\_EVENTS &  informa todos los cambios de estados \\ \hline
+      REPORT\_MOUSE\_POSITION & informa movimiento del mouse \\ \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsection{Obtención de eventos}%
+na vez que una clase de eventos de ratón se ha habilitado, las funciones de
+clase getch() devuelven KEY\_MOUSE cada vez que sucede un evento de ratón. En
+ese caso, el evento de ratón puede ser recuperado con getmouse().\\
+
+El código es aproximadamente así:
+
+\begin{minted}{cpp}
+  MEVENT even;
+  ch = getch();
+  if(ch == KEY_MOUSE)
+    if(getmouse(&event) == OK)
+      /* Hacer algo con el evento */
+      /* ... */
+\end{minted}
+
+getmouse() devuelve el evento en el puntero que se le da. Es un estructura que contiene
+
+\begin{minted}{cpp}
+  typedef struct
+  {
+    short id;         /* ID para distinguir multiples dispositivos */
+    int x, y, z;      /* coordenadas del evento */
+    mmask_t bstate;   /* bits de estado del boton */
+  }
+\end{minted}
+
+bstate es la variable que mayor nos interesa. Informa el estado del botón del ratón.\\
+
+Luego, con un fragmento de código como el siguiente, podemos averiguar lo sucedido.
+
+\begin{minted}{cpp}
+  if(event.bstate & BUTTON1_PRESSED)
+    printw("Boton izquierdo presionado");
+\end{minted}
+
+\subsection{Poniendo todo junto}%
+Esta es más o menos la interfaz con el ratón. Vamos a crear el mismo menú y
+permitir la interacción del ratón. Para hacer las cosas más simples, se elimina
+el manejo del teclado.\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/basics/mouse_menu.c}{*Ejemplo 11. Acceder al menú con el ratón!!*} 
+\inputminted[fontsize=\footnotesize]{cpp}{./cpp/011_menu_raton.cpp}
+
+\subsection{Funciones varias}%
+Puede utilizar las funciones mouse\_trafo() y wmouse\_trafo() para convertir las
+cordenadas del ratón en coordenadas relativas a la pantalla. Vea la pagina de
+manual =curs\_mouse(3X)= para más detalles.\\
+
+La función mouseinterval establece el tiempo máximo (en milesimas de segundo)
+que puede transcurrir entre eventos de presion y liberación para que puedan ser
+reconocidos como un clic. Esta función devuelve el valor del intervalo
+anterior. El valor predeterminado es una quinta parte de un segundo.
+
+\section{Manipulación de Pantalla}%
+En esta sección, veremos algunas funciones, que nos permiten manejar la
+pantalla de manera eficiente para escribir algunos programas fantasticos. Esto
+es especialmente importante en la escritura de juegos.
+
+\subsection{Funciones getyx()}%
+La función getyx() se utiliza para descubrir las coordenadas actuales del
+cursor. Se colocaran las coordenadas de los valores x e y en los argumentos
+dados. Ya que getyx() es una macro no tiene que pasar la dirección de las
+variables. Se le puede llamar como
+
+\begin{minted}{cpp}
+  getyx(win, y, x);
+  /* win : puentero a ventana
+   * y, x: se colocaran las coordenadas y, x en estas variables
+   */
+\end{minted}
+
+La función getparyx() obtiene las coordenadas iniciales de la sub ventana con
+respecto a la ventana principal. Esto algunas veces es útil para actualizar una
+sub ventana. Cuando se diseñan cosas asombrosas como menús múltiples, debido a
+la dificultad de almacenar las posiciones del menú, las coordenadas de la
+opcion principal etc. Una solución simple a este problema, es la creación de
+menús en ventanas secundarias y luego localizar las coordenadas iniciales de
+los menús utilizando getparyx().\\
+
+Las funciones getbegyx() y getmaxyx() almacenan el inicio y las coordenadas
+maximas de la ventana actual. Estas funciones son útiles de la misma manera que
+la anterior en el manejo eficaz de ventanas y sub ventanas.
+
+\subsection{Volcado de Pantalla}%
+Cuando se escriben juegos, en ocaciones es necesario almacenar el estado de la
+pantalla y restaurarlo de nuevo al mismo estado. Puede utilizar la función
+scr\_dump() para volcar los contenidos de la pantalla al archivo dado como
+argumento. Más tarde se puede restaurare con la función scr\_restore. Con estas
+dos simples funciones pueden mantener el manejo eficiente en un juego de
+movimiento rapido con cambios de escenarios.
+
+\subsection{Volcado de Ventana}%
+Puede utilizar las funciones putwin() y getwin(), para guardar y restaurar
+ventanas. putwin() coloca el estado actual de la ventana en un archivo, que
+puede ser restaurado posteriormente por getwin().\\
+
+Puede utilizar la función copywin() para copiar por completo una ventana en
+otra ventana. Toma las ventanas de origen y destino como parámetros y de
+acuerdo con el rectángulo especificado, copia la región rectangular desde la
+ventana origen hasta la ventana destino. El último parámetro especifica si
+desea sobrescribir o simplemente superponer el contenido en la ventana destino.
+Si este argumento es cierto, entonces la copia es no destructiva.
+
+\section{Características diversas}%
+Ahora ya conoces suficientes características para escribir un buen programa
+curses. Aqui estan algunas funciones auxiliares útiles en varios casos. Vamos a
+ir de cabeza a algunas de ellas.
+
+\subsection{curs\_set()}%
+Puede utilizar esta función para hacer el cursor invisible. Los parámetros
+aceptados por esta funcion son.
+\begin{itemize}
+  \item 0 : invisible
+  \item 1 : normal
+  \item 2 : muy visible.
+\end{itemize}
+
+\subsection{Dejar Temporalmente el modo curses}%
+En algunas ocaciones puede buscar volver temporalmente al cooked mode(modo
+normal de linea de buffer). En tal caso, primero tendrás que guardar los modos
+tty con una llamada a def\_prog\_mode() y luego llamar a endwin() para
+finalizar el modo de curses. Esto te dejará en el el modo tty original. Una vez
+que haya terminado, llamara a reset\_prog\_mode() para volver al modo curses.
+Esta función devuelve el tty al estado almacenada por def\_prog\_mode(). Luego
+de un refreth(), estára de vuelta en el modo de curses. He aquí un ejemplo que
+muestra la secuencia de cosas por hacer.
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/basics/temp_leave.c}{*Ejemplo 12: Dejando temporalmente el Modo curses}
+\inputminted{cpp}{./cpp/012_dejando_temp_curses.cpp}
+
+\subsection{Variables ACS\_}%
+Si alguna vez has programado en DOS, debes conocer acerca de este ingenioso
+juego de caracteres extendidos. Estos son imprimibles sólo en algunos
+terminales. Las funciones como box() utilizan estos caracteres. Todas estas
+variables comienzan con ACS significando el conjunto de caracteres alternativo.
+Es posible que haya observado mi uso de estos caracteres en algunos de los
+programas anteriores. El siguiente ejemplo que muestra todos los caracteres.
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/basics/acs_vars.c}{*Ejemplo 13: Variables ACS*}
+\inputminted{cpp}{./cpp/013_variables_ACS.cpp}
+
+\section{Otras librerias}%
+Además de la libreria curses, hay algunas librerias en modo texto, que
+proporcionan una mayor funcionalidad y un montón de características. Las
+siguientes secciones describen tres librerias estándar que normalmente se
+distribullen junto a curses.
+
+\section{Libreria Panel}%
+Ahora que eres competente en curses, buscaras hacer algo grande. Como crear una
+gran cantidad de ventanas superpuestas para dar un aspecto profesional tipo
+ventana. Por desgracia, esto se hace dificil de manejar en poco tiempo. Las
+actualizaciones múltiples, te sumergiran en una pesadilla. Las ventanas
+superpuestas generan manchas, cada vez que olvida actualizar las ventanas en el
+orden correcto.\\
+
+No caiga en la desesperacion. Hay una solución elegante proporcionada en la
+libreria Parel. En palabras de los desarrolladores de ncurses:\\
+
+Si tiene muchas ventanas superpuestas, la libreria panel es el camino a seguir.
+Es obvia la necesidad de realizar una serie de wnoutrefresh(), doupdate() y
+aliviar la carga de hacerlo correctamente (abajo arriba). La libreria mantiene
+información sobre el orden de las ventanas, su superposición y en consecuencia
+actualiza la pantalla correctamente. Así que ¿por qué esperar? Echemos un
+vistazo de cerca a los paneles.
+
+\subsection{Lo basico}%
+Un objeto panel es una ventana que se trata implícitamente como parte de una
+baraja incluyendo a todos los otros objetos panel. La baraja se trata como una
+pila con un panel superior que es completamente visible y los otros paneles
+pueden o no ser oscurecidos respecto a sus posiciones. Asi que La idea básica
+es crear una pila de paneles superpuestos y utilizal la libreria panel para
+desplegarlos correctamente. Hay una función similar a refresh() que, cuando es
+llamada, despliega los paneles en el orden correcto. Se proporcionan funciones
+para ocultar o mostrar paneles, mover paneles, cambiar su tamaño, etc.. El
+problema de superposicion es gestionado por la libreria panel durante todas las
+llamadas a estas funciones.\\
+
+El flujo general de un programa panel es el siguiente:
+\begin{itemize}
+  \item Crear las ventanas (con newwin()) que seran ligadas a paneles.
+  \item Cree paneles con el ordend de visibilidad elegido. Apilarlos de acuerdo
+    con la visibilidad deseada. La función new\_panel() se utiliza para crear
+    paneles.
+  \item Llame a update\_panels() para escribir los paneles en la pantalla
+    virtual en el orden correcto de visibilidad. llame a doupdate() para
+    mostrarlo en pantalla.
+  \item Manipule los paneles con show\_panel(), hide\_panel(), move\_panel() etc.
+    Haga uso de funciones auxiliares como panel\_hidden() y panel\_window(). Haga
+    uso del puntero de usuario para almacenar datos personalizados para un
+    panel. Utilice las funciones set\_panel\_userptr() y panel\_userptr() para
+    establecer y obtener el puntero de usuario de un panel.
+  \item Cuando haya terminado de utilizar el panel llame a del\_panel() para
+    eliminar el panel.
+\end{itemize}
+
+Hagamos los conceptos claros, con algunos programas. El siguiente es un
+sencillo programa que crea 3 paneles superpuestos y les muestra en la pantalla.
+
+\subsection{Compilación con la Librería Panel}%
+Para utilizar las funciones de la libreria panel, tiene que incluir panel.h y
+vincular el programa a la dicha libreria con la bandera -lpanel junto con
+-lncurses en ese orden.
+
+\begin{minted}{cpp}
+  #include <panel.h>
+  .
+  .
+  .
+\end{minted}
+
+Compilación y enlace:
+\mint{bash}|gcc <fichero del programa> -lpanel -lncurses|
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/panels/panel_simple.c}{*Ejemplo 14: Panel conceptos basicos*}
+\inputminted{cpp}{./cpp/014_panel.cpp}
+
+Como se puede ver, el programa anterior sigue un flujo simple. Las ventanas se
+crean con newwin() y luego son unidas a paneles con new\_panel(). La pila de
+paneles se actualiza, a medida que agregamos un panel después otro. Para
+mostrarlos en pantalla llamamos a update\_panels() y doupdate().
+
+\subsection{Navegacion en Paneles de Ventana}%
+El siguiente es un ejemplo un poco complicado. Este programa crea 3 ventanas
+que se puede rotar ciclicamente mediante el uso de tab. Echa un vistazo al
+código.
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/panels/panel_browse.c}{*Ejemplo 15: Navegación en Paneles de Ventana}
+\inputminted{cpp}{./cpp/015_navegacion_paneles.cpp}
+
+\subsection{Utilizando punteros de usuario}%
+En el ejemplo anterior utilice punteros de usuario para obtener la siguiente
+ventana en el ciclo. Podemos vincular información personalizada al panel
+especificando un puntero de usuario, que puede apuntar a cualquier información
+desea almacenar. En este caso guardé el puntero al siguiente panel en el ciclo.
+El puntero de usuario de un panel se puede establecer con la función
+set\_panel\_userptr(). Se puede acceder a dicha informacion mediante la función
+panel\_userptr() que devolverá el puntero de usuario de el panel dado como
+argumento. Después localizar el siguiente panel en el ciclo se establece en la
+cima con la función top\_panel(). Esta función trae a el panel dado como
+argumento a la parte superior de la pila de paneles.
+
+\subsection{Mover y Redimensionar Paneles}%
+Puede utilizar la función move\_panel() para mover un panel a la posicion
+deseada. Esto no cambia la posición del panel en la pila. Asegúrese utilizar
+move\_panel() en lugar de mvwin() en la ventana asociada a el panel.\\
+
+Cambiar el tamaño de un panel es ligeramente complejo. No hay una función
+directa para cambiar el tamaño de la ventana asociada a un un panel. Una
+solución para cambiar el tamaño de un panel es crear una nueva ventana con el
+tamaño deseado, cambie la ventana asociada a el panel utilizando
+replace\_panel(). No olvides borrar la ventana anterior. Puede obtener la
+ventana asociada con un panel mediante el uso de la función panel\_window().\\
+
+El siguiente programa muestra estos conceptos, en suposicion es un programa
+sencillo. Como es costumbre, puede rotar entre ventanas con <TAB>. Para cambiar
+el tamaño o mover el panel activo presione “r” por “resize”, ‘m’ para mover. A
+continuación, utilice las teclas de flecha para cambiar el tamaño o mover a la
+forma deseada y pulse enter para terminar el cambio. En ejemplo hace uso de los
+datos del usuario para obtener los datos necesarios para hacer las operaciones.
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/panels/panel_resize.c}{*Ejemplo 16: Mover y redimencionar un Panel}
+\inputminted{cpp}{./cpp/016_mover_redimencionar_panel.cpp}
+
+Concéntrese en el bucle while principal. Una vez que se descubre que tecla se
+ha pulsado, se toma la accion correspondiente. Si se presiona ‘r’ se inicia el
+modo de tamaño. Después de esto, los nuevos tamaños se actualizan a medida que
+el usuario presiona las teclas de flecha. Cuando el usuario pulsa <ENTER>
+termina la presente selección y el panel cambia de tamaño utilizando el
+concepto explicado anteriormente. Dentro del modo de tamaño el programa no
+muestra cómo se redimensiona la ventana. Se deja como ejercicio para el lector
+imprimir un borde de puntos mientras se cambia el tamaño a una nueva posición.\\
+
+Cuando el usuario presiona ‘m’ inicia el modo de movimiento. Esto es un poco
+más simple que el cambio de tamaño. Cuando pulsa las teclas de flecha se
+actualiza la nueva posición y al presionar <ENTER> el panel es movido llamando
+a la función move\_panel().\\
+
+En este programa los datos de usuario representados como PANEL\_DATA, juega
+papel muy importante en la búsqueda de la información asociada a un panel. Como
+está escrito en los comentarios, PANEL\_DATA almacena el tamaño del panel, la
+etiqueta, color de la etiqueta y un puntero al siguiente panel en el ciclo.
+
+\subsection{Ocultar y Mostrar Paneles}%
+Un panel se puede ocultar mediante el uso de la función hide\_panel(). Esta
+función simplemente lo quita de la pila de paneles, de esta forma lo oculta en
+pantalla cuando llama a update\_panels() y doupdate(). Esto no destruye la
+estructura PANEL asociada con el panel oculto. Puede mostrar nuevamente el
+panel utilizando la funcion show\_panel().\\
+
+El siguiente programa muestra como ocultar paneles. Pulse ‘a’ o ‘b’ o ‘c’ para
+mostrar u ocultar la primera, segunda y tercera ventana respectivamente. Se
+utilizan los datos de usuario con la pequeña variable hide, que realiza un
+seguimiento de si la ventana está oculta o no. Por alguna razón la función
+panel\_hidden() que indica si un panel está oculto o no, no está funcionando. Un
+informe de error fue también presentado por Michael Andres aqui
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/panels/panel_hide.c}{*Ejemplo 17: Ocultar y mostrar Paneles}
+\inputminted{cpp}{./cpp/017_ocultar_mostrar_paneles.cpp}
+
+\subsection{Funciones panel\_above() y panel\_below()}%
+Puede utilizar las funciones panel\_above() y panel\_below() para averiguar el
+panel superiar e inferiar a un panel. Si el argumento de estas funciones es
+NULL, devuelven un puntero al panel inferior y superior, respectivamente.
+
+\section{Libreria Menu}%
+La libreria menu proporciona una buena extensión al curses básico, a través de
+esta se pueden crear menús. Proporciona un conjunto de funciones para crear
+menús. Pero tiene que personalizarce para dar un aspecto más agradable, con
+colores etc. Entremos a los detalles.\\
+
+Un menú es una visualización de pantalla que ayuda al usuario a elegir un
+cierto subconjunto de un conjunto dado de elementos. Para ponerlo simple, un
+menú es una colección de elementos de los que se pueden elegir uno o más
+elementos. Algunos lectores podrían no ser conscientes de la capacidad de
+seliccion de elementos multiples. La libreria menu ofrece funcionalidad para
+escribir menús de los cuales es usuario puede elegir más de un elemento. Esto
+se trata en una sección posterior. Ahora es el momento para algunas nociones.
+
+\subsection{Lo basico}%
+Para crear menús, primero debe crear elementos, y luego colocar el menú en la
+pantalla. Después de eso, todo el procesamiento de las respuestas del usuario
+es hecho en una función elegante llamada menu\_driver() que es el caballo de
+trabajo de cualquier programa de menú.\\
+
+El flujo general de control de un programa de menú se parece a esto.
+
+\begin{itemize}
+  \item Inicializar curses
+  \item Cree elementos usando new\_item(). Puede especificar un nombre y una
+    descripción de los elementos.
+  \item Crear el menú con new\_menu() especificando los elementos que se
+    agregaran a este.
+  \item Publicar el menú con menu\_post() y refrescar la pantalla.
+  \item Procesar las las peticiones de los usuarios con un bucle y hacer las
+    actualizaciones necesarias al menú con menu\_driver.
+  \item Quitar el menú con menu\_unpost()
+  \item Liberar la memoria asignada al menú con free\_menu()
+  \item Liberar la memoria asignada a los elementos con free\_item()
+  \item Finalizar curses
+\end{itemize}
+
+Vamos a ver un programa que imprime un menú sencillo y actualiza la selección
+actual con las teclas de flecha arriba, abajo.
+
+\subsection{Compilación con la Libreria Menú}%
+Para utilizar las funciones de libreria de menu, tiene que incluir menu.h y
+enlazar el programa con la libreria menu mediante la bandera -lmenu debe ser
+añadido junto con -lncurses en ese orden.
+
+\begin{minted}{cpp}
+  #include <menu.h>
+  .
+  .
+  .
+\end{minted}
+
+Compilación y enlace:
+
+\mint{bash}|gcc <fichero del programa> -lmenu -lncurses|
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/menus/menu_simple.c}{*Ejemplo 18: Conceptos básicos de Menu*}
+\inputminted{cpp}{./cpp/018_conceptos_menu.cpp}
+
+Este programa demuestra los conceptos básicos que intervienen en la creación de
+un menú con libreria menu. Primero creamos los elementos mediante new\_item() y
+luego los agregamos al menu con la funcion new\_menu(). Después de publicar el
+menu y actualizar la pantalla, inicia el bucle principal de procesamiento. Se
+lee la entrada del usuario y se toma la acción correspondiente. La función
+menu\_driver() es el principal caballo de trabajo del sistema de menus. El
+segundo parámetro para esta función dice lo que hay que hacer con el menu. De
+acuerdo con el parámetro, menu\_driver() hace la tarea correspondiente. El valor
+puede ser ya sea una solicitud de navegación, un carácter ASCII, o una clave
+especial KEY\_MOUSE asociada a un evento de ratón.\\
+
+menu\_driver acepta las siguientes solicitudes de navegación.
+
+\begin{itemize}
+  \item REQ\_LEFT\_ITEM        Mover un elemento a la izquierda.
+  \item REQ\_RIGHT\_ITEM       Mover un elemento a la derecha.
+  \item REQ\_UP\_ITEM          Mover un elemento hacia arriba.
+  \item REQ\_DOWN\_ITEM        Mover un elemento hacia abajo.
+  \item REQ\_SCR\_ULINE        Desplácese una línea arriba.
+  \item REQ\_SCR\_DLINE        Desplácese una línea abajo.
+  \item REQ\_SCR\_DPAGE        Desplazarse una página hacia arriba.
+  \item REQ\_SCR\_UPAGE        Desplazarse una página hacia abajo.
+  \item REQ\_FIRST\_ITEM       Mover al primer elemento.
+  \item REQ\_LAST\_ITEM        Mover al último elemento.
+  \item REQ\_NEXT\_ITEM        Mover al siguiente elemento.
+  \item REQ\_PREV\_ITEM        Mover al elemento anterior.
+  \item REQ\_TOGGLE\_ITEM      Seleccionar/deseleccionar un elemento.
+  \item REQ\_CLEAR\_PATTERN    Borrar el buffer de patrones menu.
+  \item REQ\_BACK\_PATTERN     Eliminar el carácter anterior desde el buffer de patrones.
+  \item REQ\_NEXT\_MATCH       Mover al elemento siguiente que coincida con el patron.
+  \item REQ\_PREV\_MATCH       Mover al elemento anterior que coincida con el patron.
+\end{itemize}
+
+No se deje abrumar por el número de opciones. Vamos a verlos lentamente una
+tras otro. Las opciones de interés en este ejemplo son REQ\_UP\_ITEM y
+REQ\_DOWN\_ITEM. Estas dos opciones son pasadas a menu\_driver, que actualiza el
+elemento actual a un elemento hacia arriba o hacia abajo, respectivamente.
+
+\subsection{Menu Driver: El caballo de trabajo del sistema de menus}%
+Como se ha visto en el ejemplo anterior, menu\_driver juega un papel importante
+en la actualización del menu. Es muy importante comprender las diversas
+opciones y lo que hacen. Como se ha explicado, el segundo parámetro de
+menu\_driver() puede ser una solicitud de navegación, un carácter imprimible o
+una clave KEY\_MOUSE. Vamos a analizar las diferentes solicitudes de navegación.
+
+\textbf{REQ\_LEFT\_ITEM y REQ\_RIGHT\_ITEM}\\
+Se puede visualizar un menu con varias columnas de más de un ítem. Esto se
+realiza mediante la funcion menu\_format(). Cuando se muestra un menu de
+columnas múltiples estas peticiones hacen que menu\_driver de menu mueva la
+eleccion actual a la izquierda o la derecha.\\
+
+\textbf{REQ\_UP\_ITEM and REQ\_DOWN\_ITEM}\\
+Estas dos opciones se han visto en el ejemplo anterior. Cuando se pasan estas
+opciones, hacen que menu\_driver mueva la eleccion actual un elemento hacia
+arriba o hacia abajo.\\
+
+\textbf{Opciones REQ\_SCR\_*}\\
+Las cuatro opciones REQ\_SCR\_ULINE, REQ\_SCR\_DLINE, REQ\_SCR\_DPAGE,
+REQ\_SCR\_UPAGE están relacionadas con el desplazamiento. Si no se pueden
+mostrar todos los elementos de el menu en la subventana menu, el menu es
+desplazable. Estas solicitudes se pueden pasar a menu\_driver para realizar el
+desplazamiento, ya sea por línea o por pagina hacia arriba o hacia abajo
+respectivamente.\\
+
+\textbf{REQ\_FIRST\_ITEM, REQ\_LAST\_ITEM, REQ\_NEXT\_ITEM and REQ\_PREV\_ITEM}\\
+Estas solicitudes se explica por sí mismas.\\
+
+\textbf{REQ\_TOGGLE\_ITEM}\\
+Quando se pasa esta solicitud, se alterna la selección actual. Solo se utiliza
+esta opción en un menu de valores múltiples. Para utilizar esta solicitud la
+opción O\_ONEVALUE debe estar apagada. Esta opción puede ser apagar o encender
+con set\_menu\_opts().\\
+
+\textbf{Solicitud por Patrones}\\
+Cada menu tiene una buffer de patrones asociado, que se utiliza para encontrar
+la coincidencia más cercana a los caracteres ASCII introducidos por el usuario.
+Siempre que se pasan caracteres ASCII a menu\_driver, se colocan el el buffer de
+patrones. Este inteta encontrar la coincida más cercana con el patrón en la
+lista de elementos y mueve la seleccion a ese elemento. La solicitud
+REQ\_CLEAR\_PATTERN limpia el buffer de patrones. La solicitud REQ\_BACK\_PATTERN
+borra el carácter anterior en el buffer de patrones. En caso de que el patrón
+coincida con mas de un elemento se puede rotar por los elementos coincidentes
+con REQ\_NEXT\_MATCH y REQ\_PREV\_MATCH que mueven la selección a la conicidencia
+siguiente y anterior, respectivamente.\\
+
+\textbf{Solicitudes del raton}\\
+En caso de solicitudes KEY\_MOUSE, de acuerdo con la posición del ratón se toma
+una acción en consecuencia. La acción a tomar se explica en la página man como,\\
+Si el segundo argumento es la clave especial KEY\_MOUSE, el evento de ratón
+asociado se traduce en una de las anteriores solicitudes pre-definidas.
+Actualmente, solo se manejan los clics en la ventana de usuario (por ejemplo,
+dentro del área de visualización del menu o la decoracion de ventana). Si hace
+clic sobre la zona de visualizacion del menu, se genera un REQ\_SCR\_ULINE, con
+doble clic se genera REQ\_SCR\_UPAGE y con triple clic REQ\_FIRST\_ITEM. Si hace
+clic por debajo de la zona de visualización del menu, se genera un
+REQ\_SCR\_DLINE, un doble clic REQ\_SCR\_DPAGE y un triple click genera
+REQ\_LAST\_ITEM. Si hace clic en un elemento dentro del área de visualización del
+menu, el cursor del menu se coloca en dicho elemento.\\
+
+Cada una de las solicitudes anteriores se explicará en las siguientes líneas
+con varios ejemplos siempre que sea apropiado.
+
+\subsection{17.4. Ventanas de Menu}%
+Cada menu creado se asocia con una ventana y una sub ventana. La ventana menu
+muestra cualquier título o borde asociado con el menu. La ventana submenu
+muestra los elementos del menu actualmente disponible para su selección. Pero
+no especificamos ninguna ventana o subventana en el ejemplo. Cuando no se
+especifica una ventana, stdscr se toma como la ventana principal y, el sistema
+de menus calcula el tamaño requerido de la subventana para la visualización de
+elementos. A continuación se muestran los elementos en la subventana. Asi que
+vamos a jugar con estas ventanas, mostrado un menu con un borde y un título.\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/menus/menu_win.c}{*Ejemplo 19. Uso de Ventanas Menu}
+\inputminted{cpp}{./cpp/019_uso_ventanas_menu.cpp}
+
+En este ejemplo se crea un menu con un título, margen, una fantastica línea
+separa el título y los elementos. Como puede ver, con el fin de unir una
+ventana a un menu se utiliza la función set\_menu\_win(). A continuación
+agregamos tambien la ventana secundaria. Esto despliega los elementos en la
+subventana. También puede establecer la cadena de marca que se muestra a la
+izquierda del elemento seleccionado con set\_menu\_mark().
+
+\subsection{Desplazamiento en Menus}%
+Si la subventana dada no es lo suficientemente grande para mostrar todo los
+elementos, el menu serán desplazable. Cuando se está en el último elemento de
+la lista actual, si envía REQ\_DOWN\_ITEM, sera traducido como REQ\_SCR\_DLINE y el
+menu se desplaza un elemento. Puede pasar manualmente operaciones REQ\_SCR\_ para
+realizar el desplazamiento. Veamos cómo se puede realizar.\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/menus/menu_scroll.c}{*Ejemplo 20. Menu con desplazamiento}
+\inputminted{cpp}{./cpp/020_desplazamiento_menu.cpp}
+
+Este programa se explica por sí. En este ejemplo, el número de opciones ha sido
+aumentado a diez, que es más grande que el tamaño que nuestra subventana puede
+albergar (6 elementos). Este mensaje tiene que ser transmitido explícitamente
+al sistema de menus con la función set\_menu\_format(). Aquí especificamos el
+número de filas y columnas que queremos que se muestren para una sola página.
+Podemos especificar cualquier número de elementos a mostrar, en la variable
+rows, si este es menor que la altura de la subventana. Si la tecla presionada
+por el usuario es PAGE UP o PAGE DOWN, el menu se desplaza una página debido a
+la las solicitudes (REQ\_SCR\_DPAGE y REQ\_SCR\_UPAGE) dadas a menu\_driver().
+
+\subsection{Menu de Multiples Columnas}%
+En el ejemplo anterior se vio cómo utilizar la función set\_menu\_format(). No
+mencioné lo que hace la variable cols (tercer parámetro). Si la subventana es
+lo suficientemente amplia, puede optar por mostrar más de un elemento por fila.
+Esto se puede especificar en la variable cols. Para aclarar las cosas, El
+siguiente ejemplo no muestra la descripcion de los elementos.\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/menus/menu_multi_column.c}{*Ejemplo 21. Menu con Columnas Multiples}
+\inputminted{cpp}{./cpp/021_menu_columnas.cpp}
+
+Ver la llamada a la función = set\_menu\_format()=. Especifica el número de
+columnas a ser 3, mostrando de este modo 3 artículos por fila. Tenemos También
+apagado las descripciones que muestran con la función menu\_opts\_off()=. Hay par
+de funciones = set\_menu\_opts()=, menu\_opts\_on()= y = menu\_opts()= que se pueden
+utilizar para manipular opciones de menu. Las siguientes opciones de menu se
+pueden especificar.\\
+
+\textbf{O\_ONEVALUE}\\
+Solo un elemento puede seleccionarse para este menu.\\
+
+\textbf{O\_SHOWDESC}\\
+Mostrar las descripciones de los elementos cuando el menu es publicado.\\
+
+\textbf{O\_ROWMAJOR}\\
+Mostrar el menu en orden de importancia de las filas.\\
+
+\textbf{O\_IGNORECASE}\\
+Ignorar el caso en cuando el patron coincida.\\
+
+\textbf{O\_SHOWMATCH}\\
+Mueve el cursor dentro del nombre del elemento, mientras el patron coincide.\\
+
+\textbf{O\_NONCYCLIC}
+No rotar entre el siguiente/anterior elemento, solicitar por por el otro extremo del menu.\\
+
+Todas las opciones están habilitadas de forma predeterminada. Puede cambiar los
+atributos específicos a encendido o apagado con las funciones menu\_opts\_on() y
+menu\_opts\_off(). También puede utilizar set\_menu\_opts() para especificar
+directamente las opciones. El argumento para esta función debe ser un valor OR
+de algunas de las constantes anteriores. Puede utilazar la función menu\_opts()
+para optener las opciones actuales de un menu.
+
+\subsection{Menu de Valores Multiples}%
+Tal vez se pregunte lo que ocurre si apaga la opción O\_ONEVALUE. Esto crea un
+menu de valores multiples. Eso significa que se puede seleccionar más de un
+elemento. Esto nos lleva a la solicitud REQ\_TOGGLE\_ITEM. Veamoslo en acción.\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/menus/menu_toggle.c}{*Ejemplo 22. Menú de valores Múltiples}
+\inputminted{cpp}{./cpp/022_menu_valores_multiples.cpp}
+
+Menos mal, un montón de nuevas funciones. Vamos a tomar una tras otra. En
+primer lugar, REQ\_TOGGLE\_ITEM. En un menu de valores multiples, se debe
+permitir a el usuario seleccionar o anular más de un elemento. La solicitud
+REQ\_TOGGLE\_ITEM alterna la selección actual. En esto caso cuando se pulsa
+espacio se envia la solicitud REQ\_TOGGLE\_ITEM a menu\_driver para conseguir el
+resultado.\\
+
+Ahora, cuando el usuario presiona <ENTER> se muestran los elementos actualmente
+seleccionados. Primero debemos encontrar los elementos asociados con el menu
+empleando la función menu\_items(). A continuación, recorrer los elementos para
+saber si el elemento se selecciona o no. La función item\_value() devuelve TRUE
+si el elemento se ha seleccionado. La función item\_count() devuelve el número
+de elementos en el menu. El objeto nombre se puede optener con item\_name().
+También puede optener la descripción asociado con un elemento utilizando
+item\_description().
+
+\subsection{Opciones de Menu}%
+Bueno, a estas alturas ya debe estar buscando alguna diferencia en su menu, con
+un montón de funcionalidades. Lo sé. Quiere Colores !!!. Quiere crear menus
+agradables similares a las de aquellos juegos dos en modo texto. Puede utilizar
+las funciones set\_menu\_fore() y set\_menu\_back() para cambiar el atributo de los
+elementos seleccionados y no seleccionados. Los nombres son engañosos. No
+cambian el primer plano o el fondo del menu lo cual los haria menos utiles.\\
+
+Puede utilizar la función set\_menu\_grey() para establecer el atributo de
+pantalla para los elementos no seleccionables en el menu. Esto nos lleva a la
+interesante opción para un unico elemento O\_SELECTABLE. Podemos apagar dicha
+opcion con la función item\_opts\_off() y luego el elemento deja de ser
+seleccionable. Esto es parecido a atenuar un elemento en alquellos fantasticos
+menus. Vamos a poner estos conceptos en práctica con este ejemplo\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/menus/menu_attrib.c}{*Ejemplo 23. Opciones del Menú*}
+\inputminted{cpp}{./cpp/023_opciones_menu.cpp}
+
+\subsection{El conveniente Puntero de Usuario}%
+Podemos asociar un puntero de usuario a cada elemento del menu. Esto funciona
+de la misma forma que en los paneles. Esto no es tocado por el sistema de
+menus. Puede almacenar cualquier cosa en estos. Yo suelo utilizarlo para
+almacenar la función a ejecutar cuando se elige la opcion de menu (Esta
+seleccionada y el usuario pulsa <ENTER>);\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/menus/menu_userptr.c}{*Ejemplo 24. Menu con Puntero de Usuario} 
+\inputminted{cpp}{./cpp/024_puntero_usuario_menu.cpp}
+
+\section{Libreria Form}%
+Bien. Si usted ha visto esos formularios en páginas web que toman la entrada
+del usuario y hacen varios tipos de cosas, puede que se pregunte cómo crear
+formularios en pantalla en modo texto. Es bastante difícil escribir esos
+elegantes formularios en ncurses puro. La libreria form intenta proporcionar un
+marco de trabajo básico para construir y mantener formularios con facilidad.
+Cuenta con gran cantidad de características (funciones) que gestionan la
+validación, expansión dinámica de campos, etc.. Veamos esto en pleno
+desarrollo.\\
+
+Un formulario es una colección de campos; Cada campo puede ser o bien una
+etiqueta (texto estático) o un lugar de entrada de datos. La libreria también
+proporciona funciones para dividir los formularios en varias páginas.
+
+\subsection{Lo basico}%
+Los formularios se crean en la misma manera que los menus. Primero se crean los
+campos relacionados con el formulario con new\_field(). Puede configurar las
+opciones de los campos, de manera que se pueden mostrar con ciertos atributos,
+validar el contenido antes de perder el foco del campo etc.. A continuación,
+los campos se agregan al formulario. Después de esto, el formulario puede ser
+publicado y está listo para recibir entradas. En líneas similares a
+menu\_driver(), los formularios se manejan con form\_driver(). Podemos enviar
+solicitudes a form\_driver para mover el foco a un cierto campo, mover el cursor
+al final del campo etc.. Después de que el usuario introduce los valores en los
+campos y se termina la validación, su puede remover el formulario liberar la
+menoria asignada.\\
+
+El flujo de control general de un programa de formulario se vee como esto.\\
+
+\begin{itemize}
+  \item Inicializar curses
+  \item Crear campos utilizando new\_field(). Puede especificar la altura y
+    anchura del campo, y su posición en el formulario.
+  \item Crear los formularios con new\_form() especificando los campos a agregar.
+  \item Publicar el formulario con form\_post() y refrescar la pantalla.
+  \item Procesar las peticiones de usuarios con un bucle y hacer las
+    actualizaciones necesarias al formulario con form\_driver.
+  \item Remover el menu con form\_unpost()
+  \item Liberar la memoria asignada al menu con free\_form()
+  \item Liberar la memoria asignada a los elementos con free\_field()
+  \item Finalizar curses
+\end{itemize}
+
+Como puede ver, trabajar con la libreria form es muy similar a el manejo de la
+libreria menu. Los siguientes ejemplos explorarán diversos aspectos de
+procesamiento de formularios. Vamos a empezar el viaje con un simple ejemplo.
+antes.
+
+\subsection{Compilación con la Libreria Form}%
+Para utilizar funciones de la libreria form, tiene que incluir form.h y
+vincular el programa a la libreria con la bandera -lform se debe añadir junto
+con -lncurses en ese orden.
+
+\begin{minted}{cpp}
+  #include <form.h>
+  .
+  .
+  .
+\end{minted}
+
+Compilación y enlace:
+\mint{bash}|gcc <fichero del programa> -lform -lncurses|
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/forms/form_simple.c}{*Ejemplo 25. Formularios básicos}
+\inputminted{cpp}{./cpp/025_formularios_basicos.cpp}
+
+El ejemplo anterior es bastante sencillo. Se crean dos campos con new\_field().
+new\_field() toma altura, anchura, starty, startx, número de filas fuera de la
+pantalla y el número de buffers de trabajo adicional. El quinto argumento
+especifica cómo mostrar gran parte del campo. Si es cero, todo el campo se
+muestra simpre de otra manera el formulario será desplazable cuando el campo no
+muestre partes de la entrada de usuario. La libreria de formularios asigna un
+búfer por campo para almacenar los datos que el usuario ingresa. Con el ultimo
+parametro de new\_field() podemos especificar si se almacena en buffers
+adicionales. Estos puede utilizarse ​​para cualquier propósito.\\
+
+Después de crear los campos, el atributo de fondo de ambos es establecido como
+subrayado con set\_field\_back(). La opción AUTOSKIP se desactiva usando
+field\_opts\_off(). Si esta opción está activada, el foco se desplazará al
+siguiente campo en el formulario una vez que el campo activo se llene por
+completo.\\
+
+Después de colocar los campos en el formulario, se publica. Aquí, se procesa la
+entrada de usuario en un bucle while, haciendo las peticiones correspondientes
+a form\_driver. Los detalles de todas las solicitudes a form\_driver() se
+explican más adelante.
+
+\subsection{Jugando con Campos}%
+Cada campo del formulario se asocia con una gran cantidad de atributos. Estos
+se pueden manipular para conseguir el efecto deseado y divertirse !!!. Asi que
+¿por que esperar?
+
+\subsubsection{Recuperar el Tamaño y Posicion del campo}%
+Los parámetros dados a el momento de la creación de un campo pueden ser
+recuperados con field\_info(). Devuelve la altura, anchura, starty, startx,
+número de filas fuera de la pantalla, y el número buffers adicionales en los
+parámetros que le son dados. Es una especie de new\_field() inversa.
+
+\begin{minted}{cpp}
+  int field_info(     FIELD *field,              /* campo a extraer datos                */
+                      int *height, *int width,   /* tamaño de campo                      */
+                      int *top, int *left,       /* esquina superior izquierda           */
+                      int *offscreen,            /* numero de columnas fuera de pantalla */
+                      int *nbuf);                /* numero de buffers de trabajo         */
+\end{minted}
+
+\subsubsection{Mover el campo}%
+Puede mover el campo a una posición diferente con move\_field().
+
+\begin{minted}{cpp}
+  int move_field(    FIELD *field,              /* campo a modificar                */
+                     int top, int left);        /* nueva esquina superior izquierda */
+\end{minted}
+
+Puede consultar la posición modificada field\_infor().
+
+\subsubsection{Justificar un campo}%
+Puede justificar un campo mediante la función set\_field\_just().
+
+\begin{minted}{cpp}
+  int set_field_just(FIELD *field,       /* campo a modificar  */
+                     int justmode);      /* modo de ajuste     */
+  int field_just(FIELD *field);          /* obtener el modo de justificacion de un campo */
+\end{minted}
+
+Los valores aceptados y devueltos para el modo de justificación son
+NO\_JUSTIFICATION, JUSTIFY\_RIGHT, JUSTIFY\_LEFT, o JUSTIFY\_CENTER.
+
+\subsubsection{Atributos de Visualizacion del Campo}%
+Como se ha visto, en el ejemplo anterior, se pueden establecer los atributos de
+visualización del campo con set\_field\_fore() y set\_field\_back(). Estas
+funciones establecen el atributo de campo para el primer y segundo plano.
+También puede especificar un carácter de relleno que llenará la porción
+restante del campo. El carácter de relleno se establece con una llamada a
+set\_field\_pad(). Este valor por defecto es espacio. Puede utilizar las
+funciones field\_fore(), field\_back, field\_pad() para consultar los atributos de
+relleno, del primer y segundo plano. El siguiente listado muestra el uso de
+estas funciones.
+
+\begin{minted}{cpp}
+  int set_field_fore(FIELD *field,        /* campo a modificar                 */
+                     chtype attr);        /* atributo a establecer             */
+
+  chtype field_fore(FIELD *field);        /* campo a consultar                 */
+                                          /* devuelve atributo de primer plano */
+
+  int set_field_back(FIELD *field,        /* campo a modificar                 */
+                     chtype attr);        /* atributo a establecer             */
+
+  chtype field_back(FIELD *field);        /* campo a consultar                 */
+                                          /* devuelve atributo de fondo        */
+
+  int set_field_pad(FIELD *field,         /* campo a modificar                */
+                    int pad);             /* caracter de relleno a establecer */
+
+  chtype field_pad(FIELD *field);         /* campo a consultar                */
+                                          /* devuelve el caracter de relleno */
+\end{minted}
+
+A pesar de que el uso de las funciones anteriores parece bastante simple,
+utilizar de colores con set\_field\_fore() puede ser frustrante al principio.
+Primero dejame explicar acerca de los atributos de primer plano y fondo de un
+campo. El atributo de primer plano está asociado con el caracter. Eso significa
+que un carácter en el campo se imprime con el atributo que ha configurado con
+set\_field\_fore(). El atributo de fondo es utilizado para llenar el fondo del
+campo, si algún caracter está allí o no. Entonces, ¿qué hay acerca de los
+colores? Los colores siempre se definen en pares, ¿cuál es la manera correcta
+de mostrar colores en los campos? He aquí un ejemplo para aclara el uso de
+atributos de color.\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/forms/form_attrib.c}{*Ejemplo 26. Atributos de Campo*}
+\inputminted{cpp}{./cpp/026_atributos_campo.cpp}
+
+Juega con los pares de color y tratar de entender los atributos de de fondo y
+primer plano. En mis programas cuando utilizo atributos de color, por lo
+general estableco sólo el fondo con set\_field\_back(). curses simplemente no
+permite definir atributos de color individuales.
+
+\subsubsection{Bits de Opcion de Campo}%
+Hay también una gran colección de bits de opcion de campo que puede configurar
+para controlar varios aspectos al procesar formularios. Puede manipularlos con
+estas funciones:
+
+\begin{minted}{cpp}
+  int set_field_opts(FIELD *field,          /* campo a modificar          */
+                     int attr);             /* atributo a establecer      */
+
+  int field_opts_on(FIELD *field,           /* campo a modificar          */
+                    int attr);              /* atributo a encender        */
+
+  int field_opts_off(FIELD *field,          /* campo a modificar          */
+                     int attr);             /* atributo a apagar          */
+
+  int field_opts(FIELD *field);             /* campo a consultar          */
+\end{minted}
+
+Puede utilizar la función set\_field\_opts() para establecer directamente
+atributos de un campo o puede optar por encender/apagar algunos atributos con
+field\_opts\_on() y field\_opts\_off() . En cualquier momento puede consultar los
+atributos de un campo con field\_opts(). La siguiente es la lista de opciones
+disponibles. De forma predeterminada, todas las opciones están encedidas.
+
+\textbf{O\_VISIBLE}\\
+Controla si el campo es visible en pantalla. Puede ser utilizado al procesar el
+formulario para ocultar o mostar campos en función del valor de campos padre.\\
+
+\textbf{O\_ACTIVE}\\
+Controla si el campo está activo durante el procesamiento de formularios (es
+decir, se puede visitar el formulario con las teclas de navegación). Se puede
+utilizar para crear etiquetas o campos derivados con valores de buffer
+modificados por la aplicación, no el usuario.\\
+
+\textbf{O\_PUBLIC}\\
+Controla si se muestran los datos durante lo entrada. Si se desactiva esta
+opción en un campo, la libreria va a aceptar y editar datos en ese campo, pero
+no se mostrarán y el cursor no se moverá. Puede apagar el bit O\_PUBLIC para
+definir campos de contraseña.\\
+
+\textbf{O\_EDIT}\\
+Controla si los datos del campo pueden ser modificados. Cuando esta opción está
+desactivada, fallaran todas las peticiones de edición excepto REQ\_PREV\_CHOICE y
+REQ\_NEXT\_CHOICE. Estos campos de sólo lectura pueden ser útiles para mensajes
+de ayuda.\\
+
+\textbf{O\_WRAP}\\
+Controla el ajuste de texto en campos multi-linea. Normalmente, cuando
+cualquier carácter o (espacio separador) palabra llega al final de la línea
+actual, se envuelve la palabra entera y salta a la línea siguiente (suponiendo
+que la hay). Cuando esto opción está desactivada, la palabra se dividirá
+atraves del salto de línea.\\
+
+\textbf{O\_BLANK}\\
+Controla la suprecion de caracteres. Cuando esta opción está activa, al
+introducir un carácter en la primera posición del campo se borra todo el campo
+(excepto el caracter ingresado).\\
+
+\textbf{O\_AUTOSKIP}\\
+Controla el salto automático al siguiente campo cuando el actual se llena.
+Normalmente, cuando el usuario trata de ingresar mas datos en un campo hasta
+llenarlo, la ubicación de edición salta al siguiente campo. Cuando esta opción
+está desactivada, el cursor cuelga al final del campo. Esta opción se ignora en
+los campos dinámicos que no han alcanzado su límite de tamaño.\\
+
+\textbf{O\_NULLOK}\\
+Controla si la validación se aplica a campos en blanco. Normalmente, no es asi;
+el usuario puede dejar un campo en blanco sin invocar la comprobación de
+validación al salir. Si esta opción está desactivada en un campo, la salida
+invocará una comprobación de validación.\\
+
+\textbf{O\_PASSOK}\\
+Controla si la validación ocurre en cada salida, o sólo después de que el campo
+es modificado. Normalmente es cierto esto último. Ajustar O\_PASSOK puede ser
+útil si su funcion de validación puede cambiar durante el tratamiento de
+formularios.\\
+
+\textbf{O\_STATIC}\\
+Controla si el campo se fija a su dimensiones iniciales. Si se desactiva, el
+campo se vuelve dinámico y se extiende para adaptarse a los datos
+introducidos.\\
+
+Las opciones de un campo no se puede cambiar mientras el campo se encuentra
+seleccionado. Sin embargo, se pueden cambiar las opciones en los demas campos.\\
+
+Los valores de las opciones son mascaras de bits y se pueden componer con
+puertas logicas OR de manera obvia. Usted ha visto el uso de apagar la opcion
+O\_AUTOSKIP. El siguiente ejemplo aclara uso de algunas opciones más. Las otras
+opciones se explicaran cuando sea apropiado.\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/forms/form_options.c}{*Ejemplo 27. Opciones de Campo*}
+\inputminted{cpp}{./cpp/027_opciones_campo.cpp}
+
+
+En este ejemplo, aunque inútil, muestra el uso de opciones. Si se usan
+adecuadamente, puede presentar la información de manera muy eficaz. El segundo
+campo es no O\_PUBLIC, no muestra los caracteres que se están escribiendo.
+
+\subsubsection{Estado del Campo}%
+El estado de campo especifica si el campo ha sido editado o no. Inicialmente se
+establece en FALSE y cuando el usuario escribe algo y los datos del buffer son
+modificados se convierte en TRUE. Por lo tanto se puede consultar el estado de
+un campo para saber si se ha modificado o no. Las siguientes funciones pueden
+ayudar a esas operaciones.\\
+
+\begin{minted}{cpp}
+  int set_field_status(FIELD *field,      /* campo a modificar       */
+                       int status);       /* estado a entablecer     */
+
+  int field_status(FIELD *field);         /* obtener estado de campo */
+\end{minted}
+
+Es mejor comprobar el estado de un campo sólo después de salir de este, ya que
+los datos del buffer podrian no haber sido actualizados aun, mientras la
+validacion no se ha teminado. Para garantizar que es regresado el estado
+correcto, llamade a field\_status() ya sea (1) cuando termina la rutina de
+validacion del campo, (2) a partir de la inicializacion o terminacion de los
+campos o formularios, o (3) enseguida de que una solicitud REQ\_VALIDATION ha
+sido procesada por form\_driver().
+
+\subsubsection{Puntero de Usuario de Campo}%
+Cada estructura de campo contiene un puntero que puede ser utilizado por el
+usuario para diversos fines. No es empleado por la libreria form y puede ser
+utilizado por el usuario para cualquier propósito. Las siguientes funciones
+establecen y obtienen el puntero del usuario.
+
+\begin{minted}{cpp}
+  int set_field_userptr(FIELD *field,
+                        char *userptr);   /* el puntero de usuario que desea asociar */
+                                          /* con el campo                            */
+
+  char *field_userptr(FIELD *field);      /* obtener el puntero de usuario del campo */
+\end{minted}
+
+\subsubsection{Campos de Tamaño Variable}%
+Si quiere un campo que cambie su anchura dinámicamente, esta es la
+característica que desea poner a pleno uso. Esto permite que el usuario
+introdusca más datos que el tamaño original del campo y deja crecer el campo.
+De acuerdo con la orientación del campo lo hará desplazarse horizontal o
+verticalmente para incorporar los nuevos datos.\\
+
+Para obtener un campo con crecimiento dinámico, la debe apagar la opción
+O\_STATIC. Esto se puede hacer con:
+
+\begin{minted}{cpp}
+  field_opts_off(field_pointer, O_STATIC);
+\end{minted}
+
+Pero por lo general no es aconsejable permitir a un campo para crecer
+infinitamente. Puede establecer un límite máximo para el crecimiento con:
+
+\begin{minted}{cpp}
+  int set_max_field(FIELD *field,    /* Campo sabre el cual operar                 */
+                    int max_growth); /* Crecimiento maximo permitido para el campo */
+\end{minted}
+
+La informacion de un campo con crecimiento dinamico se puede recuperar utilizando:
+
+\begin{minted}{cpp}
+  int dynamic_field_info( FIELD *field,     /* campo sobre el cual operar   */
+                          int   *prows,     /* numero de filas              */
+                          int   *pcols,     /* number de columnas           */
+                          int   *pmax)      /* maximo crecimiento permitido */
+\end{minted}
+
+Aunque field\_info funciona como de costumbre, es aconsejable utilizar esta
+función para obtener los atributos correctos de un campo con crecimiento
+dinamico. Recordemos la rutina new\_field de libreria; un campo creado con la
+altura establecida en uno define un campo de una sola línea. Un campo creado
+con una altura mayor a uno define un campo de múltiples líneas.\\
+
+Un campo de una línea con O\_STATIC apagado (campo con crecimiento dinamico)
+contendrá una sola fila fija, pero el número de columnas puede aumentar si el
+usuario introduce más datos que los fijados originalmente. El número de
+columnas mostradas permanecerá fijo y los datos adicionales podran desplazarse
+horizontalmente.\\
+
+Un campo multilínea con O\_STATIC apagado (campo con crecimiento dinamico)
+contendrá un número fijo de columnas, pero el número de filas puede aumentar si
+el usuario introduce más datos que los fijados originalmnte. El número de filas
+que se muestra permanecerá fijo y los datos adicionales podran desplazarse
+verticalmente.\\
+
+Los dos párrafos anteriores describen más o menos el comportamiento de un campo
+dinamico. La forma en que se comportan otras partes de libreria se describen a
+continuacion:\\
+
+\begin{itemize}
+  \item La opción de campo O\_AUTOSKIP se ignorará si O\_STATIC está apagado y no
+    se ha especificado un crecimiento máxima para el campo. Actualmente,
+    O\_AUTOSKIP genera automaticamente una solicitud REQ\_NEXT\_FIELD cuando el
+    usuario escribe sobre la posición del ultimo carácter de un campo. En un
+    campo sin crecimiento máximo especificado, no hay un último carácter. Si se
+    especifica un crecimiento máximo, la opcion O\_AUTOSKIP funcionará de forma
+    normal si el campo ha crecido a su máximo tamaño.
+  \item Se ignora la justificación de campo si se ha apagado la opción
+    O\_STATIC. Actualmente se puede utilizar, set\_field\_just con JUSTIFY\_LEFT,
+    JUSTIFY\_RIGHT, JUSTIFY\_CENTER para los contenidos de un campo de una línea.
+    Un campo creciente de una linea, por definición, crece y se desplaza
+    horizontalmente y puede contener más datos de los que se pueden justificar.
+    El retorno de field\_just será NO\_JUSTIFICATION.
+  \item Sobrecargar form\_driver con la solicitud REQ\_NEW\_LINE operará de la
+    misma manera independientemente de la opción O\_NL\_OVERLOAD si la opción de
+    campo O\_STATIC está apagada y no hay un crecimiento máximo especificado
+    para el campo. Actualmente, si la opción O\_NL\_OVERLOAD está encendida,
+    REQ\_NEW\_LINE genera implícitamente una solicitud REQ\_NEXT\_FIELD si se llama
+    desde la última línea de un campo. Si una campo puede crecer sin límite, no
+    hay última línea, por lo que REQ\_NEW\_LINE nunca generará implícitamente una
+    solicitud REQ\_NEXT\_FIELD. Si se especifica un límite máximo de crecimiento
+    y se activa la opcion O\_NL\_OVERLOAD, REQ\_NEW\_LINE sólo se generar
+    REQ\_NEXT\_FIELD si el campo ha crecido hasta su tamaño máximo y el usuario
+    está en la última línea.
+  \item La funcion dup\_field trabajara como de costumbre; duplicara el campo,
+    incluyendo el tamaño del búfer actual y el contenido del campo. Cualquier
+    crecimiento máximo especificado también se duplicará.
+  \item La llamada link\_field funcionará como de costumbre; duplicara todos los
+    atributos de campo y compartira buffers con el campo enlazado. Si la opcion
+    de campo O\_STATIC se cambia posteriormente por buffers de campo compatidos,
+    la reaccion del sistema a un intento de introducir más datos en el campo
+    actualmente fijo dependerá de la configuración de la opción en el campo
+    actual.
+  \item La llamada field\_info funcionará como de costumbre; la variable nrow
+    contendrá el valor de la llamada original a new\_field. El usuario debe
+    utilizar dynamic\_field\_info, descrito anteriormente, para consultar el
+    tamaño actual del buffer.
+\end{itemize}
+
+Algunos de los puntos anteriores tienen sentido sólo después de explicar
+form\_driver. Cosa que buscaremos hacer en próximas secciones.
+
+\subsection{Ventanas de Formulario}% 
+El concepto de ventana de formulario es más o menos similar al de ventana de
+menu. Cada formulario está asociada con una ventana principal y una sub
+ventana. La ventana principal del formulario muestra cualquier título o borde
+asociado o lo que sea que desee. La sub ventana contiene todos los campos y los
+muestra en función de su posición. Esto le da la flexibilidad de manipular la
+presentacion de los formularios muy fácilmente.\\
+
+Dado que esto es muy similar a las ventanas de menu, proporciono un ejemplo con
+una mayor explicación. Las funciones son similares y funcionan de la misma
+manera.\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/forms/form_win.c}{*Ejemplo 28. Ventanas de Formulario}
+\inputminted{cpp}{./cpp/028_ventanas_formulario.cpp}
+
+\subsection{Validación de Campo}%
+Por defecto, un campo aceptará cualquier entrada de datos por parte del
+usuario. Es posible colocar la validación en el campo. Por tanto, fallará
+cualquier intento por parte del usuario de abandonar el campo, mientras este
+contiene datos que no concuerdan con el tipo de validación. Algunos tipos de
+validación también tienen validacion por carácter para verificar cada vez que
+se introduce un carácter en el campo.\\
+
+La validación a un campo se pude agregar con la siguiente función.
+
+\begin{minted}{cpp}
+  int set_field_type(FIELD *field,          /* campo a modificar      */
+                     FIELDTYPE *ftype,      /* tipo asociado          */
+                     ...);                  /* argumentos adicionales */
+\end{minted}
+
+Una vez establecido, el tipo de validación de un campo se puede consultar con:
+
+\begin{minted}{cpp}
+  FIELDTYPE *field_type(FIELD *field);      /* campo a consultar       */
+\end{minted}
+
+El controlador de formulario valida los datos en un campo solo cuando los datos
+son ingresados por el usuario final. La Validación no se produce cuando:
+
+\begin{itemize}
+  \item El programa de aplicación cambia el valor del campo llamando a
+    set\_field\_buffer.
+  \item Vincular valores de campo y cambiarlos indicertamente – cambiando el
+    campo al que está vinculado
+\end{itemize}
+
+Los siguientes son los tipos de validación predefinidos. También puede
+especificar una validación personalizada, aunque es un poco complicado y
+engorroso.
+
+\subsubsection*{TYPE\_ALPHA}%
+Este tipo de campo acepta datos alfabéticos; sin espacios, digitos o caracteres
+especiales (esto se comprueba en cada ingreso de caracter). Este se crea con:
+
+\begin{minted}{cpp}
+  int set_field_type(FIELD *field,          /* campo a modificar     */
+                     TYPE_ALPHA,            /* tipo asociado         */
+                     int width);            /* ancho minimo de campo */
+\end{minted}
+
+El argumento width establece una anchura minima de datos. El usuario tiene que
+ingresar un número de al menos el ancho de caracteres antes poder salir del
+campo. Normalmente, querrá establecer esto a la anchura del campo; si es mayor
+que el ancho del campo, la comprobación de validación siempre fallara. Una
+anchura menor a cero crea un campo con terminación opcional.
+
+\subsubsection*{TYPE\_ALNUM}%
+Este tipo de campo acepta datos alfanumericos; sin espacios en blanco, ni
+caracteres especiales (esto se comprueba en cada ingreso de caracter). Este se
+crea con:
+
+\begin{minted}{cpp}
+  int set_field_type(FIELD *field,          /* campo a modificar     */
+                     TYPE_ALNUM,            /* tipo asociado         */
+                     int width);            /* ancho minimo de campo */
+\end{minted}
+
+El argumento width establece una anchura mínima de datos. Al igual que
+TYPE\_ALPHA, normalmente, querrá establecer esto a la anchura del campo; si es
+mayor que el ancho del campo, la comprobación de validación siempre fallara.
+Una anchura menor a cero crea un campo con terminación opcional.
+
+\subsubsection*{TYPE\_ENUM}%
+Este tipo le permite restringir los valores de un campo a estar entre un
+conjunto de valores de cadena especifico (por ejemplo, el codigo postal de dos
+letras de los estados de Estados Unidos). Se crea con:
+
+\begin{minted}{cpp}
+  int set_field_type(FIELD *field,          /* campo a modificar         */
+                     TYPE_ENUM,             /* tipo asociado             */
+                     char **valuelist;      /* lista de valores posibles */
+                     int checkcase;         /* sensible a mayusculas?    */
+                     int checkunique);      /* coincidencia unica?       */
+\end{minted}
+
+El parámetro valuelist debe apuntar a una lista de cadenas válidas terminada en
+NULL. Si el argumento checkcase, es verdadero, hace la comparación sensible a
+mayúsculas y minúsculas.\\
+
+Cuando el usuario sale de un campo TYPE\_ENUM, el procedimiento de validación
+intenta completar los datos en el buffer a una entrada válida. Si ha ingresado
+una cadena completa de elección, por supuesto es válido. Pero también es
+posible introducir un prefijo de una cadena válido y que se complete para
+usted.\\
+
+Por defecto, si se introduce un prefijo y coincide con más de un valor en la
+lista de cadenas, el prefijo se completará al primer valor coincidente. Pero el
+argumento checkunique, de ser cierto, requiere que el prefijo coincida con un
+unico valor para ser válido.\\
+
+Las peticiones REQ\_NEXT\_CHOICE y REQ\_PREV\_CHOICE pueden ser particularmente
+útiles con estos campos.
+
+\subsubsection*{TYPE\_INTEGER}%
+Este tipo de campo acepta un entero. Se configura de la siguiente manera:
+
+\begin{minted}{cpp}
+  int set_field_type(FIELD *field,          /* campo a modificar           */
+                     TYPE_INTEGER,          /* tipo asociado               */
+                     int padding,           /* precision de relleno a cero */
+                     int vmin, int vmax);   /* rango valido                */
+\end{minted}
+
+Los caracteres válidos consisten en un menos inicial opcional y dígitos. La
+prueba de rango se realiza a la salida. Si el rango máximo es menor o igual al
+mínimo, se ignora.\\
+
+Si el valor pasa la prueva de rango, se rellena con ceros a la izquierda hasta
+cumplir con el argumento padding.\\
+
+Un buffer de valor TYPE\_INTEGER es interpretado convenientemente con la funcion
+de la libreria C atoi(3).
+
+\subsubsection*{TYPE\_NUMERIC}%
+Este tipo de campo acepta un número decimal. Se configura de la siguiente
+manera:
+
+\begin{minted}{cpp}
+  int set_field_type(FIELD *field,          /* campo a modificar           */
+                     TYPE_NUMERIC,          /* tipo asociado               */
+                     int padding,           /* procicion de relleno a cero */
+                     int vmin, int vmax);   /* rango valido                */
+\end{minted}
+
+Los caracteres válidos consisten en un menos inicial opcional y dígitos,
+posiblemente incluyendo un punto decimal. La prueba de rango se realiza a la
+salida. Si el rango máximo es menor o igual al mínimo, se ignora.\\
+
+Si el valor pasa la prueva de rango, se rellena con ceros a la izquierda hasta
+cumplir con el argumento padding.\\
+
+Un buffer de valor TYPE\_NUMERIC es interpretado convenientemente con la funcion
+de la libreria C atof(3).
+
+\subsubsection*{TYPE\_REGEXP}%
+Este tipo de campo acepta datos que coincidan con una expresión regular. Se
+configura de la siguiente manera:
+
+\begin{minted}{cpp}
+  int set_field_type(FIELD *field,          /* campo a modificar   */
+                     TYPE_REGEXP,           /* tipo asociado       */
+                     char *regexp);         /* exprecion a empatar */
+\end{minted}
+
+La sintaxis de las expresiones regulares es la de regcomp(3). La pueba de
+coincidencia de la expresión regular se ejecuta a la salida.
+
+\subsection{Controlador del Formulario: El caballo de trabajo del sistema de formularios}%
+Al igual que en el sistema de menus, form\_driver() juega un papel muy
+importante en el sistema de formularios. Todos los tipos de peticiones al
+sistema de formularios deben ser canalizado a través form\_driver().
+
+\begin{minted}{cpp}
+  int form_driver(FORM *form,     /* formulario en el que operar */
+                  int request)    /* codigo de solicitud         */
+\end{minted}
+
+Como se ha visto en ejemplos anteriores, se tiene que estar en un bucle en
+busca de entrada del usuario y luego decidir si se trata de una solicitud de
+campo o una de formulario. Las solicitudes de formulario se pasan a
+form\_driver() para hacer el trabajo.
+
+Se pueden dividir las peticiones aproximadamente en las siguientes categorías.
+Las diferentes solicitudes y su uso se explica a continuación:
+
+\subsubsection{Solicitudes de Navegacion por Pagina}%
+Estas solicitudes causan que el nivel de página se mueve a través de la
+formulario, lo que provoca la visualización de una pantalla nueva de
+formulario. Una formulario puede estar hecho de múltiples páginas. Si tiene una
+formulario con gran cantidad de campos y secciones lógicas, puede dividir el
+formulario en páginas. La función set\_new\_page() para establecer una página
+nueva en un campo especifico.
+
+\begin{minted}{cpp}
+  int set_new_page(FIELD *field,        /* Campo en el cual poner o quitar el salto de pagina */
+                   bool new_page_flag); /* debe ser TRUE para colocar el salto                */
+\end{minted}
+
+Las siguientes peticiones le permiten moverse a diferentes páginas:
+
+\begin{itemize}
+  \item REQ\_NEXT\_PAGE mover a la página siguiente.
+  \item REQ\_PREV\_PAGE mover a la página anterior.
+  \item REQ\_FIRST\_PAGE mover a la primer página.
+  \item REQ\_LAST\_PAGE mover a la última página.
+\end{itemize}
+
+Estas solicitudes manejan la lista de forma cíclica; es decir, desde la ultima
+pagina REQ\_NEXT\_PAGE va a la primera, y desde la primer pagina REQ\_PREV\_PAGE va
+a la última.
+
+\subsubsection{Solicitudes de Navegación Entre Campos}%
+Estas solicitudes manejar la navegación entre los campos de una misma página.
+
+\begin{itemize}
+  \item REQ\_NEXT\_FIELD mover al campo siguiente.
+  \item REQ\_PREV\_FIELD mover al campo anterior.
+  \item REQ\_FIRST\_FIELD mover al primer campo.
+  \item REQ\_LAST\_FIELD Mover al último campo.
+  \item REQ\_SNEXT\_FIELD Mover al siguiente campo ordenado.
+  \item REQ\_SPREV\_FIELD Mover al anteriar campo ordenado.
+  \item REQ\_SFIRST\_FIELD mover al primer campo ordenado.
+  \item REQ\_SLAST\_FIELD Mover al último campo ordenado.
+  \item REQ\_LEFT\_FIELD Mover a la izquierda del campo.
+  \item REQ\_RIGHT\_FIELD Mover a la derecha del campo.
+  \item REQ\_UP\_FIELD mover hacia arriba un campo.
+  \item REQ\_DOWN\_FIELD mover hacia abajo un campo.
+\end{itemize}
+
+Estas peticiones manejan la lista de campos en una página de forma cíclica; ese
+es decir, desde el ultimo campo REQ\_NEXT\_FIELD va a el primero, y desde el
+primer campo REQ\_PREV\_FIELD va a el ultimo. El orden de los campos para estas
+peticiones (incluidas REQ\_FIRST\_FIELD y REQ\_LAST\_FIELD) es simplemente el orden
+de los punteros en el arreglo de formularios (establecido por new\_form() o
+set\_form\_field())\\
+
+También es posible recorrer los campos como si hubieran sido ordenados
+deacuerdo a su posicion en pantalla, por lo que la secuencia va de izquierda a
+derecha y de arriba a abajo. Para ello, utilice el segundo grupo de cuatro
+movimientos por orden.\\
+
+Por último, es posible moverse entre campos utilizando las direciones arriba,
+abajo, derecha, e izquierda. Para lograr esto, utilice el tercer grupo de
+cuatro movimientos. Sin embargo, observe que la posición de un formulario a
+efectos de estas peticiones es la esquina superior izquierda.\\
+
+Por ejemplo, suponga que tiene un campo B multilinea, y dos campos de una sola
+línea A y C en la misma línea con B, A a la izquierdo de B y C a la derecha de
+B. Desde A REQ\_MOVE\_RIGHT va a B sólo si A, B, y C comparten la misma primera
+línea; de lo contrario, saltar a C.
+
+\subsubsection{Solicitudes de Navegacion dentro del Campo}%
+Estas solicitudes manejan el movimiento de el cursor de edición dentro del
+campo artalmente seleccionado.
+
+\begin{itemize}
+  \item REQ\_NEXT\_CHAR Mover al carácter siguiente.
+  \item REQ\_PREV\_CHAR Mover a carácter anterior.
+  \item REQ\_NEXT\_LINE Mover a la línea siguiente.
+  \item REQ\_PREV\_LINE Mover a la línea anterior.
+  \item REQ\_NEXT\_WORD Mover a la palabra siguiente.
+  \item REQ\_PREV\_WORD Mover a la palabra anterior.
+  \item REQ\_BEG\_FIELD Mover a inicio del campo.
+  \item REQ\_END\_FIELD Mover a final del campo.
+  \item REQ\_BEG\_LINE Mover al incio de línea.
+  \item REQ\_END\_LINE Mover a final de línea.
+  \item REQ\_LEFT\_CHAR Mover a la izquierda en el campo.
+  \item REQ\_RIGHT\_CHAR Mover a la derecha en el campo.
+  \item REQ\_UP\_CHAR Mover hacia arriba en el campo.
+  \item REQ\_DOWN\_CHAR Mover hacia abajo en el campo.
+\end{itemize}
+
+Cada palabra se separa de los caracteres anteriores y siguientes por espacio en
+blanco. Los comandos para mover al inicio y fin de línea o camo buscan el
+primer o el ultimo caracter que no es de relleno en sus rangos.
+
+\subsubsection{Solicitudes de Desplazamiento}%
+Los campos dinámicos y los creados explícitamente con filas fuera de pantalla
+son desplazables. Los campos de una linea se desplazan horizontalmente; los
+campos multilínea verticalmente. La mayoría de movimientos se acciona por la
+edición y el movimiento dentro del campo (la libreria desplaza el campo para
+mantener el cursor visible). Es posible solicitar explícitamente el
+desplazamiento con las siguientes solicitudes:
+
+\begin{itemize}
+  \item REQ\_SCR\_FLINE Desplazar verticalmente hacia adelante una línea.
+  \item REQ\_SCR\_BLINE Desplazar verticalmente hacia atrás una línea.
+  \item REQ\_SCR\_FPAGE Desplazar verticalmente hacia adelante una página.
+  \item REQ\_SCR\_BPAGE Desplazar verticalmente hacia atrás una página.
+  \item REQ\_SCR\_FHPAGE Desplazar verticalmente hacia adelante media página.
+  \item REQ\_SCR\_BHPAGE Desplazar verticalmente hacia atrás media página.
+  \item REQ\_SCR\_FCHAR Desplazar horizontal hacia adelante un caracter.
+  \item REQ\_SCR\_BCHAR Desplazar horizontal hacia atrás un caracter.
+  \item REQ\_SCR\_HFLINE Desplazar horizontal el ancho de campo hacia adelante.
+  \item REQ\_SCR\_HBLINE Desplazar horizontal el ancho de campo hacia atrás.
+  \item REQ\_SCR\_HFHALF Desplazar horizontal medio ancho de campo hacia adelante.
+  \item REQ\_SCR\_HBHALF Desplazar horizontal medio ancho de campo hacia atras.
+\end{itemize}
+
+A efectos de desplazamiento, la página de un campo es la altura de su parte visible.
+
+\subsubsection{Solicitudes de Edición}%
+Cuando se pasa un caracter ASCII al controlador de formulario, se trata como
+una solicitud para agregar el carácter a buffer de datos del campo. Si es un
+replazo o una inserción depende del modo de edición del campo (por defecto es
+inserción).\\
+
+Las siguientes solicitudes apoyan la edicion del campo y cambian de modo de
+edición:
+
+\begin{itemize}
+  \item REQ\_INS\_MODE Establece modo en inserción.
+  \item REQ\_OVL\_MODE Establece modo de superposición.
+  \item REQ\_NEW\_LINE Solicita nueva línea (ver más abajo para la explicación).
+  \item REQ\_INS\_CHAR Insertar espacio en la posicion de carácter.
+  \item REQ\_INS\_LINE Insertar línea en blanco en la posición del carácter.
+  \item REQ\_DEL\_CHAR Eliminar el carácter en el cursor.
+  \item REQ\_DEL\_PREV Eliminar palabra anterior al cursor.
+  \item REQ\_DEL\_LINE Eliminar linea en el cursor.
+  \item REQ\_DEL\_WORD Eliminar la palabra en el cursor.
+  \item REQ\_CLR\_EOL Borrar hasta el final de la línea.
+  \item REQ\_CLR\_EOF Borrar hasta el final del campo.
+  \item REQ\_CLR\_FIELD Borrar campo entero.
+\end{itemize}
+
+El comportamiento de las peticiones REQ\_NEW\_LINE y REQ\_DEL\_PREV es complicado y
+en parte controlado por un par de opciones del formulario. Los casos especiales
+se activan cuando el cursor se encuentra al inicio o en la última línea del
+campo.\\
+
+En primer lugar, consideramos REQ\_NEW\_LINE:\\
+
+El comportamiento normal de REQ\_NEW\_LINE en modo de inserción es romper la
+línea actual en la posición del cursor, colocando el resto de linea despues del
+cursor como una nueva línea y moviendo el cursor al inicio de la nueva línea
+(puede pensar en esto como la inserción de una nueva línea en el buffer de
+campo).\\
+
+El comportamiento normal de REQ\_NEW\_LINE en el modo de superposición es limpiar
+la línea actual desde la posición del cursor al fin de línea. El cursor se
+mueve entonces hasta el inicio de la línea siguiente.\\
+
+Sin embargo, REQ\_NEW\_LINE al incio de un campo, o sobre la última línea de un
+campo, en cambio realiza REQ\_NEXT\_FIELD. Si la opcion O\_NL\_OVERLOAD esta
+desactivada, se desactiva esta acción especial.\\
+
+Ahora, consideremos REQ\_DEL\_PREV:\\
+
+El comportamiento normal de REQ\_DEL\_PREV es eliminar el caracter anterior. Si
+el modo de inserción está activado, y el cursor se encuentra al inicio de una
+línea, y el texto en esa línea cabe en la anterior, se anexa el contenido de la
+línea actual a la anterior y se borra la línea actual (puede pensar en esto
+como la eliminación de un salto de línea del buffer de campo).\\
+
+Sin embargo, REQ\_DEL\_PREV al inicio de un campo se trata como REQ\_PREV\_FIELD.\\
+
+Si la opcion O\_BS\_OVERLOAD está desactivada, se desactiva esta acción especial
+y el controlador devuelve sólo E\_REQUEST\_DENIED.
+
+\subsubsection{Solicitudes de Peticion}%
+Si puede solicitar el contenido de un campo, y posse funciones asociadas para
+obtener los valores siguiente y anterior de tipo de un valor dado, estas son
+las solicitudes para obtener este valor dentro del buffer del campo:
+
+\begin{itemize}
+  \item REQ\_NEXT\_CHOICE Coloca el volor succesor del actual valor en el buffer.
+  \item REQ\_PREV\_CHOICE Coloca el valor predecesor del actual valor en el buffer.
+\end{itemize}
+
+De los tipos de campo incorporados, solamente TYPE\_ENUM ha incorporado
+funciones de sucesor y predecesor. Cuando define un tipo de campo por usted
+mismo (ver Validacion de Tipos Personalizados), puede asociar su propia
+funciones de peticion.
+
+\subsubsection{Comandos de aplicacion}%
+Las peticiones de formulario se representan como números enteros por encima del
+valor KEY\_MAX y debajo o igual a la constante MAX\_COMMAND. Un valor dentro de
+este rango es ignorado por form\_driver(). Así que se puede utilizar para
+cualquier propósito de la aplicacion. Se puede tratar como una acción
+específica de la aplicación y tomar lao accion correspondiente.
+
+\section{Librerias de Widgets y Herramientas}%
+Ahora que usted ha visto las capacidades de ncurses y sus librerias hermanas,
+se esta enrollando las mangas preparandose para un proyecto con una fuerte
+manipulacion de pantalla. Pero espere.. Puede ser muy difícil escribir y
+mantener widgets complejos con puro ncurses o incluso con las librerias
+adicionales. Puede utilizar algunas librerias de widgets y herramientas listas
+para usar en lugar de escribir su propios widgets. Puede utilizar algunos de
+ellos, obtener ideas a partir del código, o incluso extenderlas.
+
+\subsection{CDK (Kit de desarrollo de curses)}%
+En palabras del autor\\
+
+El kit proporciona algunos widgets útiles, que pueden utilizarse directamente
+en sus programas. Está muy bien escrito y la documentación es muy buena. Los
+ejemplos en el directorio examples pueden ser un buen punto de partida para los
+principiantes. CDK se puede descargar desde http://invisible-island.net/cdk/.
+Siga las instrucciones del archivo README para instalarlo.
+
+\subsubsection{Lista de Widgets}%
+La siguiente es la lista de widgets provista de cdk y su descripción.
+
+\begin{itemize}
+  \item Alphalist: Permite seleccionar al usuario de una lista de palabras, con
+    la capacidad de reducir la lista de búsqueda escribiendo algunos caracteres
+    de la palabra deseada.
+  \item Buttonbox: Crea widgets de multiples botones.
+  \item Calendar: Crea un pequeño y simple widget calendario.
+  \item Dialog: Informa un mesaje al usuario, y el usuario puede escojer una obcion de los botones proporcionados.
+  \item Entry: Permite al usuario ingresar varios tipos de datos.
+  \item File Selector: Un selector de ficheros construido con widgets CDK. Esta
+    ejemplo muestra cómo crear widgets más complicados utilizando la librería
+    CDK.
+  \item Graph: Dibuja un grafico.
+  \item Histogram: Dibuja un histograma.
+  \item Item List: Crea un campo emergente que permite al usuario seleccionar
+    una de las varias opciones en un pequeño campo. Muy útil para cosas como
+    día de la semana o nombre de mes.
+  \item Label: Muestra mensajes sobre una caja emergente, o sobre etiqueta que se considera parte de la pantalla.
+  \item Marquee: Muestra un mensaje sobre una marquesina con desplazamiento.
+  \item Matrix: Crea una compleja matrix con muchas opciones.
+  \item Menu: Crea una interfaz de menu desplegable.
+  \item Multiple Line Entry: Un campo multilinea de entrada. Muy útil para los
+    campos largos. (como un campo de descripción)
+  \item Radio List: Crea una lista de radio botones.
+  \item Scale: Crea una escala numérica. Se utiliza para permitir a un usuario
+    elegir un valor numérico y restringirlos a una serie de valores.
+  \item Scrolling List: Crea un menu/lista desplazable.
+  \item Scrolling Window: Crea un visor de registros desplazable. Puede agregar
+    información en la ventana mientras se ejecuta. Un buen widget para
+    visualizar el progreso de algo. (similar a una ventana de la consola)
+  \item Selection List: Crea una lista de opciones de seleccion multiple.
+  \item Slider: Similar al widget escale, este widget proporciona una barra
+    deslizante visual para representar el valor numérico.
+  \item Template: Crea un campo de entrada con caracteres sensibles a una
+    posicion. Se utiliza para pre-formatear campos como fechas y numeros de
+    telefono.
+  \item Viewer: Este es un visor de ficheros/informacion. Muy util cuando se
+    necesita mostrar un monton de informacion.
+\end{itemize}
+
+Algunos de los widgets son modificados por Thomas Dickey en las últimas versiones.
+
+\subsubsection{Algunas Características Atractivas}%
+Ademas de hacer nuestra vida más fácil con widgets fácilmente utilizables, cdk
+resuelve un problema frustrante con la impresión de cadenas de colores, cadenas
+justificadas elegantemente. Las etiquetas con formato especial se puede
+incrustar en las cadenas pasadas a las funciones CDK. por Ejemplo
+
+Si la cadena
+\begin{minted}{cpp}
+  "</B/1>Esta line debe tener un primer plano amarillo y un fondo azul.<!1>"
+\end{minted}
+
+se pasa como parámetro a newCDKLabel(), se imprime la línea con primer plano
+amarillo y fondo azul. Hay otras etiquetas disponibles para justificar la
+cadeno, dibujo de caracteres especiales etc.. Por favor, consulte la página man
+cdk\_display(3X) para mas detalles. La página del manual explica el uso con
+buenos ejemplos.
+
+\subsubsection{Conclusión}%
+Considerando todo, CDK es un paquete de widgets bien escrito, que si se utiliza
+correctamente puede formar un fuerte marco de trabajo para el desarrollo de
+complejos GUI.
+
+\subsection{dialog}%
+Hace mucho mucho tiempo, en Septiembre de 1994, cuando pocas personas sabían
+GNU/linux, Jeff Tranter escribió un articulo de diálog en Linux Journal. El
+articulo comienza con estas palabras..\\
+
+Como él mismo explica, dialog es una verdadera joya para crear cajas de dialogo
+de aspecto profesional con facilidad. Crea una variedad de cuadros de diálogo,
+menus, listas de verificación, etc.. Por lo general se instala de forma
+predeterminada. Si no, puede descargarlo desde el sitio de Thomas Dickey’s.\\
+
+El artículo mencionado da una muy buena descripción de sus usos y capacidades.
+La página del man tiene más detalles. Se puede utilizar en variedad de
+situaciones. Un buen ejemplo es la construcción del kernel linux en modo texto.
+El kernel linux utiliza una versión de dialog modificada a medida para sus
+necesidades.\\
+
+dialog fue diseñado inicialmente para ser utilizado con shell scripts. Si desea
+utilizar su funcionalidad en un programa c, entonces puede utilizar libdialog.
+La documentación en este aspecto es escasa. La referencia definitiva es el
+archivo de cabecera dialog.h que viene con el libreria. Puede que tenga que
+cortar aquí y allá para conseguir la salida necesaria. El codigo fuente es
+fácilmente personalizable. Lo he usado en un número de ocasiones mediante la
+modificación del código.
+
+\subsection{Módulos curses de Perl CURSES::FORM y CURSES::WIDGETS}%
+Los módulos curses de perl, curses::Form y curses::Widgets dan acceso a curses
+desde perl. Si usted tiene la instalacion basica de curses y perl, puede
+obtener estos módulos de CPAN All Modules page. Obtener los tres módulos
+comprimidos en la categoría curses. Una vez instalados puede utilizar estos
+módulos en scripts de Perl como cualquier otro módulo. Para obtener más
+información sobre los módulos vea la pagina man perlmod. Los módulos anteriores
+vienenn con una buena documentación y tienen algunos scripts de demostración
+para probar su funcionalidad. Aunque los widgets proporcionadas son muy
+rudimentarios, estos módulos proporcionan un buen acceso a la libreria curses
+desde perl.\\
+
+Algunos de mis ejemplos de código fueron adaptados a perl por Anuradha
+Ratnaweera y están disponibles en el directorio perl.\\
+
+Para obtener más información, consulte las páginas de manual curses(3),
+curses::Form(3) y curses::Widgets(3). Estas paginas se instalan sólo cuando los
+módulos anteriores se adquieren e instalan.
+
+\section{Solo Por Diversion !!!}%
+Esta sección contiene algunos programas escritos por mí sólo por diversión.
+Esto no significa que sean una mejor práctica de programación o la mejor manera
+de utilizar ncurses. Se proporcionan a fin de permitir que los principiantes
+obtegan ideas y añaden más programas a esta sección. Si usted ha escrito un par
+de buenos programas, programas sencillos en curses y los quiere incluir aquí,
+contacteme.
+
+\subsection{El juego de la vida}%
+El Juego de la vida es una maravilla de la matemáticas. En palbras de Paul
+Callahan.\\
+
+{\texttt El juego de la vida (o simplemente la vida) no es un juego en el sentido
+convencional. Ya que tiene jugadores, y no se gana o pierde. Una vez que las
+"piezas" se colocan en la posición inicial, las reglas determinan todo lo que
+sucede después.  Sin embargo, la vida está llena de sorpresas! En la mayoría de
+los casos, es imposible mirar un posición de inicial (o patrón) y ver lo que
+sucederá en el futuro. La única manera de averiguarlo es seguir las reglas del
+juego.}\\
+
+Este programa comienza con un simple patrón o recambio y muestra el maravilloso
+trabajo de la vida. Hay mucho margen de mejora en el programa. Puede dejar que
+el usuario introduzca el patrón de su elección o incluso obtener información de
+un archivo. También puede cambiar las reglas y jugar con un gran cantidad de
+variaciones. Realice una busqueda en google para obtener interesante
+información sobre el juego de vida.\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/JustForFun/life.c}{Game of life}
+\inputminted{cpp}{./cpp/life.cpp}
+
+\subsection{Cuadrado Mágico}%
+Otra maravilla de las matemáticas, es muy sencillo de entender pero muy difícil
+de hacer. En un cuadrado mágico la suma de los números en cada fila, y cada
+columna es igual. Incluso la suma en digonal puede ser igual. Hay muchas
+variaciones con propiedades particulares.\\
+
+Este programa crea un sencillo cuadrado mágico de orden impar.
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/JustForFun/magic.c}{Cuadrado magico}
+\inputminted{cpp}{./cpp/magic.cpp}
+
+\subsection{Torres de Hanoi}%
+Solucionador de las famosas torres de hanoi. El objetivo del juego es mover los
+discos de la primer a la último estaca, utilizando la estaca central como
+temporal. No se permite tomar un disco y colocarlo sobre otro mas pequeño.\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/JustForFun/hanoi.c}{Torres de Hanoi}
+\inputminted{cpp}{./cpp/hanoi.cpp}
+
+\subsection{Rompecabezas de las Reinas}%
+El objetivo del famoso rompecabezas N-reina es poner N reinas en un tablero de
+ajedrez N X N atacarse unas a otras.\\
+
+Este programa resuelve esto con una técnica de rastreo hacia atras simple.\\
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/JustForFun/queens.c}{Rompecabezas de las Reinas}
+\inputminted{cpp}{./cpp/queens.cpp}
+
+\subsection{Barajar}%
+Un juego divertido, si tienes tiempo para matar.
+
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/JustForFun/shuffle.c}{Barajar}
+\inputminted{cpp}{./cpp/shuffle.cpp}
+
+\subsection{Tutor de Mecanografia}%
+Un tutor de mecanografía simple, Lo he creado más por necesidad que por su
+facilidad de uso. Si sabe cómo colocar los dedos correctamente en el teclado,
+pero le falta práctica, puede serle útil.
+\href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/ncurses_programs/JustForFun/tt.c}{Tutor de Mecanografía}
+\inputminted{cpp}{./cpp/tt.cpp}
+
+\section{Referencias}%
+\begin{itemize}
+  \item \href{https://github.com/nasciiboy/NCURSES-Programming-HOWTO/blob/master/man/index.org}{Páginas man} de NCURSES.
+  \item NCURSES FAQ en \href{http://invisible-island.net/ncurses/ncurses.faq.html}{http://invisible-island.net/ncurses/ncurses.faq.html}
+  \item Escribir programas con NCURSES por Eric Raymond y Zeid M. Ben-Halim en\\
+    \href{http://invisible-island.net/ncurses/ncurses-intro.html}{http://invisible-island.net/ncurses/ncurses-intro.html}
+    - algo obsoleto. Me inspiré en este documento y la estructura de este HOWTO
+    sigue la del documento original
+\end{itemize}
+
+
+
+
+
+\vspace{2cm}
+\LARGE\textit{RuneCode}
+
+
+\end{document}
+

@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{n}{mousemask}\PYG{p}{(} \PYG{n}{mmask\PYGZus{}t} \PYG{n}{newmask}\PYG{p}{,}     \PYG{c+cm}{/* Los eventos que quiere escuchar */}
+             \PYG{n}{mmask\PYGZus{}t} \PYG{o}{*}\PYG{n}{oldmask} \PYG{p}{);}  \PYG{c+cm}{/* La anterior mascara de eventos */}
+\end{Verbatim}

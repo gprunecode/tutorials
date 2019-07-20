@@ -1,1 +1,2 @@
-# Este repositorio guardará, todos los tutoriales en latex del grupo.
+# Tutoriales
+Este repositorio guardará, todos los tutoriales en latex del grupo.

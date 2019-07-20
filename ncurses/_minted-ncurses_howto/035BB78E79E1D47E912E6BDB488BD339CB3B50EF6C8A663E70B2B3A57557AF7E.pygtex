@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{n}{printw}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Hola ahi!!!\PYGZdq{}}\PYG{p}{);}
+  \PYG{n}{refresh}\PYG{p}{();}
+\end{Verbatim}

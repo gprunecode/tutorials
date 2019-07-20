@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k+kt}{int} \PYG{n}{ch}\PYG{p}{;}
+  \PYG{n}{ch} \PYG{o}{=} \PYG{n}{getch}\PYG{p}{();}
+\end{Verbatim}

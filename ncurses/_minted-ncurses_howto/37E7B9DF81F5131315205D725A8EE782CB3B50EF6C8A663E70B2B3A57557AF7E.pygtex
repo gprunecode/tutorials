@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{n}{addch}\PYG{p}{(}\PYG{n}{ch} \PYG{o}{|} \PYG{n}{A\PYGZus{}BOLD} \PYG{o}{|} \PYG{n}{A\PYGZus{}UNDERLINE}\PYG{p}{);}
+\end{Verbatim}
