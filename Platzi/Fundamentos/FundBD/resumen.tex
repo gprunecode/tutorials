@@ -801,6 +801,8 @@ Vamos hacer nuestra primera consulta para que veas nuestra tabla quedó bien hec
   \includegraphics[scale=0.75]{./Pictures/049_select.png}
 \end{figure}
 
+\newpage
+
 %% Clase 20
 \section{Vistas}%
 Vamos a revisar la creación de vistas, tienen que ver con un concepto muy
@@ -826,6 +828,206 @@ convierten en algo que podamos consultar de manera recurrente.
 \section{DDL alter}%
 Este comando nos va a permitir modificar nuestra tabla. Por ejemplo agregar una
 columna a nuestra tabla o el tipo de un campo, etc.
+
+\begin{minted}{mysql}
+  ALTER TABLE people
+  ADD date_of_birth date;
+
+  ALTER TABLE people
+  ALTER COLUMN date_of_birth year;
+
+  ALTER TABLE people
+  DROP COLUMN date_of_birth;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/054_alter.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/055_alter_table.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/056_alter_confirm.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/057_alter_tipo.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/057_drop_column.png}
+\end{figure}
+
+
+%% Clase 21
+\section{DDL drop}%
+Esta puede ser la sentencia ¡más peligrosa!, sobre todo cuando somos
+principiantes. Básicamente borra o desaparece de nuestra base de datos algún
+elemento.
+
+\begin{minted}{mysql}
+  DROP TABLE people;
+
+  DROP DATABASE test_db;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/058_drop_table.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/059_drop_table_retriew.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/060_drop_schema.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/061_drop_database.png}
+\end{figure}
+
+\newpage
+
+%% Clase 22
+\section{DML}%
+\textbf{DML} trata del contenido de la base de datos. Son las siglas de Data
+Manipulation Language y sus comandos son:
+\begin{itemize}
+  \item \textbf{Insert}: Inserta o agrega nuevos registros a la tabla.
+  \item \textbf{Update}: Actualiza o modifica los datos que ya existen.
+  \item \textbf{Delete}: Esta setencia es riesgosa porque puede borrar el contenido de una tabla.
+  \item \textbf{Select}: Trae información de la base de datos.
+\end{itemize}
+
+\textbf{insert}
+\begin{minted}{mysql}
+  INSERT INTO people (last_name, first_name, address, city)
+  VALUES ('Hernández', 'Laura', 'Calle 21', 'Monterrey');
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/062_insert.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/063_insert.png}
+\end{figure}
+
+\textbf{Update}\\
+Tiene que ver con actualizar o modificar los datos que ya tenemos.
+\begin{minted}{mysql}
+  UPDATE people
+  SET last_name = 'Chávez', city = 'Mérida'
+  WHERE person_id = 1;
+
+  UPDATE people
+  SET first_name = 'Juan'
+  WHERE city = 'Mérida';
+
+  UPDATE people
+  SET first_name = 'Juan';
+\end{minted}
+
+\textbf{Delete}\\
+Igual que DROP que vimos en el lenguaje DDL, ésta es una sentencia DML que
+también es bastante riesgosa porque puede borrar el contenido de una tabla.
+
+\begin{minted}{mysql}
+  DELETE FROM people
+  WHERE person_id = 1;
+
+  DELETE FROM people;
+\end{minted}
+
+\textbf{Select}\\
+Nos trae información de la base de datos, nos puede servir para generar una
+vista.
+\begin{minted}{mysql}
+  SELECT first_name, last_name
+  FROM people;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/064_select.png}
+\end{figure}
+
+%% Clase 23
+\section{¿Qué tan estandard es SQL?}%
+La utilidad más grande de \textbf{SQL} fue unificar la forma en la que pensamos
+y hacemos preguntas a un repositorio de datos. Ahora que nacen nuevas bases de
+datos igualmente siguen tomando elementos de \textbf{SQL}.\\
+
+Por ejemplo veamos los comandos usados en \textbf{mysql}.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/065_mysql.png}
+\end{figure}
+
+También se pueden usar los mismos comando SQL en \textbf{postgresql}.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.50]{./Pictures/066_postgresql.png}
+\end{figure}
+
+%% Clase 24
+\section{Creando Platziblog: tablas independientes}%
+\begin{itemize}
+  \item Una buena práctica es comenzar creando las entidades que no tienen una
+    llave foránea.
+  \item Generalmente en los nombres de bases de datos se evita usar eñes o
+    acentos para evitar problemas en los manejadores de las bases de datos.
+\end{itemize}
+
+\begin{minted}{mysql}
+  /* Creacion de la base de datos platziblog */
+  CREATE DATABASE platziblog DEFAULT CHARACTER SET uft8;
+  /* Linea para utilizar platziblog */
+  USE platziblog;
+  
+  /* Construccion de tablas independientes */
+  CREATE TABLE `platziblog`.`categorias` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nombre_categoria` VARCHAR(30) NOT NULL,
+  PRIMARY KEY (`id`));
+
+  CREATE TABLE etiquetas (
+  id INT NOT NULL AUTO_INCREMENT,
+  nombre_etiqueta VARCHAR(30) NOT NULL,
+  PRIMARY KEY (id));
+
+  CREATE TABLE usuarios (
+  id INT NOT NULL AUTO_INCREMENT,
+  login VARCHAR(30) NOT NULL,
+  password VARCHAR(32) NOT NULL,
+  nickname VARCHAR(40) NOT NULL,
+  email VARCHAR(40) NOT NULL UNIQUE,
+  PRIMARY KEY(id));
+\end{minted}
+
+Esto lo podemos hacer a través de nuestro cliente gráfico o por consola como se puede observar.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.50]{./Pictures/067_platziblog_ti.png}
+\end{figure}
+
+
+
 
 
 \vspace{2cm}
