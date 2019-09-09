@@ -1000,10 +1000,10 @@ También se pueden usar los mismos comando SQL en \textbf{postgresql}.
   USE platziblog;
   
   /* Construccion de tablas independientes */
-  CREATE TABLE `platziblog`.`categorias` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `nombre_categoria` VARCHAR(30) NOT NULL,
-  PRIMARY KEY (`id`));
+  CREATE TABLE categorias (
+  id INT NOT NULL AUTO_INCREMENT,
+  nombre_categoria VARCHAR(30) NOT NULL,
+  PRIMARY KEY (id));
 
   CREATE TABLE etiquetas (
   id INT NOT NULL AUTO_INCREMENT,
@@ -1025,6 +1025,342 @@ Esto lo podemos hacer a través de nuestro cliente gráfico o por consola como s
   \centering
   \includegraphics[scale=0.50]{./Pictures/067_platziblog_ti.png}
 \end{figure}
+
+%% Clase 25
+\section{Creando Platziblog: tablas dependientes}%
+El comando "cascade" sirve para que cada que se haga un update en la tabla
+principal, se refleje también en la tabla en la que estamos creando la
+relación.\\
+
+Vamos a crear la tabla \textbf{posts}:\\
+
+\begin{minted}{mysql}
+  CREATE TABLE posts (
+  id INT NOT NULL AUTO_INCREMENT,
+  titulo VARCHAR(130) NOT NULL,
+  fecha_publicacion TIMESTAMP NULL,
+  contenido TEXT NOT NULL,
+  estatus CHAR(8) NULL DEFAULT 'activo',
+  usuario_id INT NOT NULL,
+  categoria_id INT NOT NULL
+  PRIMARY KEY (id));
+\end{minted}
+
+\newpage
+
+Luego configuramos sus Foreign Keys, que en este caso son dos:\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/068_fk.png}
+\end{figure}
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/069_fk_confirm.png}
+\end{figure}
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/070_fk.png}
+\end{figure}
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/071_fk_confirm.png}
+\end{figure}
+
+
+%% Clase 26
+\section{Creando Platziblog: tablas transitivas}%
+Creamos ahora la tabla \textbf{comentarios}:
+
+\begin{minted}{mysql}
+  CREATE TABLE comentarios (
+  id INT NOT NULL AUTO_INCREMENT,
+  cuerpo_comentario TEXT NOT NULL,
+  usuario_id INT NOT NULL,
+  post_id INT NOT NULL,
+  PRIMARY KEY (id));
+\end{minted}
+
+Añadimos sus \textbf{foreing keys}:
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/072_fk_comentarios.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/073_fk_comentarios_confirm.png}
+\end{figure}
+
+
+\newpage
+
+Las tablas transitivas sirven como puente para unir dos tablas. No tienen
+contenido semántico.\\
+
+Ahora creamos la tabla \textbf{posts\_etiqueta}:
+
+\begin{minted}{mysql}
+  CREATE TABLE posts_etiqueta (
+  id INT NOT NULL AUTO_INCREMENT,
+  post_id INT NOT NULL,
+  etiqueta_id INT NOT NULL,
+  PRIMARY KEY (id));
+\end{minted}
+
+Y configuramos su Foreign Keys:
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/074_fk_pe_posts.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/075_fk_confirm.png}
+\end{figure}
+
+\newpage
+\textbf{Reverse Engineer} nos reproduce el esquema del cual nos basamos para
+crear nuestras tablas. Es útil cuando llegas a un nuevo trabajo y quieres
+entender cuál fue la mentalidad que tuvieron al momento de crear las bases de
+datos.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/076_reverse_engineer.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/077_reverse_engineer.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/077_select_schema.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/077_diag_fisico_workbench.png}
+\end{figure}
+
+
+%% Clase 27
+\section{¿Por qué las consultas son tan importantes?}%
+Las consultas o queries a una base de datos son una parte fundamental ya que
+esto podría salvar un negocio o empresa.\\
+
+Alrededor de las consultas a las bases de datos se han creado varias
+especialidades como \textbf{ETL} o transformación de datos, \textbf{business
+intelligence} e incluso \textbf{machinen learning}.
+
+%% Clase 28
+\section{Estructura básica de un Query}%
+Los queries son la forma en la que estructuramos las preguntas que se harán a
+la base de datos. Transforma preguntas en sintaxis.\\
+
+El query tiene básicamente 2 partes: \textbf{SELECT} y \textbf{FROM} y pude
+aparecer una tercera como \textbf{WHERE}.\\
+
+\textbf{Estructura básica de un Query}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/078_query.png}
+\end{figure}
+
+
+El asterisco (*) quiere decir que vamos a seleccionar todo sin filtrar campos, por ejemplo.
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts;
+\end{minted}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/079_select_year.png}
+\end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE year(fecha_publicacion) > '2024';
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/079_select_ast.png}
+\end{figure}
+
+
+
+%% Clase 29
+\section{SELECT}%
+El select más básico es el siguiente:
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts;
+\end{minted}
+
+Ahora vamos a elegir solo algunos campos:
+\begin{minted}{mysql}
+  SELECT titulo, fecha_publicacion, estatus
+  FROM posts;
+\end{minted}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/080_select.png}
+\end{figure}
+
+Tambien podemos usar \textbf{AS} para modificar el nombre con el que se mostrarán los campos:
+\begin{minted}{mysql}
+  SELECT titulo AS encabezado, fecha_publicado AS publicado_en, estatus AS estado
+  FROM posts;
+\end{minted}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/081_select_as.png}
+\end{figure}
+
+\newpage
+
+Podemos contar los registros usando \textbf{count()}:
+\begin{minted}{mysql}
+  SELECT count(*)
+  FROM posts;
+\end{minted}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/082_select_count.png}
+\end{figure}
+
+
+Y se puede modificar el nombre que se muestra por algo mas entendible usando
+\textbf{AS}:
+\begin{minted}{mysql}
+  SELECT count(*) AS numero_posts
+  FROM posts;
+\end{minted}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/083_select_count_as.png}
+\end{figure}
+
+
+%% Clase 30
+\section{FROM}%
+\textbf{FROM} indica de dónde traer los datos y puede ayudar a hacer sentencias
+y filtros complejos cuando se quieren unir tablas. La sentencia compañera que
+nos ayuda con este proceso es \textbf{JOIN}.\\
+
+Los diagramas de Venn son círculos que se tocan en algún punto para ver dónde
+está la intersección de conjuntos. Ayudan mucho para poder formular la
+sentencia \textbf{JOIN} de la manera adecuada dependiendo del query que se
+quiere hacer.\\
+
+\textbf{JOIN - Diferencia}\\
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/084_join_diferencia.png}
+\end{figure}
+
+\newpage
+
+\textbf{JOIN - Intersección}\\
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/085_join_interseccion.png}
+\end{figure}
+
+\textbf{JOIN - Union - Diferencia simétrica}\\
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/086_join_outer.png}
+\end{figure}
+
+
+%% Clase 31
+\section{Utilizando la sentencia FROM}%
+Vamos a empezar con \textbf{JOIN - Diferencia}:
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/089_join_left.png}
+\end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM usuarios
+  LEFT JOIN posts ON usuarios.id = posts.usuario_id;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/087_join_left.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.55]{./Pictures/088_join_left_perezoso.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/090_join_left_not_null.png}
+\end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM usuarios
+  LEFT JOIN posts ON usuarios.id = posts.usuario_id
+  WHERE posts.usuario_id IS NOT NULL;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/093_join_left_not_null.png}
+\end{figure}
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/091_join_right.png}
+\end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM usuarios
+  RIGHT JOIN posts ON usuarios.id = posts.usuario_id;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/094_join_right.png}
+\end{figure}
+
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM usuarios
+  RIGHT JOIN posts ON usuarios.id = posts.usuario_id
+  WHERE posts.usuario_id IS NOT NULL;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/095_join_right_not_null.png}
+\end{figure}
+
+
+
 
 
 
