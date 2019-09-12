@@ -1,0 +1,10 @@
+Alfresco, dspace
+Gestores documentales o CMS
+
+Java, Spring.
+
+Myb (mybatis)
+
+
+Conexion jdbc + java gui
+mitocode (youtube)
