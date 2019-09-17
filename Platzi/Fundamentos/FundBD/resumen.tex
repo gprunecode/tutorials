@@ -1365,6 +1365,440 @@ Ahora veremos la \textbf{Intersección}\\
   \includegraphics[scale=0.75]{./Pictures/096_Interseccion.png}
 \end{figure}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/099_inner.png}
+\end{figure}
+
+
+Ahora veremos la \textbf{Unión}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/097_union.png}
+\end{figure}
+
+
+%% Clase 32
+\section{WHERE}%
+\textbf{WHERE} es la sentencia que nos ayuda a filtar tuplas o registros
+dependiendo de las características que elegimos.
+
+Veamos por ejemplo una instrucción SELECT de posts:
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/102_where.png}
+\end{figure}
+
+Y ahora agreguemos una sentencia WHERE con id con el que podemos hacer comparaciones de orden:
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/103_where.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/104_where.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/107_where_id_dif.png}
+\end{figure}
+
+
+Podemos usar esta sentencia con el campo \textbf{estatus}, por ejemplo:
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/105_where.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/106_where_estatus.png}
+\end{figure}
+
+La propiedad \textbf{LIKE} nos ayuda a traer registros de los cuales conocemos
+sólo una parte de la información.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/108_where_like.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/109_where_like.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/110_where_like.png}
+\end{figure}
+
+Nota: También podemos hacer comparaciones de orden con datos de tipo TIMESTAMP, por ejemplo:
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/111_where_fecha.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/112_where_fecha.png}
+\end{figure}
+
+La propiedad \textbf{BETWEEN} nos sirve para arrojar registros que estén en el
+medio de dos. Por ejemplo los registros con id entre 20 y 30.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/114_where_id_between.png}
+\end{figure}
+
+También podemos usar between con fecha, por ejemplo:
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/113_where_fecha_between.png}
+\end{figure}
+
+Usando \textbf{year} podemos comparar solo el año del dato tipo TIMESTAMP:
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/115_where_date_year.png}
+\end{figure}
+
+O si usamos \textbf{month} entonces solo compararemos el mes:
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/116_where_month.png}
+\end{figure}
+
+En conclusión la sentencia \textbf{WHERE} sirve para filtrar los rows o tuplas.
+
+%% Clase 33
+\section{Utilizando la sentencia WHERE nulo y no nulo}%
+El valor nulo en una tabla generallmente es su valor por defecto cuando nadie
+le asignó algo diferente. La sintaxis para hacer búsquedas de datos nulos es
+\textbf{IS NULL}. La sintaxis para buscar datos que no son nulos es \textbf{IS
+NOT NULL}. También podemos usar \textbf{AND} para agregar más filtros a WHERE.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/117_where_and.png}
+\end{figure}
+
+%% Clase 34
+\section{GROUP BY}%
+\textbf{GROUP BY} tiene que ver con agrupación, indica a la base de datos qué
+criterios debe tener en cuenta para agrupar.\\
+
+Por ejemplo usamos \textbf{COUNT(*)} y agrupar segun estatus:\\
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/118_group_by.png}
+\end{figure}
+
+Podemos agrupar también por año y contar los posts.\\
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/119_group_by_year.png}
+\end{figure}
+
+Podemos agrupar por mes:\\
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/120_group_by_monthname.png}
+\end{figure}
+
+Podemos agrupar en base a varios campos, por ejemplo agrupamos en base a
+estatus y luego de acuerdo al mes.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/121_group_by_estatus_month.png}
+\end{figure}
+
+%% Clase 35
+\section{ORDER BY y HAVING}%
+La sentencia \textbf{ORDER BY} tiene que ver con el ordenamiento de los datos
+dependiento de los criterios que quieras usar.\\
+
+\begin{itemize}
+  \item ASC sirve para ordenar de forma ascendente.
+  \item DESC sirve para ordenar de forma descendente.
+  \item LIMIT se usa para limitar la cantidad de resultados que arroja el query.
+\end{itemize}
+
+\textbf{HAVING} tiene una similitud muy grande con \textbf{WHERE}, sin embargo
+el uso de ellos depende del orden. Cuando se quiere seleccionar tuplas
+agrupadas únicamente se puede hacer con \textbf{HAVING}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/122_order_by.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/123_order_by_asc.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/124_order_by_desc.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/125_order_by_titulo.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/126_order_by_titulo.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/127_order_by_id_asc.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/128_order_by_id_desc.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/129_order_by_limit.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/131_order_by_month.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/132_order_by_month_having.png}
+\end{figure}
+
+
+%% Clase 36
+\section{El interminable agujero de conejo (Nested queries)}%
+Los \textbf{Nested queries} significan que dentro de un query podemos hacer
+otro query. Esto sirve para hacer join de tablas, estando una en memoria.
+También teniendo un query como condicional del otro.\\
+
+Este proceso puede ser tan profundo como quieras, teniendo infinitos queries anidados.\\
+Se le conoce como un producto cartesiano ya que se multiplican todos los
+registros de una tabla con todos los del nuevo queery. Esto provoca que el
+query sea difícil de procesar por lo pesado que puede resultar.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/133_select_anidado.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/134_where_anidado.png}
+\end{figure}
+
+
+%% Clase 37
+\section{¿Cómo convertir una pregunta en un query SQL?}%
+De pregunta a Query
+\begin{itemize}
+  \item \textbf{SELECT}: Lo que quieres mostrar.
+  \item \textbf{FROM}: De dónde voy a tomar los datos.
+  \item \textbf{WHERE}: Los filtros de los datos que quieres mostrar.
+  \item \textbf{GROUP BY}: Los rubros por los que me interesa agrupar la información.
+  \item \textbf{ORDER BY}: El orden en que quiero presentar mi información.
+  \item \textbf{HAVING}: Los filtros que quiero que mis datos agrupados tengan.
+\end{itemize}
+
+%% Clase 38
+\section{Preguntándole a la base de datos}%
+\textbf{GROUP\_CONCAT} toma el resultado del query y lo pone como campo
+separado por comas.\\
+
+Trabajando con \textbf{platziblog}:\\
+¿Cuántas tags tiene un blogpost?\\
+\begin{minted}{mysql}
+  SELECT posts.titulo, COUNT(*) AS num_etiquetas
+  FROM posts
+    INNER JOIN posts_etiquetas ON posts.id=posts_etiquetas.post_id
+    INNER JOIN etiquetas ON etiquetas.id=posts_etiquetas.etiqueta_id
+  GROUP BY posts_id
+  ORDER BY num_etiquetas DESC;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/135_first_question.png}
+\end{figure}
+
+¿Cuáles son las etiquetas de cada post?\\
+\begin{minted}{mysql}
+  SELECT posts.titulo, GROUP_CONCAT(nombre_etiqueta)
+  FROM posts
+    INNER JOIN posts_etiquetas ON posts.id=posts_etiquetas.post_id
+    INNER JOIN etiquetas ON etiquetas.id=posts_etiquetas.etiqueta_id
+  GROUP BY posts_id;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/136_second_question.png}
+\end{figure}
+
+
+¿Cuáles son las etiquetas que no tienen ningún post?
+\begin{minted}{mysql}
+  SELECT *
+  FROM etiquetas
+    LEFT JOIN posts_etiquetas ON etiquetas.id=posts_etiquetas.etiqueta_id
+    WHERE posts_etiquetas.etiqueta_id IS NULL;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/137_third_question.png}
+\end{figure}
+
+
+%% Clase 39
+\section{Consultando Platziblog}%
+Puedes usar una abreviación para evitar escribir lo mismo cada vez. Ejemplo:\\
+
+\begin{minted}{mysql}
+  FROM categorias AS c
+\end{minted}
+
+Vamos hacer una consulta en la que traigamos las categorías de los posts y las
+ordenaremos de las que tienen más posts a las que tienen menos.\\
+
+\begin{minted}{mysql}
+  SELECT c.nombre_categoria, COUNT(*) AS cant_posts
+  FROM categorias AS c
+    INNER JOIN posts AS p ON c.id=p.categoria_id
+  GROUP BY c.id
+  ORDER BY cant_posts DESC;
+\end{minted}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/138_fourth_question.png}
+\end{figure}
+
+Y si quiero saber cuál es la categoría que tiene más posts, entonces a lo
+anterior le agregados una sentencia \textbf{LIMIT}\\
+
+\begin{minted}{mysql}
+  SELECT c.nombre_categoria, COUNT(*) AS cant_posts
+  FROM categorias AS c
+    INNER JOIN posts AS p ON c.id=p.categoria_id
+  GROUP BY c.id
+  ORDER BY cant_posts DESC
+  LIMIT 1;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/139_fifth_question.png}
+\end{figure}
+
+Ahora veremos, ¿qué usuario está creando más post en el sistema?\\
+
+\begin{minted}{mysql}
+  SELECT u.nickname, COUNT(*) cant_posts
+  FROM usuarios AS u
+    INNER JOIN posts AS p ON u.id=p.usuario_id
+  GROUP BY u.id
+  ORDER BY cant_posts DESC
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/140_sixth_question.png}
+\end{figure}
+
+
+Luego vamos a modificar esta consulta y le vamos agregar el número de posts y
+de qué categoría está escribiendo.\\
+\begin{minted}{mysql}
+  SELECT u.nickname, COUNT(*) cant_posts, GROUP_CONCAT(nombre_categoria)
+  FROM usuarios AS u
+    INNER JOIN posts AS p ON u.id=p.usuario_id
+    INNER JOIN categorias AS c ON c.id=p.categoria_id
+  GROUP BY u.id
+  ORDER BY cant_posts DESC
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/141_seventh_question.png}
+\end{figure}
+
+En este último query vamos a ver que usuario no tiene posts escritos.\\
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM usuarios AS u
+    LEFT JOIN posts ON u.id=posts.usuario_id
+  WHERE posts.usuario_id IS NULL;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/142_eighth_question.png}
+\end{figure}
+
+
+%% Clase 40
+\section{¿Qué son y cuáles son los tipos de baes de datos no relacionales?}%
+Respecto a las bases de datos no relacionales, no existe un solo tipo aunque se
+engloben en una sola categoría.
+
+\textbf{Tipos de bases de datos no relacionales:}\\
+
+\begin{itemize}
+  \item \textbf{Clave - valor:} Son ideales para almacenar y extraer datos con
+    una clave única. Manejan los diccionarios de manera excepcional. Ejemplos:
+    \textbf{DynamoDB}, \textbf{Cassandra}.
+  \item \textbf{Basadas en documentos}: Son una implementación de clave valor
+    que varía en la forma semiestructurada en que se trata la información.
+    Ideal para almacenar datos JSON y XML. Ejemplos: \textbf{MongoDB},
+    \textbf{Firestore}.
+  \item \textbf{Basadas en grafos}: Basadas en teoría de grafos, sirven para
+    entidades que se encuentran interconectadas por múltiples relaciones.
+    Ideales para almacenar relaciones complejas. Ejemmplos: \textbf{neo4j},
+    \textbf{TITAN}.
+  \item \textbf{Optimizadas para búsquedas:} Pueden ser de diversas
+    estructuras, su ventaja radica en que se pueden hacer queries y búsquedas
+    complejas de manera sencilla. Ejemplos: \textbf{BigQuery},
+    \textbf{Elasticsearch}.
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
