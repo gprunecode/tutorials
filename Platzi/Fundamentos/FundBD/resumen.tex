@@ -62,6 +62,7 @@
 %% Portada
 \includepdf{./portada/portada.pdf}
 
+%% Clase 1
 \section{Bienvenida conceptos básicos y contexto histórico de las Bases de Datos}%
 
 \textbf{Historia de Base de datos}
@@ -76,8 +77,9 @@ también muy resistentes.
 Pasaron muchos siglos y el siguiente salto que se logró después del papel se
 dio en el siglo XX con el microfilm que tiene la ventaja de almacenar
 información que puede durar miles de años sin ningún problema, la desventaja es
-que el guardar información, modificar y leer información requiere máquinas muy
-especializadas que no son fáciles de conseguir y no es tan fácil el proceso.
+que el guardar, modificar y leer información requiere de máquinas muy
+especializadas que no son fáciles de conseguir y no es tan fácil el proceso
+tampoco.\\
 
 Luego tenemos a los medios digitales: Los discos duros, discos de estado
 sólido, incluso los CDs fueron medios de almacenamiento digital en los que para
@@ -86,7 +88,7 @@ su almacenamiento se usó el formato digital de "unos y ceros".
 El siguiente gran cambio que se dió fue la nube. La nube tiene como beneficio a
 su favor el que es accesible desde cualquier parte del mundo.
 
-Entonces ¿Qué son las Bases de Datos?
+Entonces \textbf{¿Qué son las Bases de Datos?}
 Las bases de datos entran en el periodo en el que hicimos la transición a
 medios digitales y ahora en la nube.
 Las bases de datos nos servian para complementar la arquitectura de Von Neumann
@@ -94,10 +96,10 @@ Las bases de datos nos servian para complementar la arquitectura de Von Neumann
 elementos de entrada y salida).
 
 Las bases de datos se han divido en dos grandes tipos, las Relacionales, que
-fueron las primeras en surgir y luego las no relacionales.
+fueron las primeras en surgir y luego las no relacionales.\\
 
-Con respecto a las Base de Datos relacionales actualmente tenemos en la
-industria varias compañías que se dedican a ser manejadores de Base de Datos
+Con respecto a las \textbf{Bases de Datos relacionales} actualmente tenemos en
+la industria varias compañías que se dedican a ser manejadores de Base de Datos
 Relacionales, por ejemplo SQL Server de Microsoft, luego Oracle que ha sido muy
 popular e importante; pero tenemos también las versiones de comunidad u Open
 Source, por ejemplo PostgresSQl, la más usada probablemente en la industria que
@@ -107,72 +109,70 @@ MariaDB que es virtualmente lo mismo que MySQL de hecho es un fork del codigo
 original que hizo su creador para continuar con este proyecto de una manera más
 libre sin tener que estar atado a Oracle.
 
-Con respecto a la Base de Datos no Relacionales es un mundo muy interesante y
-que todavía está avanzando por ejemplo: MemcacheDB, Cassandra que es una base
-datos que inventó Facebook, DynamoDB, elasticsearch, BigQuery, y también
-tenemos algunas muy interesantes como: neo4j (basada en grafos), MongoDB (una
-de las más utilizadas) y tenemos firestore que es una muy reciente.
+Con respecto a las \textbf{Bases de Datos no Relacionales} es un mundo muy
+interesante y que todavía está avanzando por ejemplo: MemcacheDB, Cassandra que
+es una base datos que inventó Facebook, DynamoDB, elasticsearch, BigQuery, y
+también tenemos algunas muy interesantes como: neo4j (basada en grafos),
+MongoDB (una de las más utilizadas) y tenemos firestore que es una muy
+reciente.
 
 Tenemos también otra gran división de servicios de Base de Datos: Los que se
-llaman Autoadministrados y los Administrados. Los Autoadministrados, es la base
-de datos que tu instalas en tu computadora o en tu servidor, tu te encargas de
-las actualizaciones y te encargas de toda la parte de mantenimiento,
-actualización, parche, persistencia de datos, etc. Los servicios administrados
-por otro lado no los llevar tu, son servicios que ofrecen las nubes modernas,
-por ejemplo: Amazon, Google o Azure de Microsoft que lo que te ofrecen es
-realmente el servicio de base de datos. Tu vas a usarla pero no tienes que
-instalarla u ocuparte de todo el mantenimiento que implica. Como se ve ambas
-tienen ciertas ventajas y desventajas.
+llaman \textbf{Autoadministrados y los Administrados}. Los Autoadministrados,
+es la base de datos que tu instalas en tu computadora o en tu servidor, tu te
+encargas de las actualizaciones y te encargas de toda la parte de
+mantenimiento, actualización, parche, persistencia de datos, etc. Los servicios
+administrados por otro lado no se manejan por uno mismo, son servicios que
+ofrecen las nubes modernas, por ejemplo: Amazon, Google o Azure de Microsoft
+que lo que te ofrecen es realmente el servicio de base de datos. Tu vas a
+usarla pero no tienes que instalarla u ocuparte de todo el mantenimiento que
+implica. Como se ve ambas tienen ciertas ventajas y desventajas.
 
 %% clase 2
-\section{Historio de las RDB}%
+\section{Historia de las RDB}%
 Las bases de datos surgen de la necesidad de conservar la información más allá
-de lo que existe en la memoria RAM. Y cuando tuvimos la necesidad de guardar la
-información de una forma que fuera facil de guardar y extraer empezaron a
-buscarse formas un poquito más inteligentes de hacerse esto. La primera
-aproximación fueron lo que se llaman Base de Datos basados en archivos que no
-es lo mismo que Base de Datos basados en Documentos.
-
-Las bases de datos surgen de la necesidad de conservar la información mas allá
-de lo que existe en la memoria RAM en el esquema de la arquitectura de Von
-Neumann.
+de lo que existe en la memoria RAM (en el esquema de la arquitectura de Von
+Neumann). Y cuando tuvimos la necesidad de guardar la información de una forma
+que fuera facil de guardar y extraer empezaron a buscarse formas un poquito más
+inteligentes de hacerse esto. La primera aproximación fueron lo que se llaman
+Base de Datos basados en archivos que no es lo mismo que Base de Datos basados
+en Documentos.\\
 
 Las bases de datos basadas en archivos eran datos guardados en texto plano,
 fáciles de guardar pero muy difíciles de consultar y por la necesidad de
 mejorar nacen las \textbf{bases de datos relacionales}. Su inventor
 \textbf{Edgar Codd} dejó ciertas reglas para asegurarse de que toda la
-filosofía de las bases de datos no se perdieran, estandarizando el proceso.\\
-
-Codd inventó algo llamado el Álgebra Relacional.
+filosofía de las bases de datos no se perdieran, estandarizando el proceso.
+(Codd inventó algo llamado el Álgebra Relacional.)\\
 
 %% Clase 3
 \section{Entidades y atributos}%
 Una \textbf{entidad} es algo similar a un objeto (programación orientada a
-objetos) y representa algo en el mundo real, incluso algo abstracto. Tienen
-atributos que son las cosas que los hacen ser una entidad y por convención se
-ponen en plural.
-
-\begin{figure}[h!]
-    \centering
-      \includegraphics[scale=0.5]{./Pictures/001_entidades.png}
-\end{figure}
+objetos) y representa algo en el mundo real, incluso algo abstracto. Las
+entidades tienen atributos que son las características que las hacen ser una
+entidad y por convención se ponen en plural.
 
 \newpage
 Veamos unos diagramas de ejemplo:
 \begin{figure}[h!]
     \centering
+      \includegraphics[scale=0.5]{./Pictures/001_entidades.png}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
       \includegraphics[scale=0.5]{./Pictures/002_Diagrama.png}
 \end{figure}
 
-El atributo llantas es un atributo multivaluado, eso quiere decir que la
-entidad automóvil tiene más de uno de estos atributos. Como se vé se representa
-con un ovalo doble.\\
+El atributo \textbf{llantas} es un \textbf{atributo multivaluado}, eso quiere
+decir que la entidad \textbf{automóvil} tiene más de uno de estos atributos.
+Como se vé, se representa con un \textbf{ovalo doble}.\\
 
-Ahora veamos el atributo motor es un atributo compuesto ya que, este a su vez
-está formado por otros atributos.\\
+Ahora veamos el atributo \textbf{motor} es un \textbf{atributo compuesto} ya
+que, este a su vez está formado por otros atributos.\\
 
-También fijémonos en el atributo especial llamado antiguedad, ya que este
-atributo se puede inferir a partir del año en el que salió el automovil.
+También fijémonos en el \textbf{atributo especial} llamado \textbf{antiguedad},
+ya que este atributo se puede inferir a partir del año en el que salió el
+automovila. Se representa con un óvalo discontinuo.
 
 \newpage
 
@@ -185,8 +185,7 @@ Por convención las entidades se ponen en plural.\\
 
 En caso del atributo \textbf{no\_de\_serie} es el que diferencia nuestra
 entidad de otras y se conoce como atributo llave, se grafica dentro de un óvalo
-y además tiene subrayado. Los \textbf{atributos llave} son aquellos que identifican a la entidad y no
-pueden ser repetidos.
+y además tiene subrayado.
 
 \begin{figure}[h!]
     \centering
@@ -212,9 +211,6 @@ con un cuadrado con doble línea.
       \includegraphics[scale=0.5]{./Pictures/005_entidades_debiles.png}
 \end{figure}
 
-Las identidades débiles también se representan con el mismo cuadrado pero
-tienen doble línea.
-
 La Identidades pueden ser débiles por dos motivos:\\
 
 \textbf{Entidades débiles por idendidad:} No se diferencian entre si más que
@@ -225,6 +221,7 @@ por la clave de su entidad fuerte.
       \includegraphics[scale=0.5]{./Pictures/006_entidades_debiles_dependientes.png}
 \end{figure}
 
+\newpage
 \textbf{Entidades débiles por existencia}: Se les asigna una clave propia,
 pero conceptualmente no puede existir esta identidad sin otra que sea fuerte.
 
@@ -285,24 +282,18 @@ que vamos a vincular con la relación llamado \textbf{pertenece}.
 \end{figure}
 
 También veamos otras dos entidades: \textbf{laptops} y \textbf{discos\_duros}
-(este último era un atributo multivaluado), cuando tenemos atributos
-multivaluados por lo general los convertimos en entidades separadas porque
+(este último era un atributo multivaluado), cuando tenemos \textbf{atributos
+multivaluados} por lo general los convertimos en entidades separadas porque
 tienen una vida en sí mismas. En este caso decimos que una laptop tiene varios
-discos\_duros. Y esto se define con la cardinalidad.
+discos\_duros y esto se define con la cardinalidad.\\
 
 \begin{figure}[h!]
     \centering
-      \includegraphics[scale=0.45]{./Pictures/012_relacion_tiene.png}
+      \includegraphics[scale=0.40]{./Pictures/012_relacion_tiene.png}
 \end{figure}
 
-En el slide de laptos tiene discos\_duros, se ve que éste ultimo no estaba
-siendo considerado una entidad sino que era un atributo multivaluado. Por lo
-general a los atributos multivaluados los convertimos en entidades separadas
-porque tienen una vida por sí misma y porque se pueden relacionar de diferentes
-maneras.\\
-
 Las relaciones tienen una propiedad llamada \textbf{cardinalidad} y tiene que
-ver con números. Cuántos de un lado pertenecen a cuántos del otro lado:\\
+ver con números. Cuántos de un lado pertenecen a cuántos del otro lado:
 
 \begin{itemize}
   \item Cardinalidad: 1 a 1
@@ -332,12 +323,12 @@ diagrama físico de base de Datos.\\
 Esta cardinalidad es opcional, por ejemplo puede que haya una
 \textbf{sesion\_actual} para un usuario como tambien que no.
 
-\newpage
-
 \begin{figure}[h!]
     \centering
       \includegraphics[scale=0.45]{./Pictures/015_card_0_1.png}
 \end{figure}
+
+\newpage
 
 \textbf{Cardinalidad: 1 a N}\\
 Esta es la cardinalidad 1 a muchos, por ejemplo: Una persona afortunada, puede
@@ -347,7 +338,7 @@ cardinalidad se saca el número mayor de cada lado.\\
 
 \begin{figure}[h!]
     \centering
-      \includegraphics[scale=0.5]{./Pictures/016_card_1_N.png}
+      \includegraphics[scale=0.45]{./Pictures/016_card_1_N.png}
 \end{figure}
 
 \textbf{Cardinalidad: 0 a N}\\
@@ -357,7 +348,7 @@ opcional.
 
 \begin{figure}[h!]
     \centering
-      \includegraphics[scale=0.5]{./Pictures/017_card_0_N.png}
+      \includegraphics[scale=0.45]{./Pictures/017_card_0_N.png}
 \end{figure}
 
 
@@ -373,13 +364,12 @@ clase contiene a varios alumnos. En este caso es difícil saber de donde viene
 la relación, si es el alumno el que se relaciona con la clase o es la clase la
 que tiene muchos alumnos.
 
-\newpage
-
 \begin{figure}[h!]
     \centering
-      \includegraphics[scale=0.5]{./Pictures/018_card_N_N.png}
+      \includegraphics[scale=0.45]{./Pictures/018_card_N_N.png}
 \end{figure}
 
+\newpage
 
 %% Clase 7
 \section{Diagrama ER}%
@@ -415,6 +405,8 @@ parámetros como:
       \includegraphics[scale=0.45]{./Pictures/020_tipos_datos.png}
 \end{figure}
 
+\newpage
+
 \textbf{Constraints (Restricciones)}
 \begin{itemize}
   \item \textbf{NOT NULL:} Se asegura que la columna no tenga valores nulos
@@ -448,7 +440,6 @@ componentes en la base de datos:\\
     multivaluado se indentifican por una clave única
 \end{itemize}
 
-\newpage
 Por ejemplo la siguiente tabla muestra datos \textbf{sin normalizar}:
 
 \begin{figure}[h!]
@@ -459,6 +450,8 @@ Por ejemplo la siguiente tabla muestra datos \textbf{sin normalizar}:
 Como se verifica en esta tabla, hay campos repetidos materia1 y materia2 que al
 fin y al cabo son materia y si se aplica la primera normal entonces tendremos
 lo siguiente:
+
+\newpage
 
 \begin{figure}[h!]
     \centering
@@ -496,7 +489,7 @@ entidades, relaciones y cardinalidad que existe entre ellos.\\
       \includegraphics[scale=0.45]{./Pictures/027_diagramaER.png}
 \end{figure}
 
-Veamos el diagrama físico:
+Ahora veamos el diagrama físico:
 
 \begin{figure}[h!]
     \centering
@@ -504,14 +497,15 @@ Veamos el diagrama físico:
 \end{figure}
 
 Como se ve en el diagrama en cada relación de 1 a muchos, al que tiene muchos
-se le agrega el Foreign Key de la entidad que solo tiene uno en la relación de
-cardinalidad. Sin embargo hay que tener en consideración la relación de muchos
-a muchos que se verifica entre \textbf{posts} y \textbf{etiquetas}.
+se le agrega el \textbf{Foreign Key} de la entidad que solo tiene uno en la
+relación de cardinalidad. Sin embargo hay que tener en consideración la
+relación de muchos a muchos que se verifica entre \textbf{posts} y
+\textbf{etiquetas} ya que tiene un trato diferente al relacionarlos.
 
 
 %% Clase 11
 \section{Formas normales en DB relacionales}%
-La normalización en las bases de datos relacionales en uno de esos temas que,
+La normalización en las bases de datos relacionales es uno de esos temas, que
 por un lado es sumamente importante y por el otro suena algo esotérico. Vamos a
 tratar de entender las formas normales (FN) de una manera simple para que
 puedas aplicarlas en tus proyectos profesionales.\\
@@ -528,7 +522,7 @@ Formalmente, una tabla está en primera forma normal si:
   \item No debe existir variación en el número de columnas.
   \item Los campos no clave deben identificarse por la clave (dependencia
     funcional)
-  \item Debe existir una indepencia del orden tanto de las filascomo de las
+  \item Debe existir una independencia del orden tanto de las filas como de las
     columnas; es decir, si los datos cambian de orden no deben cambiar sus
     significados.
 \end{itemize}
@@ -571,8 +565,6 @@ En la tabla anterior tenemos por lo menos dos entidades que debemos separar
 para que cada una dependa de manera única de su campo llave o ID. En este caso
 las entidades son alumnos por un lado y materias por el otro, ya que una
 materia. En el ejemplo anterior, quedaría de la siguiente manera:
-
-\newpage
 
 \begin{figure}[h!]
     \centering
@@ -627,6 +619,8 @@ propagará a cualquier referencia que haya de ella.
     \centering
       \includegraphics[scale=0.5]{./Pictures/033_normalizacion.png}
 \end{figure}
+
+\newpage
 
 \begin{figure}[h!]
     \centering
@@ -684,11 +678,6 @@ esquema de la siguiente manera:
   \includegraphics[scale=0.65]{./Pictures/040_create_schema.png}
 \end{figure}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.65]{./Pictures/041_create_schema.png}
-\end{figure}
-
 \newpage
 
 Luego como vemos en la parte izquierda de nuestra ventana, observaremos el
@@ -696,8 +685,9 @@ esquema con el que podremos estar trabajando con diferentes opciones.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.65]{./Pictures/042_create_schema.png}
+  \includegraphics[scale=0.65]{./Pictures/041_create_schema.png}
 \end{figure}
+
 
 
 %% Clase 17
@@ -758,7 +748,7 @@ Ahora vamos a usar nuestro esquema usando nuestro cliente gráfico.\\
   \includegraphics[scale=0.65]{./Pictures/043_use_database.png}
 \end{figure}
 
-Esto es equivalente a nuestro comano \textbf{USE DATABASE}\\
+Esto es equivalente a nuestro comando \textbf{USE DATABASE}\\
 
 Por último vamos a crear una tabla:
 
@@ -789,6 +779,7 @@ id nunca.\\
   \includegraphics[scale=0.65]{./Pictures/047_people_apply.png}
 \end{figure}
 
+\newpage
 Vamos hacer nuestra primera consulta para que veas nuestra tabla quedó bien hecha.\\
 
 \begin{figure}[h!]
@@ -801,8 +792,46 @@ Vamos hacer nuestra primera consulta para que veas nuestra tabla quedó bien hec
   \includegraphics[scale=0.75]{./Pictures/049_select.png}
 \end{figure}
 
-\newpage
+Todo lo anterior se puede resumir en el siguiente código SQL:
+\begin{minted}{mysql}
+  CREATE DATABASE platziblog;
+  USE platziblog;
+  CREATE TABLE people (
+    person_id INT NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    address VARCHAR(255),
+    city VARCHAR(255),
+    PRIMARY KEY(person_id)
+  );
+  DESCRIBE people;
+\end{minted}
 
+Con \textbf{DESCRIBE people;} podemos ver una descripción de los campos
+presentes en nuestra entidad people.\\
+
+\textbf{Nota:} Para poder ver nuestras \textbf{databases} y nuestras
+\textbf{tablas} en una terminal (sin cliente gráfico) se usan las siguientes
+sentencias:
+
+\begin{minted}{mysql}
+  SHOW DATABASES;
+  SHOW TABLES;
+\end{minted}
+
+Es necesario tener en cuenta que antes de usar \textbf{SHOW TABLES} deberá
+estar en uso un esquema, esto se puede lograr con el comando \textbf{USE ...}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.65]{./Pictures/143_ddl_create.png}
+\end{figure}
+
+\newpage
+También ten en cuenta que en SQL las mayusculas y minúsculas no se discriminan,
+pero su uso permite distinguir las instrucciones.
+
+\newpage
 %% Clase 20
 \section{Vistas}%
 Vamos a revisar la creación de vistas, tienen que ver con un concepto muy
@@ -811,20 +840,26 @@ ponerlos en una forma presentable y convertirlas en algo que podamos consultar
 de manera recurrente.\\
 
 \begin{minted}{mysql}
-  USE `platziblog`;
-  CREATE VIEW `platzi_people` AS
-  SELECT * FROM platziblog.people;
+  USE platziblog;
+  CREATE VIEW platzi_people AS
+  SELECT person_id, first_name FROM people;
 \end{minted}
 
 Ahora por ejemplo si seleccionamos con el siguiente comando:
 
 \begin{minted}{mysql}
-  SELECT * FROM platziblog.platzi_people;
+  SELECT * FROM platzi_people;
 \end{minted}
 
 Los Views toman datos de la base de datos, los hacen presentables y los
 convierten en algo que podamos consultar de manera recurrente.
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.50]{./Pictures/146_ddl_create_vistas.png}
+\end{figure}
+
+%% Clase 21
 \section{DDL alter}%
 Este comando nos va a permitir modificar nuestra tabla. Por ejemplo agregar una
 columna a nuestra tabla o el tipo de un campo, etc.
@@ -834,7 +869,7 @@ columna a nuestra tabla o el tipo de un campo, etc.
   ADD date_of_birth date;
 
   ALTER TABLE people
-  ALTER COLUMN date_of_birth year;
+  CHANGE COLUMN date_of_birth date_of_birth year;
 
   ALTER TABLE people
   DROP COLUMN date_of_birth;
@@ -842,27 +877,7 @@ columna a nuestra tabla o el tipo de un campo, etc.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.55]{./Pictures/054_alter.png}
-\end{figure}
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.55]{./Pictures/055_alter_table.png}
-\end{figure}
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.55]{./Pictures/056_alter_confirm.png}
-\end{figure}
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.55]{./Pictures/057_alter_tipo.png}
-\end{figure}
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.55]{./Pictures/057_drop_column.png}
+  \includegraphics[scale=0.5]{./Pictures/147_ddl_alter.png}
 \end{figure}
 
 
@@ -873,15 +888,17 @@ principiantes. Básicamente borra o desaparece de nuestra base de datos algún
 elemento.
 
 \begin{minted}{mysql}
+  DROP VIEW platzi_people;
   DROP TABLE people;
-
-  DROP DATABASE test_db;
+  DROP DATABASE platziblog;
 \end{minted}
 
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.75]{./Pictures/058_drop_table.png}
 \end{figure}
+
+\newpage
 
 \begin{figure}[h!]
   \centering
@@ -898,7 +915,10 @@ elemento.
   \includegraphics[scale=0.75]{./Pictures/061_drop_database.png}
 \end{figure}
 
-\newpage
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.65]{./Pictures/148_ddl_drop.png}
+\end{figure}
 
 %% Clase 22
 \section{DML}%
@@ -911,21 +931,41 @@ Manipulation Language y sus comandos son:
   \item \textbf{Select}: Trae información de la base de datos.
 \end{itemize}
 
-\textbf{insert}
+\vspace{0.4cm}
+\textbf{Insert}\\
+Se puede realizar este procedimiento de manera muy sencilla usando un cliente gráfico como Workbench.\\
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/149_dml_insert_workbench.png}
+\end{figure}
+
+No olvides dar clic en \textbf{Apply} para que se guarden los cambios y seguir
+los pasos en los que Workbench te guía. La ventaja de usar un cliente gráfico
+radica en que éste te muestra las instrucciones SQL que usa en cada
+procedimiento antes de aplicar cambios.\\
+
+Veamos un ejemplo de la instrucción SQL usada para insertar:
 \begin{minted}{mysql}
   INSERT INTO people (last_name, first_name, address, city)
   VALUES ('Hernández', 'Laura', 'Calle 21', 'Monterrey');
 \end{minted}
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/150_dml_insert_console.png}
+\end{figure}
+
+Recuerda que en Workbench es posible ejecutar comandos SQL usando su Editor de
+Scripts.
 
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.75]{./Pictures/062_insert.png}
 \end{figure}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{./Pictures/063_insert.png}
-\end{figure}
+\vspace{0.4cm}
 
 \textbf{Update}\\
 Tiene que ver con actualizar o modificar los datos que ya tenemos.
@@ -942,6 +982,21 @@ Tiene que ver con actualizar o modificar los datos que ya tenemos.
   SET first_name = 'Juan';
 \end{minted}
 
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/151_dml_update_terminal.png}
+\end{figure}
+
+Se debe tener cuidado al usar update: es recomendable filtrar usando el
+\textbf{primary key} que identifica a un registro en específico para no hacer
+cambios masivos y perder información. Por otro lado el uso de un cliente
+gráfico brinda una ventaja ya que genera advertencias antes de realizar algún
+cambio para no perder información por realizar mal estas instrucciones.\\
+
+\vspace{0.4cm}
+
 \textbf{Delete}\\
 Igual que DROP que vimos en el lenguaje DDL, ésta es una sentencia DML que
 también es bastante riesgosa porque puede borrar el contenido de una tabla.
@@ -953,6 +1008,8 @@ también es bastante riesgosa porque puede borrar el contenido de una tabla.
   DELETE FROM people;
 \end{minted}
 
+\vspace{0.4cm}
+
 \textbf{Select}\\
 Nos trae información de la base de datos, nos puede servir para generar una
 vista.
@@ -963,8 +1020,16 @@ vista.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/064_select.png}
+  \includegraphics[scale=0.65]{./Pictures/064_select.png}
 \end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.65]{./Pictures/152_dml_select_delete.png}
+\end{figure}
+
 
 %% Clase 23
 \section{¿Qué tan estandard es SQL?}%
@@ -977,6 +1042,8 @@ Por ejemplo veamos los comandos usados en \textbf{mysql}.
   \centering
   \includegraphics[scale=0.75]{./Pictures/065_mysql.png}
 \end{figure}
+
+\newpage
 
 También se pueden usar los mismos comando SQL en \textbf{postgresql}.
 \begin{figure}[h!]
@@ -1001,22 +1068,25 @@ También se pueden usar los mismos comando SQL en \textbf{postgresql}.
   
   /* Construccion de tablas independientes */
   CREATE TABLE categorias (
-  id INT NOT NULL AUTO_INCREMENT,
-  nombre_categoria VARCHAR(30) NOT NULL,
-  PRIMARY KEY (id));
+    id INT NOT NULL AUTO_INCREMENT,
+    nombre_categoria VARCHAR(30),
+    PRIMARY KEY (id)
+  );
 
   CREATE TABLE etiquetas (
-  id INT NOT NULL AUTO_INCREMENT,
-  nombre_etiqueta VARCHAR(30) NOT NULL,
-  PRIMARY KEY (id));
+    id INT NOT NULL AUTO_INCREMENT,
+    nombre_etiqueta VARCHAR(30),
+    PRIMARY KEY (id)
+  );
 
   CREATE TABLE usuarios (
-  id INT NOT NULL AUTO_INCREMENT,
-  login VARCHAR(30) NOT NULL,
-  password VARCHAR(32) NOT NULL,
-  nickname VARCHAR(40) NOT NULL,
-  email VARCHAR(40) NOT NULL UNIQUE,
-  PRIMARY KEY(id));
+    id INT NOT NULL AUTO_INCREMENT,
+    login VARCHAR(30) NOT NULL,
+    password VARCHAR(32) NOT NULL,
+    nickname VARCHAR(40) NOT NULL,
+    email VARCHAR(40) NOT NULL UNIQUE,
+    PRIMARY KEY(id)
+  );
 \end{minted}
 
 Esto lo podemos hacer a través de nuestro cliente gráfico o por consola como se puede observar.
@@ -1036,102 +1106,161 @@ Vamos a crear la tabla \textbf{posts}:\\
 
 \begin{minted}{mysql}
   CREATE TABLE posts (
-  id INT NOT NULL AUTO_INCREMENT,
-  titulo VARCHAR(130) NOT NULL,
-  fecha_publicacion TIMESTAMP NULL,
-  contenido TEXT NOT NULL,
-  estatus CHAR(8) NULL DEFAULT 'activo',
-  usuario_id INT NOT NULL,
-  categoria_id INT NOT NULL
-  PRIMARY KEY (id));
+    id INT NOT NULL AUTO_INCREMENT,
+    titulo VARCHAR(130),
+    fecha_publicacion TIMESTAMP,
+    contenido TEXT,
+    estatus CHAR(8) DEFAULT 'activo',
+    usuario_id INT,
+    categoria_id INT,
+    PRIMARY KEY (id)
+  );
 \end{minted}
 
 \newpage
 
 Luego configuramos sus Foreign Keys, que en este caso son dos:\\
 
+\begin{minted}{mysql}
+  ALTER TABLE posts
+  ADD INDEX fk_posts_usuarios_idx (usuario_id);
+
+  ALTER TABLE posts
+  ADD CONSTRAINT fk_posts_usuarios
+    FOREIGN KEY (usuario_id)
+    REFERENCES platziblog.usuarios(id)
+    ON UPDATE cascade;
+
+  ALTER TABLE posts
+  ADD INDEX fk_posts_categorias_idx (categoria_id);
+
+  ALTER TABLE posts
+  ADD CONSTRAINT fk_posts_categorias
+    FOREIGN KEY (categoria_id)
+    REFERENCES categorias (id);
+\end{minted}
+
+Usando el Workbench sería así:\\
+
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.55]{./Pictures/068_fk.png}
 \end{figure}
-
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.55]{./Pictures/069_fk_confirm.png}
-\end{figure}
-
 
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.55]{./Pictures/070_fk.png}
 \end{figure}
 
+No olvides dar clic en \textbf{Apply} para guardar los cambios. Ahora veamos
+como se realiza por terminal (sin cliente gráfico):\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.55]{./Pictures/071_fk_confirm.png}
+  \includegraphics[scale=0.60]{./Pictures/153_platziblog_t_dependientes.png}
 \end{figure}
 
+\newpage
 
-%% Clase 26
-\section{Creando Platziblog: tablas transitivas}%
 Creamos ahora la tabla \textbf{comentarios}:
 
 \begin{minted}{mysql}
   CREATE TABLE comentarios (
-  id INT NOT NULL AUTO_INCREMENT,
-  cuerpo_comentario TEXT NOT NULL,
-  usuario_id INT NOT NULL,
-  post_id INT NOT NULL,
-  PRIMARY KEY (id));
+    id INT NOT NULL AUTO_INCREMENT,
+    cuerpo_comentario TEXT NOT NULL,
+    usuario_id INT NOT NULL,
+    post_id INT NOT NULL,
+    PRIMARY KEY (id)
+  );
 \end{minted}
 
 Añadimos sus \textbf{foreing keys}:
+
+\begin{minted}{mysql}
+  ALTER TABLE comentarios
+    ADD INDEX fk_comentarios_usuarios_idx (usuario_id),
+    ADD INDEX fk_comentarios_posts_idx (post_id);
+
+  ALTER TABLE comentarios
+    ADD CONSTRAINT fk_comentarios_usuarios
+    FOREIGN KEY (usuario_id)
+    REFERENCES platziblog.usuarios (id),
+    ADD CONSTRAINT fk_comentarios_posts
+    FOREIGN KEY (post_id)
+    REFERENCES platziblog.posts (id);
+\end{minted}
+
+\newpage
+Usando Workbench sería así:\\
 
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.55]{./Pictures/072_fk_comentarios.png}
 \end{figure}
 
+No olvides dar clic en \textbf{Apply} para guardar los cambios. Ahora veamos
+como se realiza por terminal (sin cliente gráfico):\\
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.55]{./Pictures/073_fk_comentarios_confirm.png}
+  \includegraphics[scale=0.5]{./Pictures/154_platziblog_t_dependientes.png}
 \end{figure}
 
 
-\newpage
-
+%% Clase 26
+\section{Creando Platziblog: tablas transitivas}%
 Las tablas transitivas sirven como puente para unir dos tablas. No tienen
 contenido semántico.\\
 
-Ahora creamos la tabla \textbf{posts\_etiqueta}:
+Creamos la tabla \textbf{posts\_etiqueta}:
 
 \begin{minted}{mysql}
   CREATE TABLE posts_etiqueta (
-  id INT NOT NULL AUTO_INCREMENT,
-  post_id INT NOT NULL,
-  etiqueta_id INT NOT NULL,
-  PRIMARY KEY (id));
+    id INT NOT NULL AUTO_INCREMENT,
+    post_id INT NOT NULL,
+    etiqueta_id INT NOT NULL,
+    PRIMARY KEY (id)
+  );
 \end{minted}
 
-Y configuramos su Foreign Keys:
+\newpage
+
+Luego configuramos su Foreign Keys:
+
+\begin{minted}{mysql}
+  ALTER TABLE posts_etiqueta
+    ADD INDEX fk_posts_etiqueta_posts_idx (post_id),
+    ADD INDEX fk_posts_etiqueta_etiquetas_idx (etiqueta_id);
+
+  ALTER TABLE posts_etiqueta
+    ADD CONSTRAINT fk_posts_etiqueta_posts
+    FOREIGN KEY (post_id)
+    REFERENCES platziblog.posts (id),
+    ADD CONSTRAINT fk_posts_etiqueta_etiquetas
+    FOREIGN KEY (etiqueta_id)
+    REFERENCES platziblog.etiquetas (id);
+\end{minted}
+
+Usando Workbench sería así:\\
 
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.55]{./Pictures/074_fk_pe_posts.png}
 \end{figure}
 
+No olvides dar clic en \textbf{Apply} para guardar los cambios. Ahora veamos
+como se realiza por terminal (sin cliente gráfico):\\
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.55]{./Pictures/075_fk_confirm.png}
+  \includegraphics[scale=0.5]{./Pictures/155_platziblog_t_transitiva.png}
 \end{figure}
 
 \newpage
-\textbf{Reverse Engineer} nos reproduce el esquema del cual nos basamos para
-crear nuestras tablas. Es útil cuando llegas a un nuevo trabajo y quieres
-entender cuál fue la mentalidad que tuvieron al momento de crear las bases de
-datos.
+Workbench tiene una herramienta llamada \textbf{Reverse Engineer} que nos
+reproduce el esquema del cual nos basamos para crear nuestras tablas. Es útil
+cuando llegas a un nuevo trabajo y quieres entender cuál fue la mentalidad que
+tuvieron al momento de crear las bases de datos.
 
 \begin{figure}[h!]
   \centering
@@ -1148,6 +1277,8 @@ datos.
   \includegraphics[scale=0.55]{./Pictures/077_select_schema.png}
 \end{figure}
 
+\newpage
+
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.55]{./Pictures/077_diag_fisico_workbench.png}
@@ -1161,14 +1292,17 @@ esto podría salvar un negocio o empresa.\\
 
 Alrededor de las consultas a las bases de datos se han creado varias
 especialidades como \textbf{ETL} o transformación de datos, \textbf{business
-intelligence} e incluso \textbf{machinen learning}.
+intelligence} e incluso \textbf{machine learning}.
 
 %% Clase 28
 \section{Estructura básica de un Query}%
+Para poder realizar consultas a nuestra base de datos, primera vamos a
+ingresarle datos de prueba. Para esto copiaremos el contenido del archivo que se encuentra en el siguiente :\\
+
 Los queries son la forma en la que estructuramos las preguntas que se harán a
 la base de datos. Transforma preguntas en sintaxis.\\
 
-El query tiene básicamente 2 partes: \textbf{SELECT} y \textbf{FROM} y pude
+El query tiene básicamente 2 partes: \textbf{SELECT} y \textbf{FROM} y puede
 aparecer una tercera como \textbf{WHERE}.\\
 
 \textbf{Estructura básica de un Query}
@@ -1176,7 +1310,6 @@ aparecer una tercera como \textbf{WHERE}.\\
   \centering
   \includegraphics[scale=0.55]{./Pictures/078_query.png}
 \end{figure}
-
 
 El asterisco (*) quiere decir que vamos a seleccionar todo sin filtrar campos, por ejemplo.
 
