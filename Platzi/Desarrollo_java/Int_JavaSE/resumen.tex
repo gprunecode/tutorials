@@ -1345,6 +1345,8 @@ la ejecución de nuestro código.\\
 
 Existen diferentes bucles. Por ejemplo, el bucle \texttt{while}:
 
+\newpage
+
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.75]{./Pictures/028_while.png}
@@ -1386,6 +1388,27 @@ Veamos un ejemplo para Do while:
   }
 \end{minted}
 
+\textbf{IntelliJ IDEA} permite agregar automáticamente instrucciones para
+importar algunas librerías. Por ejemplo en el código anterior se usa la clase
+scanner y con un simple enter se agrega automáticamente.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/052_dowhile.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/053_scanner.png}
+\end{figure}
+
+Veamos el resultado del programa:\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/054_dowhile.png}
+\end{figure}
+
 
 %% Clase 32
 \section{Operador Ternario y Bucle While}%
@@ -1396,6 +1419,8 @@ El Bucle While nos ayuda a ejecutar una parte del código mientras una condició
 se cumpla. Recuerda tener mucho cuidado y asegurarte de que la condición del
 ciclo While cambie en algún momento, de otra forma, el ciclo no se detendrá
 nunca y sobrecargarás tu programa.
+
+\newpage
 
 \begin{minted}{java}
   public class WhileLoop {
@@ -1427,10 +1452,17 @@ nunca y sobrecargarás tu programa.
   }
 \end{minted}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/055_dowhile.png}
+\end{figure}
+
+\newpage
+
 %% Clase 33
 \section{Bucle For}%
 El Ciclo For también nos ayuda a ejecutar una parte de nuestro código las veces
-que sean necesarias para que se cumplan una condición. de hecho, el ciclo
+que sean necesarias para que se cumpla una condición. De hecho, el ciclo
 \texttt{FOR} nos da muchas ayudas para lograr este resultado de la forma más
 fácil posible:\\
 
@@ -1463,12 +1495,19 @@ fácil posible:\\
   }
 \end{minted}
 
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/056_forloop.png}
+\end{figure}
+
 
 %% Clase 34
 \section{Break, Continue y Return}%
 Antes de pasar a uno de nuestros temas más importantes del curso es importante
 que sepas todas las opciones que tienes para detener ciclos y así seguir
-controlando el flujo de tus programas.
+controlando el flujo de tus programas.\\
 
 \textbf{Break}\\
 En Java esta sentencia la verás en dos situaciones específicamente:
@@ -1477,7 +1516,7 @@ En Java esta sentencia la verás en dos situaciones específicamente:
     switch no continúe ejecutándose a la siguiente comparación, esto con el
     objetivo de que solo se cumpla una sola condición:
 
-  \begin{minted}{ipython3}
+  \begin{minted}{java}
     switch (colorModelSelected) {
       case "Light":
         System.out.println("Seleccionaste Light Mode");
@@ -1644,6 +1683,11 @@ Recuerda que puedes aprender mucho más sobre estructura de datos en el
   }
 \end{minted}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/057_arrays.png}
+\end{figure}
+
 
 %% Clase 38
 \section{Ciclos For anidados}%
@@ -1656,25 +1700,84 @@ escribir todos los números a mano, vamos a utilizar un ciclo para imprimir el
 valor de cada posición de nuestros arreglos, incluso si estos son
 multidimensionales.\\
 
+\begin{minted}{java}
+  public class Arrays {
+    public static void main(String[] args) {
+      String[] androidVersions = new String[17];
+      String days[] = new String [7];
+
+      String[][] cities = new String[4][2]; // 4*2 = 8
+
+      int[][][] numbers = new int[2][2][2];
+      int[][][][] numbers4 = new int[2][2][2][2];
+
+      androidVersions[0] = "Apple Pie";
+      androidVersions[1] = "Bannana Bread";
+      androidVersions[2] = "Cupcake";
+      androidVersions[3] = "Donut";
+
+      // for (int i =0; i < androidVersions.length; i++) {
+      //   System.out.println(androidVersions[i]);
+      // }
+
+      for (String androidVersion : androidVersions) {
+        System.out.println(androidVersion);
+      }
 
 
+      System.out.println();
+      System.out.println();
+
+      cities[0][0] = "Colombia";
+      cities[0][1] = "Medellín";
+      cities[1][0] = "colombia";
+      cities[1][1] = "Bogotá";
+      cities[2][0] = "México";
+      cities[2][1] = "Guadalajara";
+      cities[3][0] = "México";
+      cities[3][1] = "CDMX";
 
 
+      // for (int i = 0; i < cities.length; i++) {
+      //   for (int j = 0; j < cities[i].length; j++) {
+      //     System.out.println(cities[i][j]);
+      //   }
+      // }
 
+      for (String[] pair : cities) {
+        for (String name : pair) {
+          System.out.println(name);
+        }
+      }
 
+      String[][][][] animals =  new String[2][3][2][2];
+      animals[1][0][0][1] = "Monkey";
 
+      System.out.println();
+      System.out.println();
+      // System.out.println(animals[1][0][0][1]);
 
+      for (int i =0; i<=1; i++) {
+        for (int j = 0; j <=0; j++) {
+          for (int k = 0; k <= 0; k++) {
+            for (int l = 0; l <= 1; l++) {
+            System.out.println(animals[i][j][k][l]);
+            }
+          }
+        }
+      }
+    }
+  }
+\end{minted}
 
+\newpage
 
+Veamos el resultado que genera el programa:\\
 
-
-
-
-
-
-
-
-
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/058_for_anidado.png}
+\end{figure}
 
 
 \vspace{2cm}
