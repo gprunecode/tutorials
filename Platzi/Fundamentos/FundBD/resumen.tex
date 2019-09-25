@@ -1294,12 +1294,55 @@ Alrededor de las consultas a las bases de datos se han creado varias
 especialidades como \textbf{ETL} o transformación de datos, \textbf{business
 intelligence} e incluso \textbf{machine learning}.
 
+\newpage
+
 %% Clase 28
 \section{Estructura básica de un Query}%
-Para poder realizar consultas a nuestra base de datos, primera vamos a
-ingresarle datos de prueba. Para esto copiaremos el contenido del archivo que se encuentra en el siguiente :\\
+Para poder realizar consultas a nuestra base de datos, primero vamos a
+ingresarle datos de prueba. Para esto copiaremos el contenido del archivo que
+se encuentra en el siguiente
+\href{https://raw.githubusercontent.com/gprunecode/tutorials/master/Platzi/Fundamentos/FundBD/Recursos/Datos_prueba.sql}{enlace}:\\
 
-Los queries son la forma en la que estructuramos las preguntas que se harán a
+Luego abrimos el archivo en un editor de texto y copiamos el script a nuestro
+Workbench, ejecutamos el script (con el ícono en forma de rayo en parte
+superior) y listo.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.65]{./Pictures/162_wb_datos_prueba.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.65]{./Pictures/163_wb_datos_prueba.png}
+\end{figure}
+
+% \begin{figure}[h!]
+%   \centering
+%   \includegraphics[scale=0.75]{./Pictures/156_wb_exportar_bd.png}
+% \end{figure}
+%
+% \begin{figure}[h!]
+%   \centering
+%   \includegraphics[scale=0.75]{./Pictures/157_wb_exportar_bd.png}
+% \end{figure}
+%
+% \begin{figure}[h!]
+%   \centering
+%   \includegraphics[scale=0.75]{./Pictures/158_wb_expoertar_bd.png}
+% \end{figure}
+
+\newpage
+
+Luego de ingresar los datos de prueba, en el panel izquierdo de Workbench
+actualizamos los esquemas con \textbf{clic derecho / Refresh All}.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/164_refresh_all_schemas.png}
+\end{figure}
+
+\textbf{Los queries} son la forma en la que estructuramos las preguntas que se harán a
 la base de datos. Transforma preguntas en sintaxis.\\
 
 El query tiene básicamente 2 partes: \textbf{SELECT} y \textbf{FROM} y puede
@@ -1355,7 +1398,7 @@ Ahora vamos a elegir solo algunos campos:
 
 Tambien podemos usar \textbf{AS} para modificar el nombre con el que se mostrarán los campos:
 \begin{minted}{mysql}
-  SELECT titulo AS encabezado, fecha_publicado AS publicado_en, estatus AS estado
+  SELECT titulo AS encabezado, fecha_publicacion AS publicado_en, estatus AS estado
   FROM posts;
 \end{minted}
 \begin{figure}[h!]
@@ -1437,35 +1480,35 @@ Vamos a empezar con \textbf{JOIN - Diferencia}:
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.55]{./Pictures/087_join_left.png}
+  \includegraphics[scale=0.5]{./Pictures/087_join_left.png}
 \end{figure}
+
+\newpage
+
+En la siguiente diferencia, no se va a considerar la intersección.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.55]{./Pictures/088_join_left_perezoso.png}
-\end{figure}
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{./Pictures/090_join_left_not_null.png}
+  \includegraphics[scale=0.65]{./Pictures/088_join_left_perezoso.png}
 \end{figure}
 
 \begin{minted}{mysql}
   SELECT *
   FROM usuarios
   LEFT JOIN posts ON usuarios.id = posts.usuario_id
-  WHERE posts.usuario_id IS NOT NULL;
+  WHERE posts.usuario_id IS NULL;
 \end{minted}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/093_join_left_not_null.png}
+  \includegraphics[scale=0.64]{./Pictures/090_join_left_not_null.png}
 \end{figure}
 
+Ahora veamos diferencia por la derecha usando \textbf{RIGHT JOIN}\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/091_join_right.png}
+  \includegraphics[scale=0.85]{./Pictures/091_join_right.png}
 \end{figure}
 
 \begin{minted}{mysql}
@@ -1476,21 +1519,30 @@ Vamos a empezar con \textbf{JOIN - Diferencia}:
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/094_join_right.png}
+  \includegraphics[scale=0.50]{./Pictures/094_join_right.png}
 \end{figure}
 
+En la siguiente diferencia no se va a considerar la intersección.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.65]{./Pictures/095_euler_rj_null.png}
+\end{figure}
 
 \begin{minted}{mysql}
   SELECT *
   FROM usuarios
   RIGHT JOIN posts ON usuarios.id = posts.usuario_id
-  WHERE posts.usuario_id IS NOT NULL;
+  WHERE posts.usuario_id IS NULL;
 \end{minted}
+
+\newpage
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/095_join_right_not_null.png}
+  \includegraphics[scale=0.5]{./Pictures/095_join_right_not_null.png}
 \end{figure}
+
 
 Ahora veremos la \textbf{Intersección}\\
 \begin{figure}[h!]
@@ -1498,19 +1550,69 @@ Ahora veremos la \textbf{Intersección}\\
   \includegraphics[scale=0.75]{./Pictures/096_Interseccion.png}
 \end{figure}
 
+\begin{minted}{mysql}
+  SELECT *
+  FROM usuarios
+    INNER JOIN posts ON usuarios.id=posts.usuario_id;
+\end{minted}
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/099_inner.png}
+  \includegraphics[scale=0.5]{./Pictures/099_inner.png}
 \end{figure}
 
 
-Ahora veremos la \textbf{Unión}
+Ahora veremos la \textbf{Unión}\\
 
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.75]{./Pictures/097_union.png}
 \end{figure}
 
+\begin{minted}{mysql}
+  SELECT *
+  FROM usuarios
+    LEFT JOIN posts ON usuarios.id = posts.usuario_id
+  UNION
+  SELECT *
+  FROM usuarios
+    RIGHT JOIN posts ON usuarios.id = posts.usuario_id;
+\end{minted}
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/100_union.png}
+\end{figure}
+
+Finalmente veremos la \textbf{diferencia simétrica}\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/101_dif_simetrica_euler.png}
+\end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM usuarios
+    LEFT JOIN posts ON usuarios.id = posts.usuario_id
+  WHERE posts.usuario_id IS NULL
+  UNION
+  SELECT *
+  FROM usuarios
+    RIGHT JOIN posts ON usuarios.id = posts.usuario_id
+  WHERE posts.usuario_id IS NULL;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/101_dif_simetrica.png}
+\end{figure}
+
+
+
+\newpage
 
 %% Clase 32
 \section{WHERE}%
@@ -1518,106 +1620,219 @@ Ahora veremos la \textbf{Unión}
 dependiendo de las características que elegimos.
 
 Veamos por ejemplo una instrucción SELECT de posts:
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts;
+\end{minted}
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/102_where.png}
+  \includegraphics[scale=0.5]{./Pictures/102_where.png}
 \end{figure}
 
 Y ahora agreguemos una sentencia WHERE con id con el que podemos hacer comparaciones de orden:
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE id > 50;
+\end{minted}
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/103_where.png}
+  \includegraphics[scale=0.5]{./Pictures/103_where.png}
 \end{figure}
 
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE id <= 50;
+\end{minted}
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/104_where.png}
+  \includegraphics[scale=0.5]{./Pictures/104_where.png}
 \end{figure}
 
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE id != 50;
+\end{minted}
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/107_where_id_dif.png}
+  \includegraphics[scale=0.5]{./Pictures/107_where_id_dif.png}
 \end{figure}
 
 
-Podemos usar esta sentencia con el campo \textbf{estatus}, por ejemplo:
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{./Pictures/105_where.png}
-\end{figure}
+También podemos usar esta sentencia con el campo \textbf{estatus}, por ejemplo:
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE estatus = 'activo';
+\end{minted}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/106_where_estatus.png}
+  \includegraphics[scale=0.5]{./Pictures/105_where.png}
+\end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE estatus = 'inactivo';
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/106_where_estatus.png}
 \end{figure}
 
 La propiedad \textbf{LIKE} nos ayuda a traer registros de los cuales conocemos
-sólo una parte de la información.
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{./Pictures/108_where_like.png}
-\end{figure}
+sólo una parte de la información.\\
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE titulo LIKE '%escandalo%';
+\end{minted}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/109_where_like.png}
+  \includegraphics[scale=0.5]{./Pictures/108_where_like.png}
 \end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE titulo LIKE 'escandalo%';
+\end{minted}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/110_where_like.png}
+  \includegraphics[scale=0.5]{./Pictures/109_where_like.png}
+\end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE titulo LIKE '%roja';
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/110_where_like.png}
 \end{figure}
 
 Nota: También podemos hacer comparaciones de orden con datos de tipo TIMESTAMP, por ejemplo:
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{./Pictures/111_where_fecha.png}
-\end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE fecha_publicacion > '2025-01-01';
+\end{minted}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/112_where_fecha.png}
+  \includegraphics[scale=0.5]{./Pictures/111_where_fecha.png}
 \end{figure}
 
-La propiedad \textbf{BETWEEN} nos sirve para arrojar registros que estén en el
-medio de dos. Por ejemplo los registros con id entre 20 y 30.
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE fecha_publicacion < '2025-01-01';
+\end{minted}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/114_where_id_between.png}
+  \includegraphics[scale=0.5]{./Pictures/112_where_fecha.png}
 \end{figure}
 
-También podemos usar between con fecha, por ejemplo:
+La propiedad \textbf{BETWEEN} nos sirve para obtener registros que estén en el
+medio de dos límites. Por ejemplo los registros con id entre 50 y 60.
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE id BETWEEN 50 AND 60;
+\end{minted}
+
+\newpage
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/113_where_fecha_between.png}
+  \includegraphics[scale=0.5]{./Pictures/114_where_id_between.png}
 \end{figure}
 
-Usando \textbf{year} podemos comparar solo el año del dato tipo TIMESTAMP:
+También podemos usar between con fecha, por ejemplo:\\
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE fecha_publicacion BETWEEN '2023-01-01' AND '2025-12-31';
+\end{minted}
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/115_where_date_year.png}
+  \includegraphics[scale=0.5]{./Pictures/113_where_fecha_between.png}
 \end{figure}
 
-O si usamos \textbf{month} entonces solo compararemos el mes:
+Usando \textbf{YEAR} podemos comparar solo con el año del dato tipo TIMESTAMP:\\
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE YEAR(fecha_publicacion) BETWEEN '2023' AND '2024';
+\end{minted}
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/116_where_month.png}
+  \includegraphics[scale=0.5]{./Pictures/115_where_date_year.png}
 \end{figure}
 
-En conclusión la sentencia \textbf{WHERE} sirve para filtrar los rows o tuplas.
+O si usamos \textbf{MONTH} entonces solo compararemos el mes:\\
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE MONTH(fecha_publicacion) = '04';
+\end{minted}
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/116_where_month.png}
+\end{figure}
+
+En conclusión la sentencia \textbf{WHERE} sirve para filtrar los rows o tuplas.\\
 
 %% Clase 33
 \section{Utilizando la sentencia WHERE nulo y no nulo}%
-El valor nulo en una tabla generallmente es su valor por defecto cuando nadie
+El valor nulo en una tabla generalmente es su valor por defecto cuando nadie
 le asignó algo diferente. La sintaxis para hacer búsquedas de datos nulos es
 \textbf{IS NULL}. La sintaxis para buscar datos que no son nulos es \textbf{IS
 NOT NULL}. También podemos usar \textbf{AND} para agregar más filtros a WHERE.
 
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE usuario_id IS NOT NULL
+    AND estatus = 'activo'
+    AND id < 50
+    AND categorias_id = 2
+    AND YEAR(fecha_publicacion) = '2025';
+\end{minted}
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/117_where_and.png}
+  \includegraphics[scale=0.5]{./Pictures/117_where_and.png}
 \end{figure}
+
 
 %% Clase 34
 \section{GROUP BY}%
@@ -1625,29 +1840,61 @@ NOT NULL}. También podemos usar \textbf{AND} para agregar más filtros a WHERE.
 criterios debe tener en cuenta para agrupar.\\
 
 Por ejemplo usamos \textbf{COUNT(*)} y agrupar segun estatus:\\
+
+\begin{minted}{mysql}
+  SELECT estatus, COUNT(*) AS post_quantity
+  FROM posts
+  GROUP BY estatus;
+\end{minted}
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/118_group_by.png}
+  \includegraphics[scale=0.5]{./Pictures/118_group_by.png}
 \end{figure}
 
 Podemos agrupar también por año y contar los posts.\\
+
+\begin{minted}{mysql}
+  SELECT YEAR(fecha_publicacion) AS post_year, COUNT(*) AS post_quantity
+  FROM posts
+  GROUP BY post_year;
+\end{minted}
+
+\newpage
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/119_group_by_year.png}
+  \includegraphics[scale=0.5]{./Pictures/119_group_by_year.png}
 \end{figure}
 
 Podemos agrupar por mes:\\
+
+\begin{minted}{mysql}
+  SELECT MONTHNAME(fecha_publicacion) AS post_month, COUNT(*) AS post_quantity
+  FROM posts
+  GROUP BY post_month;
+\end{minted}
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/120_group_by_monthname.png}
+  \includegraphics[scale=0.5]{./Pictures/120_group_by_monthname.png}
 \end{figure}
 
 Podemos agrupar en base a varios campos, por ejemplo agrupamos en base a
 estatus y luego de acuerdo al mes.
+
+\begin{minted}{mysql}
+  SELECT estatus, MONTHNAME(fecha_publicacion) AS post_month, COUNT(*) AS post_quantity
+  FROM posts
+  GROUP BY estatus, post_month;
+\end{minted}
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/121_group_by_estatus_month.png}
+  \includegraphics[scale=0.5]{./Pictures/121_group_by_estatus_month.png}
 \end{figure}
+
+\newpage
 
 %% Clase 35
 \section{ORDER BY y HAVING}%
@@ -1660,58 +1907,126 @@ dependiento de los criterios que quieras usar.\\
   \item LIMIT se usa para limitar la cantidad de resultados que arroja el query.
 \end{itemize}
 
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  ORDER BY fecha_publicacion;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/122_order_by.png}
+\end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  ORDER BY fecha_publicacion ASC;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/123_order_by_asc.png}
+\end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  ORDER BY fecha_publicacion DESC;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/124_order_by_desc.png}
+\end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  ORDER BY titulo ASC;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/125_order_by_titulo.png}
+\end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  ORDER BY titulo DESC;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/126_order_by_titulo.png}
+\end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  ORDER BY usuario_id ASC;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/127_order_by_id_asc.png}
+\end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  ORDER BY usuario_id DESC;
+\end{minted}
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/128_order_by_id_desc.png}
+\end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  ORDER BY fecha_publicacion ASC
+  LIMIT 5;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/129_order_by_limit.png}
+\end{figure}
+
+\begin{minted}{mysql}
+  SELECT MONTHNAME(fecha_publicacion) AS post_month, estatus, COUNT(*) AS post_quantity
+  FROM posts
+  GROUP BY estatus, post_month
+  ORDER BY post_month;
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/131_order_by_month.png}
+\end{figure}
+
 \textbf{HAVING} tiene una similitud muy grande con \textbf{WHERE}, sin embargo
 el uso de ellos depende del orden. Cuando se quiere seleccionar tuplas
 agrupadas únicamente se puede hacer con \textbf{HAVING}.
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{./Pictures/122_order_by.png}
-\end{figure}
+\begin{minted}{mysql}
+  SELECT MONTHNAME(fecha_publicacion) AS post_month, estatus, COUNT(*) AS post_quantity
+  FROM posts
+  GROUP BY estatus, post_month
+  HAVING post_quantity > 1
+  ORDER BY post_month;
+\end{minted}
+
+\newpage
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/123_order_by_asc.png}
-\end{figure}
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{./Pictures/124_order_by_desc.png}
-\end{figure}
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{./Pictures/125_order_by_titulo.png}
-\end{figure}
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{./Pictures/126_order_by_titulo.png}
-\end{figure}
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{./Pictures/127_order_by_id_asc.png}
-\end{figure}
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{./Pictures/128_order_by_id_desc.png}
-\end{figure}
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{./Pictures/129_order_by_limit.png}
-\end{figure}
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{./Pictures/131_order_by_month.png}
-\end{figure}
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{./Pictures/132_order_by_month_having.png}
+  \includegraphics[scale=0.5]{./Pictures/132_order_by_month_having.png}
 \end{figure}
 
 
@@ -1723,17 +2038,37 @@ También teniendo un query como condicional del otro.\\
 
 Este proceso puede ser tan profundo como quieras, teniendo infinitos queries anidados.\\
 Se le conoce como un producto cartesiano ya que se multiplican todos los
-registros de una tabla con todos los del nuevo queery. Esto provoca que el
+registros de una tabla con todos los del nuevo query. Esto provoca que el
 query sea difícil de procesar por lo pesado que puede resultar.
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{./Pictures/133_select_anidado.png}
-\end{figure}
+\begin{minted}{mysql}
+  SELECT new_table_projection.date, COUNT(*) AS posts_count
+  FROM(
+    SELECT DATE(MIN(fecha_publicacion)) AS date, YEAR(fecha_publicacion) AS post_year
+    FROM posts
+    GROUP BY post_year
+  ) AS new_table_projection
+  GROUP BY new_table_projection.date
+  ORDER BY new_table_projection.date;
+\end{minted}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/134_where_anidado.png}
+  \includegraphics[scale=0.5]{./Pictures/133_select_anidado.png}
+\end{figure}
+
+\begin{minted}{mysql}
+  SELECT *
+  FROM posts
+  WHERE fecha_publicacion = (
+    SELECT MAX(fecha_publicacion)
+    FROM posts
+  );
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/134_where_anidado.png}
 \end{figure}
 
 
@@ -1751,37 +2086,39 @@ De pregunta a Query
 
 %% Clase 38
 \section{Preguntándole a la base de datos}%
-\textbf{GROUP\_CONCAT} toma el resultado del query y lo pone como campo
-separado por comas.\\
-
 Trabajando con \textbf{platziblog}:\\
-¿Cuántas tags tiene un blogpost?\\
+
+¿Cuántas tags tiene un blogpost? ¿Cuál es el blogpost que tiene más etiquetas?\\
+
 \begin{minted}{mysql}
   SELECT posts.titulo, COUNT(*) AS num_etiquetas
   FROM posts
-    INNER JOIN posts_etiquetas ON posts.id=posts_etiquetas.post_id
-    INNER JOIN etiquetas ON etiquetas.id=posts_etiquetas.etiqueta_id
-  GROUP BY posts_id
+    INNER JOIN posts_etiqueta ON posts.id = posts_etiqueta.post_id
+    INNER JOIN etiquetas ON etiquetas.id = posts_etiqueta.etiqueta_id
+  GROUP BY posts.id
   ORDER BY num_etiquetas DESC;
 \end{minted}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/135_first_question.png}
+  \includegraphics[scale=0.5]{./Pictures/135_first_question.png}
 \end{figure}
 
 ¿Cuáles son las etiquetas de cada post?\\
+\textbf{Nota: GROUP\_CONCAT} toma el resultado del query y lo pone como campo
+separado por comas.\\
+
 \begin{minted}{mysql}
   SELECT posts.titulo, GROUP_CONCAT(nombre_etiqueta)
   FROM posts
-    INNER JOIN posts_etiquetas ON posts.id=posts_etiquetas.post_id
-    INNER JOIN etiquetas ON etiquetas.id=posts_etiquetas.etiqueta_id
-  GROUP BY posts_id;
+    INNER JOIN posts_etiqueta ON posts.id=posts_etiqueta.post_id
+    INNER JOIN etiquetas ON etiquetas.id=posts_etiqueta.etiqueta_id
+  GROUP BY posts.id;
 \end{minted}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/136_second_question.png}
+  \includegraphics[scale=0.5]{./Pictures/136_second_question.png}
 \end{figure}
 
 
@@ -1789,13 +2126,13 @@ Trabajando con \textbf{platziblog}:\\
 \begin{minted}{mysql}
   SELECT *
   FROM etiquetas
-    LEFT JOIN posts_etiquetas ON etiquetas.id=posts_etiquetas.etiqueta_id
-    WHERE posts_etiquetas.etiqueta_id IS NULL;
+    LEFT JOIN posts_etiqueta ON etiquetas.id=posts_etiqueta.etiqueta_id
+    WHERE posts_etiqueta.etiqueta_id IS NULL;
 \end{minted}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/137_third_question.png}
+  \includegraphics[scale=0.5]{./Pictures/137_third_question.png}
 \end{figure}
 
 
@@ -1813,13 +2150,13 @@ ordenaremos de las que tienen más posts a las que tienen menos.\\
 \begin{minted}{mysql}
   SELECT c.nombre_categoria, COUNT(*) AS cant_posts
   FROM categorias AS c
-    INNER JOIN posts AS p ON c.id=p.categoria_id
+    INNER JOIN posts AS p ON c.id = p.categorias_id
   GROUP BY c.id
   ORDER BY cant_posts DESC;
 \end{minted}
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/138_fourth_question.png}
+  \includegraphics[scale=0.5]{./Pictures/138_fourth_question.png}
 \end{figure}
 
 Y si quiero saber cuál es la categoría que tiene más posts, entonces a lo
@@ -1828,7 +2165,7 @@ anterior le agregados una sentencia \textbf{LIMIT}\\
 \begin{minted}{mysql}
   SELECT c.nombre_categoria, COUNT(*) AS cant_posts
   FROM categorias AS c
-    INNER JOIN posts AS p ON c.id=p.categoria_id
+    INNER JOIN posts AS p ON c.id=p.categorias_id
   GROUP BY c.id
   ORDER BY cant_posts DESC
   LIMIT 1;
@@ -1836,7 +2173,7 @@ anterior le agregados una sentencia \textbf{LIMIT}\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/139_fifth_question.png}
+  \includegraphics[scale=0.5]{./Pictures/139_fifth_question.png}
 \end{figure}
 
 Ahora veremos, ¿qué usuario está creando más post en el sistema?\\
@@ -1846,29 +2183,32 @@ Ahora veremos, ¿qué usuario está creando más post en el sistema?\\
   FROM usuarios AS u
     INNER JOIN posts AS p ON u.id=p.usuario_id
   GROUP BY u.id
-  ORDER BY cant_posts DESC
+  ORDER BY cant_posts DESC;
 \end{minted}
+
+\newpage
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/140_sixth_question.png}
+  \includegraphics[scale=0.5]{./Pictures/140_sixth_question.png}
 \end{figure}
 
 
 Luego vamos a modificar esta consulta y le vamos agregar el número de posts y
 de qué categoría está escribiendo.\\
+
 \begin{minted}{mysql}
   SELECT u.nickname, COUNT(*) cant_posts, GROUP_CONCAT(nombre_categoria)
   FROM usuarios AS u
     INNER JOIN posts AS p ON u.id=p.usuario_id
-    INNER JOIN categorias AS c ON c.id=p.categoria_id
+    INNER JOIN categorias AS c ON c.id=p.categorias_id
   GROUP BY u.id
-  ORDER BY cant_posts DESC
+  ORDER BY cant_posts DESC;
 \end{minted}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/141_seventh_question.png}
+  \includegraphics[scale=0.5]{./Pictures/141_seventh_question.png}
 \end{figure}
 
 En este último query vamos a ver que usuario no tiene posts escritos.\\
@@ -1882,9 +2222,10 @@ En este último query vamos a ver que usuario no tiene posts escritos.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.75]{./Pictures/142_eighth_question.png}
+  \includegraphics[scale=0.5]{./Pictures/142_eighth_question.png}
 \end{figure}
 
+\newpage
 
 %% Clase 40
 \section{¿Qué son y cuáles son los tipos de baes de datos no relacionales?}%
@@ -1905,37 +2246,325 @@ engloben en una sola categoría.
     entidades que se encuentran interconectadas por múltiples relaciones.
     Ideales para almacenar relaciones complejas. Ejemmplos: \textbf{neo4j},
     \textbf{TITAN}.
-  \item \textbf{Optimizadas para búsquedas:} Pueden ser de diversas
+  \item \textbf{En memoria}: Pueden ser de estructura variada, pero su ventaja
+    radica en la velocidad, ya que al vivir en memoria la extracción de datos
+    es casi inmediata. Ejemplos: Memcached, Redis.
+  \item \textbf{Optimizadas para búsquedas}: Pueden ser de diversas
     estructuras, su ventaja radica en que se pueden hacer queries y búsquedas
     complejas de manera sencilla. Ejemplos: \textbf{BigQuery},
     \textbf{Elasticsearch}.
 \end{itemize}
 
+%% Clase 41
+\section{Servicios administrados y jerarquía de datos}%
+\textbf{Firabase} es un servicio de Google donde puedes terceerizar muchos
+elementnos en la nube.\\
+
+\textbf{Jerarquía de datos}:
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/165_jerarquia_BD_documentos.png}
+\end{figure}
+
+Tenemos tres niveles. Base de datos, que va a guardar el estado de tu
+aplicación o videojuego. Las colecciones, que son el simil a las tablas de las
+base de datos relacionales (en lugar de agrupar tuplas agrupan documentos). Los
+documentos son la información que queremos guardar en formato similar a un
+formato JSON.
+
+%% Clase 42
+\section{Top level collection con firebase}%
+El modelo de bases de datos no relacionales es un poco más cercano al mundo
+real en su comportamiento.\\
+\begin{itemize}
+  \item Las top level collections son las colecciones que se tienen de
+    inmediato o entrada en el proyecto.
+  \item \textbf{Firebase} es un servicio que tiene múltiples opciones y está
+    pensado principalmente para aplicaciones móviles y web.
+\end{itemize}
+
+%% Clase 43
+\section{Creando y borrando documentos en firestore}%
+En este módulo vas a ver más a detalle el cómo se modelan los datos ahora en
+Base de Datos basados en Documentos.\\
+
+Una de las grandes ventajas que ofrecen las bases de datos basados en
+documentos es que su modelo es más cercano a la vida real y por ello resulta
+más fácil de trabajar.\\
+
+\textbf{Top level Collections}\\
+Son las colecciones que vamos a tener de inmediato en nuestro proyecto.
+
+Veamos un ejemplo: ingresamos con un navegador a \textbf{firabase} en este
+\href{https://console.firebase.google.com/}{enlace}. Firebase permite crear
+proyectoss y también te brinda un panel en el que podremos crear la base de
+datos en firestore.\\
+
+Creamos el proyecto \textbf{platziblog}. Note que al indicar el nombre se crea
+también un id único a nivel mundial que identifica nuestro proyecto.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.65]{./Pictures/166_platziblog_firebase.png}
+\end{figure}
 
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.65]{./Pictures/167_platziblog_tc_acepted.png}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.65]{./Pictures/168_creando_platziblog.png}
+\end{figure}
 
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/169_creando_BD.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.65]{./Pictures/170_next.png}
+\end{figure}
+
+\newpage
+
+Luego podemos iniciar una colección:\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/171_crear_database.png}
+\end{figure}
 
 
+Ahora veamos los tipos de datos:
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/173_tipo_datos.png}
+\end{figure}
+
+Podemos elimnar los campos de un documento, un documento y las colecciones de
+manera muy sencilla: clic derecho en los "tres puntos verticales" y luego
+eliminar.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/174_eliminar_documento.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/175_eliminar_coleccion.png}
+\end{figure}
 
 
+%% Clase 44
+\section{Colecciones vs subcolecciones}%
+La particularidad de las top level collections es que existen en el primer
+nivel de manera intrínseca. Las subcolecciones ya no vivirán al inicio de la
+base de datos.\\
+
+Si tienes una entidad separada que vas a referenciar desde muchos lugares es
+recomendado usar un top level collection. Por otro lado si se necesita hacer
+algo intrínseco al documento es aconsejable usar subcolecciones.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/176_coleccion_posts.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/177_etiqueta_subcoleccion.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/178_etiqueta_subcoleccion.png}
+\end{figure}
 
 
+\newpage
+
+%% Clase 47
+\section{Proyecto final: transformando tu proyecto en un db no relacinoal}%
+Dentro de las bases de datos relacionales tenemos diferentes niveles de datos.
+En primer lugar tenemos las Bases de Datos o Esquemas como repositorios donde
+vivirán los datos que nos interesa guardar. Dentro del esquema existen las
+Tablas que provienen del concepto de entidades; y a su vez dentro de las tablas
+tenemos las tuplas o renglones.\\
+
+Cuando trabajamos con bases de datos basadas en documentos como Firestore, aún
+existe la figura de la base de datos, sin embargo cambiaremos las tablas en
+favor de las colecciones y las tuplas en lugar de los documentos.\\
+
+Recuerda:\\
+
+Tabla $->$ Colección\\
+Tupla $->$ Documento\\
+
+Dentro de las Colecciones existen 2 grandes tipos. Las Top level collection o
+colecciones de nivel superior y las subcollections o subcolecciones. Estas
+últimas viven únicamente dentro de un documento padre.\\
+
+¿Cómo saber cuál escoger?\\
+
+Para determinar si tu colección debe ser top level o subcolección no hay una
+regla escrita en piedra y más bien tiene que ver con el caso de uso en
+particular y con la experiencia que hayas ganado como desarrollador.\\
+
+Lo cierto es que no hay una sola forma de estructurar nuestra DB basada en
+documentos, y por tanto no existe una respuesta correcta, sin embargo a
+continuación te ofrezco un par de reglas guía que puedes utilizar para
+transformar tu proyecto que ya trabajaste en bases de datos relacionales en un
+proyecto no relacional.\\
+
+Regla 1. Piensa en la vista de tu aplicación\\
+
+La primera pista que te puedo dar es que pienses en un inicio en la manera en
+que los datos serán extraídos. En el caso de una aplicación, la mejor forma de
+pensarlo es en términos de las vistas que vas a mostrar a un momento
+determinado en la aplicación.\\
+
+Es decir, al armar la estructura en la base de datos que sea un espejo o que al
+menos contenga todos los datos necesarios para llenar las necesidades que tiene
+nuestra parte visual en la aplicación.\\
+
+En el caso de Platziblog por ejemplo si tienes una vista de un blog post
+individual, generalmente conviene mostrar además de los datos inherentes al
+post como el contenido, datos adicionales como las etiquetas que tiene o por
+ejemplo el autor (o autores si es colaborativo), en este caso tal vez convenga
+guardar estas dos “entidades” (autores y etiquetas) como subcolecciones de cada
+documento blog post.\\
+
+Regla 2. La colección tiene vida propia\\
+
+Esta regla se refiere a que la excepción a la regla 1 es cuando tenemos un caso
+en que la “entidad” que tiene necesidad de vivir y modificarse constantemente
+de manera independiente a las otras colecciones. Por ejemplo en Platziblog
+podemos en el ejemplo anterior hacer una excepción a autores porque nos
+conviene tenerlas como top level collection en el sentido que se añadan,
+borren, cambien o listen los usuarios sin depender del blog post.\\
+
+Experimenta aplicando estas dos reglas a un proyecto que ya conozcas en una
+base de datos relacional y trata de convertirla en un proyecto de Firestore y
+comentanos los retos a los que te enfrentaste.
+
+%% Clase 48
+\section{Bases de datos en la vida real}%
+Diferentes soluciones de datos para aplicaciones modernas. Dependiendo la
+necesidad está una base de datos. Incluso en un mismo proyecto podemos usar
+diferentes tipos de base de datos para diferentes tipos de necesidades.\\
+
+%% Clase 49
+\section{Big Data}%
+\textbf{Big Data} es un concepto que nace de la necesidad de manejar grandes
+cantidades de datos. La tendencia comenzó con compañías como YouTube al tener
+la necesidad de guardar y consultar mucha información de manera rápida.\\
+
+Es un gran movimiento que consiste en el uso de diferentes tipos de bases de
+datos.
 
 
+%% Clase 50
+\section{Data warehouse}%
+\textbf{Data Warehouse} trata de guardar cantidades masivas de datos para la
+posteridad. Allí se guarda todo lo que no está viviendo en la aplicación pero
+es necesario tenerlo.\\
+
+Debe servir para guardar datos por un largo periodo de tiempo y estos datos se
+deben poder usar para poder encontrar cuestiones interesantes para el
+negocio.\\
 
 
+%% Clase 51
+\section{Data mining}%
+El \textbf{Data Mining} se dedica a minar datos, a extraerlos de donde sea que
+estén (archivos muertos, base de datos actual, etc...) y hacer sentido de ellos
+para darles un uso.\\
 
 
+%% Clase 52
+\section{ETL}%
+\textbf{ETL} son las siglas de Extract, Transform, Load (extraer, transformar y
+cargar). Se trata de convertir datos de archivos muertos y convertirlos en algo
+que sea de utilidad para el negocio.\\
+
+También ayuda a tomar los datos vivos de la aplicación, transformarlos y
+guardarlos en un data warehouse periódicamente.\\
 
 
+%% Clase 53
+\section{Business intelligence}%
+\textbf{Business Intelligence} es una parte muy importante de las carreras de
+datos ya que es el punto final del manejo de estos. Su razón de ser es tener la
+información lista, clara y que tenga todos los elementos para tomar decisiones
+en una empresa.\\
+
+Es necesario tener una buena sensibilidad por entender el negocio, sus
+necesidades y la información que puede llevar a tomar decisiones en el momento
+adecuado al momento de realizar business intelligence.
 
 
+%% Clase 54
+\section{Machine Learning}%
+\textbf{Machine Learning} tiene significados que varían. Es una serie de
+técnicas que involucran la inteligencia artificial y la detección de patrones.\\
+
+Machine learning para datos tiene un gran campo de acción y es un paso más allá
+del business intelligence.\\
+
+Nos ayuda a hacer modelos que encuentran patrones fortuitos encontrando
+correlaciones inesperadas.\\
+
+\textbf{Tiene dos casos de uso particulares:}
+\begin{itemize}
+  \item Clasificación
+  \item Predicción
+\end{itemize}
 
 
+%% Clase 55
+\section{Data Science}%
+\textbf{Data Science} es aplicar todas las técnicas de procesamiento de datos.
+En su manera más pura tiene que ver con gente con un background de estadísticas
+y ciencias duras.
 
 
+%% Clase 56
+\section{¿Por qué aprender bases de datos hoy?}%
+¡Has concluido el curso! Ahora tienes potentes herramientas y posibilidades
+para ingresar en este apasionante campo.\\
 
+Llevaste diagramas a bases de datos, exploraste un poco el mundo de las bases
+de datos no relacionales, hicimos un proyecto en firestore y transformamos
+Platzi blog de una base de datos relacional en una base de datos de
+documentos.\\
+
+Dentro de las posibilidades que tienes hoy en día puedes hacer: Machine
+learning, ETL, Data Warehouse, Data mining, entre otros.\\
+
+Recuerda practicar mucho con el proyecto. Te invito a que tomes el examen y
+verifiques tus conocimientos. ¡Éxitos!
+
+%% Clase 57
+\section{Bases de datos relacionales vs no relacionales}%
+Las bases de datos relacionales han estado entre nosotros durante un largo
+tiempo y han sido usadas por grandes como Google, Amazon, entro otros. Aún son
+usadas por bancos, aseguradoras, etc.\\
+
+Las bases de datos no relacionales surgen cuando las grandes empresas sintieron
+necesidad de guardar y extraer cantidades de datos en muy cortos periodos de
+tiempo, como YouTube.
 
 
 \vspace{2cm}
