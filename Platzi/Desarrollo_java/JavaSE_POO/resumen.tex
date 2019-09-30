@@ -850,26 +850,6 @@ El resultado que obtendremos se verá así:
 \end{figure}
 
 
-
-
-%% Clase 10
-\section{Variable vs. Objeto: Un vistazo a la memoria}%
-Un objeto es una referencia a un espacio en memoria. Cuando creamos objetos,
-Java los guarda en la memoria y nos devuelve coordenadas con las que podremos
-acceder a la información que almacenamos.\\
-
-Existen dos tipos de memoria: Stack y Heap.\\
-
-La memoria Stack es mucho más rápida y nos permite almacenar nuestra
-información de forma “ordenada”. Aquí se guardan las variables y sus valores de
-tipos de datos primitivos (booleanos, números, strings, entre otros).\\
-
-Los objetos también usan la memoria Stack, pero no para guardar su información,
-sino para guardar las coordenadas a la verdadera ubicación del objeto en la
-memoria Heap, una memoria que nos permite guardar grandes cantidades de
-información, pero con un poco menos de velocidad.\\
-
-
 %% Clase 11
 \section{¡Reto!}%
 Ahora estás listo para resolver tu primer reto que en realidad es muy sencillo
@@ -889,6 +869,76 @@ blood: String\\
 Patient(name: String, email: String)\\
 
 
+\begin{minted}{java}
+  public class Patient {
+    String name;
+    String email;
+    String address;
+    String phoneNumber;
+    String birthday;
+    double weight;
+    double height;
+    String blood;
+
+    public Patient(String name, String email) {
+      this.name = name;
+      this.email = email;
+    }
+  }
+\end{minted}
+
+
+
+%% Clase 10
+\section{Variable vs. Objeto: Un vistazo a la memoria}%
+Un objeto es una referencia a un espacio en memoria. Cuando creamos objetos,
+Java los guarda en la memoria y nos devuelve coordenadas con las que podremos
+acceder a la información que almacenamos.\\
+
+Existen dos tipos de memoria: Stack y Heap.\\
+
+La memoria Stack es mucho más rápida y nos permite almacenar nuestra
+información de forma “ordenada”. Aquí se guardan las variables y sus valores de
+tipos de datos primitivos (booleanos, números, strings, entre otros).\\
+
+Los objetos también usan la memoria Stack, pero no para guardar su información,
+sino para guardar las coordenadas a la verdadera ubicación del objeto en la
+memoria Heap, una memoria que nos permite guardar grandes cantidades de
+información, pero con un poco menos de velocidad.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/027_var_vs_objeto.png}
+\end{figure}
+
+Veamos un ejemplo:
+
+\begin{minted}{java}
+  import static ui.UIMenu.*;
+
+  public class Main {
+      public static void main(String[] args) {
+
+          Patient patient = new Patient("Alejandra", "alejandra@mail.com");
+          Patient patient2 = new Patient("Anahi", "anahi@mail.com");
+
+          System.out.println(patient.name);
+          System.out.println(patient2.name);
+          patient2 = patient;
+
+          System.out.println(patient.name);
+          System.out.println(patient2.name);
+
+          patient2.name = "Manuel";
+          System.out.println(patient.name);
+          System.out.println(patient2.name);
+      }
+  }
+\end{minted}
+
+
+
+
 %% Clase 12
 \section{Sobrecarga de métodos y constructores}%
 A veces necesitamos que dos o más métodos de una misma clase tengan el mismo
@@ -902,6 +952,74 @@ El uso más común de la sobrecarga de métodos es la sobrecarga de constructore
 para instanciar objetos de formas distintas dependiendo de la cantidad de
 argumentos que enviamos.\\
 
+\textbf{Calculadora.java}
+\begin{minted}{java}
+  public class Calculadora {
+      public int suma(int a, int b) {
+          return a + b;
+      }
+
+      public float suma(float a, float b) {
+          return a + b;
+      }
+
+      public float suma(int a, float b) {
+          return a + b;
+      }
+  }
+\end{minted}
+
+Por ejemplo en nuestro proyecto apliquemos sobrecarga en nuestro constructor Doctor:
+
+\textbf{Doctor.java}
+\begin{minted}{java}
+  public class Doctor {
+      // Atributos
+      static int id = 0;   // Autoincrement
+      String name;
+      String speciality;
+
+      Doctor() {
+          System.out.println("Construyendo el Objeto Doctor");
+      }
+
+      Doctor(String name, String speciality) {
+          System.out.println("El nombre  " + name);
+          id++;
+          this.name = name;
+          this.speciality = speciality;
+      }
+
+      // Comportamientos
+      public void showName() {
+          System.out.println(name);
+      }
+
+      public void showId() {
+          System.out.println("ID Doctor: " + id);
+      }
+  }
+\end{minted}
+
+\textbf{Main.java}
+\begin{minted}{java}
+  import static ui.UIMenu.*;
+
+  public class Main {
+      public static void main(String[] args) {
+
+          Doctor myDoctor = new Doctor("Anahí Salgado", "Pediatría");
+          System.out.println(myDoctor.name);
+          System.out.println(myDoctor.speciality);
+      }
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/029_sobrecarga_constructor.png}
+\end{figure}
+
 
 %% Clase 13
 \section{Encapsulamiento: Modificadores de acceso}%
@@ -910,7 +1028,110 @@ modificar atributos especiales de nuestras clases. Podemos definir qué
 variables se pueden leer/editar por fuera de las clases donde fueron creadas.
 Esto lo conocemos como Encapsulamiento.\\
 
+\textbf{Patient.java}
+\begin{minted}{java}
+  public class Patient {
+      // Atributos
+      String name;
+      String email;
+      String address;
+      String phoneNumber;
+      String birthday;
+      double weight;
+      double height;
+      String blood;
 
+      Patient(String name, String email) {
+          this.name = name;
+          this.email = email;
+      }
+  }
+\end{minted}
+
+\textbf{Main.java}
+\begin{minted}{java}
+  import static ui.UIMenu.*;
+
+  public class Main {
+      public static void main(String[] args) {
+
+          Doctor myDoctor = new Doctor("Anahí Salgado", "Pediatría");
+          System.out.println(myDoctor.name);
+          System.out.println(myDoctor.speciality);
+
+          Patient patient = new Patient("Alejandra", "alejandra@mail.com");
+          System.out.println(patient.name);
+          System.out.println(patient.email);
+
+          patient.weight = 60.5;  // kg   Genera incosistencia
+          patient.height = 1.65;  // Mts  Genera incosistencia
+
+          System.out.println(patient.weight); // Genera incosistencia
+          System.out.println(patient.height); // Genera incosistencia
+
+          patient.weight = 54.5; // Genera incosistencia
+          patient.name = "Juan"; // Genera incosistencia
+      }
+  }
+\end{minted}
+
+Para evitar estas inconsistencias está el \textbf{encapsulamiento}. Para esto
+podemos utilizar los modificadores de acceso:\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/030_mod_acceso.png}
+\end{figure}
+
+Vamos a modificar nuestros atributos de la clase \textbf{Patient} con los
+modificadores de acceso.\\
+
+\textbf{Patient.java}
+\begin{minted}{java}
+  public class Patient {
+      // Atributos
+      private String name;
+      private String email;
+      private String address;
+      private String phoneNumber;
+      private String birthday;
+      private double weight;
+      private double height;
+      String blood;
+
+      Patient(String name, String email) {
+          this.name = name;
+          this.email = email;
+          this.weight = 54.5;
+          System.out.println(weight + "kg.");
+      }
+  }
+\end{minted}
+
+\textbf{Main.java}
+\begin{minted}{java}
+  import static ui.UIMenu.*;
+
+  public class Main {
+      public static void main(String[] args) {
+
+          Doctor myDoctor = new Doctor("Anahí Salgado", "Pediatría");
+          System.out.println(myDoctor.name);
+          System.out.println(myDoctor.speciality);
+
+          Patient patient = new Patient("Alejandra", "alejandra@mail.com");
+      }
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/031_resultado_encaps.png}
+\end{figure}
+
+
+
+\newpage
 %% Clase 14
 \section{Getters y Setters}%
 Los Getters y Setters nos permiten leer y escribir (respectivamente) los
@@ -920,6 +1141,213 @@ asignamos o cambiamos su valor.\\
 
 También puedes usar los atajos de tu IDE favorito para generar los métodos
 getters y setters de todas o algunas de tus variables.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/032_get_set.png}
+\end{figure}
+
+\textbf{Patient.java}
+\begin{minted}{java}
+public class Patient {
+    // Atributos
+    private String name;
+    private String email;
+    private String address;
+    private String phoneNumber;
+    private String birthday;
+    private double weight;
+    private double height;
+    String blood;
+
+    Patient(String name, String email) {
+        this.name = name;
+        this.email = email;
+        this.weight = 54.5;
+        System.out.println(weight + "kg.");
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public String getWeight() {
+        return weight + " Kg.";
+    }
+}
+\end{minted}
+
+También podemos usar la herramienta que nos proporciona IntelliJ IDEA para
+generar automáticamente el código.\\
+
+\newpage
+Clic derecho - Generate - Getter and Setter - OK\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/033_generate.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/034_generate.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/035_generate.png}
+\end{figure}
+
+Luego de esto se generarán los getters y setters para cada uno de nuestros
+atributos.\\
+
+
+\textbf{Patient.java}
+\begin{minted}{java}
+  public class Patient {
+      // Atributos
+      private String name;
+      private String email;
+      private String address;
+      private String phoneNumber;
+      private String birthday;
+      private double weight;
+      private double height;
+      String blood;
+
+      Patient(String name, String email) {
+          this.name = name;
+          this.email = email;
+          this.weight = 54.5;
+          System.out.println(weight + "kg.");
+      }
+
+      public void setWeight(double weight) {
+          this.weight = weight;
+      }
+
+      public String getWeight() {
+          return weight + " Kg.";
+      }
+
+      public String getName() {
+          return name;
+      }
+
+      public void setName(String name) {
+          this.name = name;
+      }
+
+      public String getEmail() {
+          return email;
+      }
+
+      public void setEmail(String email) {
+          this.email = email;
+      }
+
+      public String getAddress() {
+          return address;
+      }
+
+      public void setAddress(String address) {
+          this.address = address;
+      }
+
+      public String getPhoneNumber() {
+          return phoneNumber;
+      }
+
+      public void setPhoneNumber(String phoneNumber) {
+          if (phoneNumber.length() > 8) {
+              System.out.println("El nro telefónico debe ser de 8 dígitos máximo");
+          } else if (phoneNumber.length() == 8) {
+              this.phoneNumber = phoneNumber;
+          }
+      }
+
+      public String getBirthday() {
+          return birthday;
+      }
+
+      public void setBirthday(String birthday) {
+          this.birthday = birthday;
+      }
+
+      public String getHeight() {
+          return height + " Mts.";
+      }
+
+      public void setHeight(double height) {
+          this.height = height;
+      }
+
+      public String getBlood() {
+          return blood;
+      }
+
+      public void setBlood(String blood) {
+          this.blood = blood;
+      }
+  }
+\end{minted}
+
+\textbf{Main.java}
+\begin{minted}{java}
+  import static ui.UIMenu.*;
+
+  public class Main {
+      public static void main(String[] args) {
+
+          Doctor myDoctor = new Doctor("Anahí Salgado", "Pediatría");
+          System.out.println(myDoctor.name);
+          System.out.println(myDoctor.speciality);
+
+          Patient patient = new Patient("Alejandra", "alejandra@mail.com");
+          patient.setWeight(54.6);
+          System.out.println(patient.getWeight());
+
+          patient.setPhoneNumber("123456789");
+          System.out.println(patient.getPhoneNumber());
+      }
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/036_set_get.png}
+\end{figure}
+
+\newpage
+
+Ahora en cambio si seteamos el phoneNumber con 8 dígitos, cumpliendo nuestra
+condición entonces:\\
+
+\textbf{Main.java}
+\begin{minted}{java}
+  import static ui.UIMenu.*;
+
+  public class Main {
+      public static void main(String[] args) {
+
+          Doctor myDoctor = new Doctor("Anahí Salgado", "Pediatría");
+          System.out.println(myDoctor.name);
+          System.out.println(myDoctor.speciality);
+
+          Patient patient = new Patient("Alejandra", "alejandra@mail.com");
+          patient.setWeight(54.6);
+          System.out.println(patient.getWeight());
+
+          patient.setPhoneNumber("12345678");
+          System.out.println(patient.getPhoneNumber());
+      }
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/037_set_get.png}
+\end{figure}
 
 
 %% Clase 15
@@ -931,8 +1359,10 @@ pueden estar formadas por la agrupación de diferentes variables y métodos.\\
 Los Objetos Primitivos o Clases Wrapper son variables primitivas que trabajan
 con algún tipo de dato y también tienen las características de los objetos.\\
 
-Por ejemplo: Byte, Short, Integer, Long, Float, Double, Character, Boolean o
-String.\\
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/038_class_wrapper.png}
+\end{figure}
 
 
 %% Clase 16
@@ -947,6 +1377,22 @@ cualquier tipo de elemento o método de nuestras clases.\\
 Las Clases Estáticas no necesitan ser instanciadas para poder ser llamadas y
 ejecutadas, aunque debes recordar que solo permiten llamar a los métodos
 estáticos de sus clases padre.\\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 %% Clase 17
