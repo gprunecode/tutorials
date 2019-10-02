@@ -1,0 +1,133 @@
+%%
+%% (
+%%  )\ )                             (
+%%  (()/(   (            (             )\  )   (
+%%   /(_))  ))\   (       ))\  (   (   (()/(   ))\
+%%   (_))  /((_)  )\  )  /((_) )\  )\   ((_))/((_)
+%%   | _ \(_))(  _(_/( (_) )  ((_)((_)  _| |(_))
+%%   |   /| || || ' \))/ -_)/ _|/ _ \/ _` |/ -_)
+%%   |_|_\ \_,_||_||_| \___|\__|\___/\__,_|\___|
+%%
+
+\documentclass{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+%\usepackage{slashbox}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx} % Paquete para incluir imágenes en el documento LaTeX
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  filecolor=magenta,
+  urlcolor=cyan,
+}
+\urlstyle{same}
+\usepackage{varwidth}
+
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+
+\usepackage{multirow}
+
+\usepackage[a4paper,rmargin=1.5cm,lmargin=1.5cm,top=1.5cm,bottom=1.5cm]{geometry}
+
+\usepackage{pdfpages}
+
+\usepackage{xcolor}
+\usepackage{minted}
+\setminted[cpp]{frame=lines, framesep=2mm, baselinestretch=1.2, rulecolor=\color{black!80},
+                bgcolor=DarkGray,fontsize=\normalsize}
+\usemintedstyle[cpp]{monokai}
+\setminted[python]{frame=lines, framesep=2mm, baselinestretch=1.2, rulecolor=\color{black!80}, bgcolor=DarkGray}
+\usemintedstyle[python]{monokai}
+\setminted[vim]{frame=lines, framesep=2mm, baselinestretch=1.2, rulecolor=\color{black!30}, bgcolor=LightGray}
+\setminted[javascript]{frame=lines, framesep=2mm, baselinestretch=1.2, rulecolor=\color{black!80}, bgcolor=DarkGray}
+\usemintedstyle[javascript]{monokai}
+\setminted[php]{frame=lines, framesep=2mm, baselinestretch=1.2, rulecolor=\color{black!30}, bgcolor=LightGray}
+\setminted[html]{frame=lines, framesep=2mm, baselinestretch=1.2, rulecolor=\color{black!30}, bgcolor=LightGray}
+\setminted[bash]{baselinestretch=1.2,rulecolor=\color{black!30},fontsize=\footnotesize,bgcolor=LightGray}
+\definecolor{LightGray}{gray}{0.98}
+\definecolor{DarkGray}{gray}{0.1}
+\definecolor{MidGray}{gray}{0.8}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\setlength{\parindent}{0px}  % Setea la indentacion de la primera linea de cada parrafo a cero pixeles.
+
+
+\DeclareUnicodeCharacter{2014}{\dash}
+
+\title{Introducción a JavaSE}
+\author{@RuneCode}
+
+\begin{document}
+%% Portada
+\includepdf{./portada/portada.pdf}
+
+%% Screencast 1
+\section{Mostrar invisibles}%
+La función \textbf{list} de Vim se puede usar para revelar caracteres ocultos,
+como tabulaciones y líneas nuevas. En este episodio, vamos a demostrar cómo
+personalizar la apariencia de estos caracteres modificando la configuración de
+listchars. Continúo mostrando cómo hacer que estos caracteres invisibles se
+mezclen con su colortheme.\\
+
+TextMate tiene una opción para \textbf{Mostrar invisibles}, que le permite ver
+los caracteres de tabulación y final de línea. Cuando esto está habilitado, los
+caracteres de tabulación aparecen como un pequeño triángulo, y el final de las
+líneas aparece como un 'signo no' (¬). Esto es útil para distinguir entre
+pestañas y espacios, y para revelar espacios finales al final de una línea.En
+Vim, podemos mostrar caracteres invisibles habilitando \texttt{:set list}.
+Puede ocultar estos caracteres nuevamente al ejecutarlos \texttt{:set nolist},
+o puede alternar entre mostrarlos y ocultarlos al ejecutarlos  \texttt{:set
+list!}. Si desea poder hacer esto rápidamente, puede asignar el comando de
+alternancia a algo más conveniente.  Intente poner lo siguiente en su .vimrc:
+
+\begin{minted}{vim}
+  nmap <leader> l: set list! <CR>
+\end{minted}
+
+Ahora puede alternar entre mostrar y ocultar caracteres invisibles con
+\textbf{{\textbackslash}l}. Tenga en cuenta que si ha configurado su mapleader
+en un valor distinto de la barra diagonal inversa, deberá usarlo en su lugar.\\
+
+\textbf{Personalizar símbolos}\\
+Por defecto, el carácter de tabulación se representa literalmente como \^ I, y
+el final de las líneas se representa con un signo de dólar.\\
+
+Podemos personalizar los símbolos utilizados para representar caracteres
+invisibles cambiando la listcharsconfiguración. Si desea utilizar los mismos
+símbolos que TextMate, coloque lo siguiente en su .vimrc:
+
+\begin{minted}{vim}
+  set listchars=tab:▸\ ,eol:¬
+\end{minted}
+
+Si lo desea, puede personalizar otros caracteres invisibles además de las
+pestañas y el final de las líneas. Para obtener más información, obtenga ayuda
+sobre listchars:
+
+\begin{minted}{vim}
+  :help listchars
+\end{minted}
+
+
+%% Screencast 2
+
+
+
+
+
+
+
+
+
+\vspace{2cm}
+\LARGE\textit{RuneCode}
+
+
+\end{document}
+
