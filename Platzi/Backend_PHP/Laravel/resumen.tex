@@ -769,6 +769,118 @@ post o datos en la URL.\\
     el die; este helper es dd.
 \end{itemize}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/015_request.png}
+\end{figure}
+
+\textbf{app/Http/Controllers/DashboardController.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use Illuminate\Http\Request;
+
+  class DashboardController extends Controller
+  {
+      public function index(Request $request) {
+          var_dump($request); die;
+          return view('test', [
+              'title' => 'Curso Laravel en Platzi!!!'
+          ]);
+      }
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/016_vardump_request.png}
+\end{figure}
+
+\textbf{app/Http/Controllers/DashboardController.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use Illuminate\Http\Request;
+
+  class DashboardController extends Controller
+  {
+      public function index(Request $request) {
+          dd($request->query('title'));
+          return view('test', [
+              'title' => 'Curso Laravel en Platzi!!!'
+          ]);
+      }
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/017_dd_title.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/018_dd_title_null.png}
+\end{figure}
+
+\textbf{app/Http/Controllers/DashboardController.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use Illuminate\Http\Request;
+
+  class DashboardController extends Controller
+  {
+      public function index(Request $request) {
+          dd($request->query('title', 'Valor default'));
+          return view('test', [
+              'title' => 'Curso Laravel en Platzi!!!'
+          ]);
+      }
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/019_dd_title_default.png}
+\end{figure}
+
+\textbf{app/Http/Controllers/DashboardController.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use Illuminate\Http\Request;
+
+  class DashboardController extends Controller
+  {
+      public function index(Request $request) {
+          return view('test', [
+              'title' => $request->query('title', 'Valor default')
+          ]);
+      }
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/020_title_default.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/021_title_hola_request.png}
+\end{figure}
+
+
+
 %% Clase 7
 \section{Configuración de laravel}%
 En nuestro archivo .env encontraremos mucha información sobre cómo se está
