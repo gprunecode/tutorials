@@ -1358,8 +1358,8 @@ También podemos visualizar el registro en nuestro cliente de Base de Datos.
 CRUD significa create (crear), read (leer), update (actualizar o editar),
 delete (eliminar).\\
 
-resource genera una clase de controlador de tipo recurso. Esto significa que
-tendremos todo lo necesario para poder hacer CRUD.\\
+\textbf{resource} genera una clase de controlador de tipo recurso. Esto
+significa que tendremos todo lo necesario para poder hacer CRUD.\\
 
 \begin{itemize}
   \item index: Aquí se despliegan todos los elementos a mostrar.
@@ -1371,12 +1371,276 @@ tendremos todo lo necesario para poder hacer CRUD.\\
   \item destroy: Eliminará los elementos.
 \end{itemize}
 
+Creamos nuestro controller con el flag \textbf{--resource}. Esto nos creará los
+métodos en blanco para poder realizar CRUD con nuestro controller.\\
+
+\begin{minted}{bash}
+  php artisan make:controller ExpenseReportController --resource
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/049_controller_resource.png}
+\end{figure}
+
 En route:list podremos ver todas las rutas que tenemos definidas\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/050_route_list.png}
+\end{figure}
 
 Para crear una ruta de un controlador resource no usamos get o post, sino
 directamente la estructura Route::resource(); ya que de esta manera se nos
 crearán rutas para cada uno de los métodos anteriormente mencionados que son
 creados por el controlador resource.
+
+\textbf{routes/web.php}
+\begin{minted}{php}
+  <?php
+
+  /*
+  |--------------------------------------------------------------------------
+  | Web Routes
+  |--------------------------------------------------------------------------
+  |
+  | Here is where you can register web routes for your application. These
+  | routes are loaded by the RouteServiceProvider within a group which
+  | contains the "web" middleware group. Now create something great!
+  |
+  */
+
+  Route::get('/', 'HomeController@index');
+  Route::get('/dashboard', 'DashboardController@index');
+  Route::resource('/expense_reports', 'ExpenseReportController');
+\end{minted}
+
+Con solo hacer esto, veamos nuevamente la lista de nuestras rutas.
+
+\begin{minted}{bash}
+  php artisan route:list
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/051_rout_list_after.png}
+\end{figure}
+
+Ahora vamos a modificar el método index dentro de ExpenseReportController para
+mostrar todos los registros que tenga.
+
+\textbf{app/Http/Controllers/}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use App\ExpenseReport;
+  use Illuminate\Http\Request;
+
+  class ExpenseReportController extends Controller
+  {
+      /**
+      * Display a listing of the resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function index()
+      {
+          return ExpenseReport::all();
+      }
+
+      /**
+      * Show the form for creating a new resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function create()
+      {
+          //
+      }
+
+      /**
+      * Store a newly created resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @return \Illuminate\Http\Response
+      */
+      public function store(Request $request)
+      {
+          //
+      }
+
+      /**
+      * Display the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function show($id)
+      {
+          //
+      }
+
+      /**
+      * Show the form for editing the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function edit($id)
+      {
+          //
+      }
+
+      /**
+      * Update the specified resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function update(Request $request, $id)
+      {
+          //
+      }
+
+      /**
+      * Remove the specified resource from storage.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function destroy($id)
+      {
+          //
+      }
+  }
+\end{minted}
+
+Luego vamos a nuestro navegador y escribimos en el url /expense\_reports\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/052_expense_reports.png}
+\end{figure}
+
+Ahora vamos a añadirle una vista. Para esto vamos a copiar el contenido de la
+vista \textbf{welcome.blade.php} en una nueva carpeta llamada
+\textbf{expenseReport}, con la finalidad de ir organizando nuestras vistas en
+el fichero llamado \textbf{index.blade.php}.\\
+
+Luego vamos a modificar el contenido de la siguiente manera:
+
+\textbf{resources/views/expenseReport/index.blade.php}
+\begin{minted}{html+php}
+  <!DOCTYPE html>
+  <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+      <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+
+          <title>Laravel</title>
+
+          <!-- Fonts -->
+          <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+
+          <!-- Styles -->
+          <style>
+              html, body {
+                  background-color: #fff;
+                  color: #636b6f;
+                  font-family: 'Nunito', sans-serif;
+                  font-weight: 200;
+                  height: 100vh;
+                  margin: 0;
+              }
+
+              .full-height {
+                  height: 100vh;
+              }
+
+              .flex-center {
+                  align-items: center;
+                  display: flex;
+                  justify-content: center;
+              }
+
+              .position-ref {
+                  position: relative;
+              }
+
+              .top-right {
+                  position: absolute;
+                  right: 10px;
+                  top: 18px;
+              }
+
+              .content {
+                  text-align: center;
+              }
+
+              .title {
+                  font-size: 84px;
+              }
+
+              .links > a {
+                  color: #636b6f;
+                  padding: 0 25px;
+                  font-size: 13px;
+                  font-weight: 600;
+                  letter-spacing: .1rem;
+                  text-decoration: none;
+                  text-transform: uppercase;
+              }
+
+              .m-b-md {
+                  margin-bottom: 30px;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="flex-center position-ref full-height">
+              @if (Route::has('login'))
+                  <div class="top-right links">
+                      @auth
+                          <a href="{{ url('/home') }}">Home</a>
+                      @else
+                          <a href="{{ route('login') }}">Login</a>
+
+                          @if (Route::has('register'))
+                              <a href="{{ route('register') }}">Register</a>
+                          @endif
+                      @endauth
+                  </div>
+              @endif
+
+              <div class="content">
+                  <div class="row">
+                      <div class="col">
+                          <h1>Reports</h1>
+                          <table class="table">
+                              @foreach ($expenseReports as $expenseReport)
+                                  <tr>
+                                      <td>{{ $expenseReport->title }}</td>
+                                  </tr>
+                              @endforeach
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </body>
+  </html>
+\end{minted}
+
+Actualizamos en nuestro navegador y obtenemos:\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/053_expense_reports_ok.png}
+\end{figure}
+
 
 
 %% Clase 13
