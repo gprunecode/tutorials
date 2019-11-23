@@ -1234,6 +1234,125 @@ visualizar también en nuestro cliente de Base de Datos.\\
     los elementos creados.
 \end{itemize}
 
+Para crear una migration entonces lo hacemos usando artisan indicando el nombre
+de la tabla.
+\begin{minted}{bash}
+  php artisan make:migration create_column_title_in_reports --table=expense_reports
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/040_migration_file.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/042_php_migration.png}
+\end{figure}
+
+\textbf{database/migrations/2019\_11\_23\_190804\_create\_column\_title\_in\_reports.php}
+\begin{minted}{php}
+  <?php
+
+  use Illuminate\Database\Migrations\Migration;
+  use Illuminate\Database\Schema\Blueprint;
+  use Illuminate\Support\Facades\Schema;
+
+  class CreateColumnTitleInReports extends Migration
+  {
+      /**
+      * Run the migrations.
+      *
+      * @return void
+      */
+      public function up()
+      {
+          Schema::table('expense_reports', function (Blueprint $table) {
+              $table->text('title');
+          });
+      }
+
+      /**
+      * Reverse the migrations.
+      *
+      * @return void
+      */
+      public function down()
+      {
+          Schema::table('expense_reports', function (Blueprint $table) {
+              $table->dropColumn('title');
+          });
+      }
+  }
+\end{minted}
+
+Luego hacemos la migración:
+\begin{minted}{bash}
+  php artisan migrate
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/041_migrate.png}
+\end{figure}
+
+Luego revisamos la tabla y verificamos que se ha creado el campo
+\textbf{title} de tipo text.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/043_title.png}
+\end{figure}
+
+También revisemos el contenido de la tabla \textbf{migrations} y observamos que
+se creó un nuevo registro con el nombre de nuestro fichero de migración y con
+el campo \textbf{batch} en valor 2.\\
+
+Por último con \textbf{fresh} podemos eliminar todo el contenido de nuestras
+bases de datos y crear nuevamente las tablas.
+
+\begin{minted}{bash}
+  php artisan migrate:fresh
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/044_migrate_fresh.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/045_migration_fresh.png}
+\end{figure}
+
+Como vemos la tabla \textbf{migrations} ahora tiene todos los registros con el
+\textbf{batch} en valor 1. Además el registro que teníamos en la tabla
+\textbf{expense\_reports} también ha desaparecido.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/046_expense_report_dropped.png}
+\end{figure}
+
+Entonces vamos usar \textbf{tinker} para crear un registro en la tabla.
+
+\begin{minted}{bash}
+  php artisan tinker
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/047_new_reg_tinker.png}
+\end{figure}
+
+También podemos visualizar el registro en nuestro cliente de Base de Datos.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/048_expense_report.png}
+\end{figure}
+
+
 %% Clase 12
 \section{Controladores y recursos}%
 CRUD significa create (crear), read (leer), update (actualizar o editar),
