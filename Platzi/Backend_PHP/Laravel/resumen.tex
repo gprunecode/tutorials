@@ -470,6 +470,619 @@ para solventar esa falencia.\\
     con los helpers.
 \end{itemize}
 
+\textbf{resources/views/test.blade.php}
+\begin{minted}{html+php}
+  <!DOCTYPE html>
+  <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+      <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+
+          <title>Laravel</title>
+
+          <!-- Fonts -->
+          <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+
+          <!-- Styles -->
+          <style>
+              html, body {
+                  background-color: #fff;
+                  color: #636b6f;
+                  font-family: 'Nunito', sans-serif;
+                  font-weight: 200;
+                  height: 100vh;
+                  margin: 0;
+              }
+
+              .full-height {
+                  height: 100vh;
+              }
+
+              .flex-center {
+                  align-items: center;
+                  display: flex;
+                  justify-content: center;
+              }
+
+              .position-ref {
+                  position: relative;
+              }
+
+              .top-right {
+                  position: absolute;
+                  right: 10px;
+                  top: 18px;
+              }
+
+              .content {
+                  text-align: center;
+              }
+
+              .title {
+                  font-size: 84px;
+              }
+
+              .links > a {
+                  color: #636b6f;
+                  padding: 0 25px;
+                  font-size: 13px;
+                  font-weight: 600;
+                  letter-spacing: .1rem;
+                  text-decoration: none;
+                  text-transform: uppercase;
+              }
+
+              .m-b-md {
+                  margin-bottom: 30px;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="flex-center position-ref full-height">
+              @if (Route::has('login'))
+                  <div class="top-right links">
+                      @auth
+                          <a href="{{ url('/home') }}">Home</a>
+                      @else
+                          <a href="{{ route('login') }}">Login</a>
+
+                          @if (Route::has('register'))
+                              <a href="{{ route('register') }}">Register</a>
+                          @endif
+                      @endauth
+                  </div>
+              @endif
+
+              <div class="content">
+                  <div class="title m-b-md">
+                      @isset($title)
+                          {{ $title }}
+                      @else
+                          {{ 'No title' }}
+                      @endisset
+                  </div>
+
+                  <div class="links">
+                      <a href="https://laravel.com/docs">Docs</a>
+                      <a href="https://laracasts.com">Laracasts</a>
+                      <a href="https://laravel-news.com">News</a>
+                      <a href="https://blog.laravel.com">Blog</a>
+                      <a href="https://nova.laravel.com">Nova</a>
+                      <a href="https://forge.laravel.com">Forge</a>
+                      <a href="https://vapor.laravel.com">Vapor</a>
+                      <a href="https://github.com/laravel/laravel">GitHub</a>
+                  </div>
+              </div>
+          </div>
+      </body>
+  </html>
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/008_blade.png}
+\end{figure}
+
+\textbf{routes/web.php}
+\begin{minted}{php}
+  <?php
+
+  /*
+  |--------------------------------------------------------------------------
+  | Web Routes
+  |--------------------------------------------------------------------------
+  |
+  | Here is where you can register web routes for your application. These
+  | routes are loaded by the RouteServiceProvider within a group which
+  | contains the "web" middleware group. Now create something great!
+  |
+  */
+
+  Route::get('/', function () {
+      return view('welcome');
+  });
+
+  Route::get('/test', function () {
+      return view('test', [
+          'title' => 'Curso Laravel en Platzi!!!'
+      ]);
+  });
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/009_blade.png}
+\end{figure}
+
+%% Clase 5
+\section{Controladores en Laravel}%
+Basados en el modelo MVC, vimos que las vistas las tenemos en resources/views,
+igualmente en la carpeta app/Http/Controllers podremos definir nuestros
+controladores.\\
+Aunque podemos utilizar closures directamente dentro de las rutas, Laravel
+viene preparado para que trabajemos con controladores.\\
+
+\begin{itemize}
+  \item Cuando utilizamos el comando "artisan", encontramos una sección llamada
+    "make" que nos va a permitir crear diferentes cosas en el proyecto.
+    make:controller nos crea un nuevo controlador.
+  \item En nuestro archivo web.php, en la parte de los parámetros, en vez de
+    poner un closure vamos a poner el nombre del controlador que creamos
+    seguido de una @ y finalizando el método que llamaremos de ese controlador.
+\end{itemize}
+
+\begin{minted}{bash}
+  php artisan make:controller --help
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/010_artisan_make_controller.png}
+\end{figure}
+
+\begin{minted}{bash}
+  php artisan make:controller HomeController
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/011_artisar_make_controller.png}
+\end{figure}
+
+Luego vamos a modificar el HomeController que se ha creado dentro de nuestra
+ruta  \textbf{Http/Controllers/HomeController.php}\\
+
+\textbf{Http/Controllers/HomeController.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use Illuminate\Http\Request;
+
+  class HomeController extends Controller {
+      public function index() {
+          return view('welcome');
+      }
+  }
+\end{minted}
+
+También modificamos:
+
+\textbf{routes/web.php}
+\begin{minted}{php}
+  <?php
+
+  /*
+  |--------------------------------------------------------------------------
+  | Web Routes
+  |--------------------------------------------------------------------------
+  |
+  | Here is where you can register web routes for your application. These
+  | routes are loaded by the RouteServiceProvider within a group which
+  | contains the "web" middleware group. Now create something great!
+  |
+  */
+
+  Route::get('/', 'HomeController@index');
+
+  Route::get('/test', function () {
+      return view('test', [
+          'title' => 'Curso Laravel en Platzi!!!'
+      ]);
+  });
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/012_homeController.png}
+\end{figure}
+
+Ahora crearemos un controller \textbf{DashboardController} ya organizando
+nuestro código para el proyecto.\\
+
+\begin{minted}{bash}
+  php artisan make:controller DashboardController
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/014_dashboardController.png}
+\end{figure}
+
+\textbf{app/Http/Controllers/DashboardController.php}
+\begin{minted}{java}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use Illuminate\Http\Request;
+
+  class DashboardController extends Controller
+  {
+      public function index() {
+          return view('test', [
+              'title' => 'Curso Laravel en Platzi!!!'
+          ]);
+      }
+  }
+\end{minted}
+
+
+\textbf{routes/web.php}
+\begin{minted}{java}
+  <?php
+
+  /*
+  |--------------------------------------------------------------------------
+  | Web Routes
+  |--------------------------------------------------------------------------
+  |
+  | Here is where you can register web routes for your application. These
+  | routes are loaded by the RouteServiceProvider within a group which
+  | contains the "web" middleware group. Now create something great!
+  |
+  */
+
+  Route::get('/', 'HomeController@index');
+  Route::get('/dashboard', 'DashboardController@index');
+\end{minted}
+
+
+
+%% Clase 6
+\textbf{Request}
+El Request es el que contendrá la información que llega cuando alguien hace una
+petición al servidor. Se podrán traer parámetros get, datos de formulario en
+post o datos en la URL.\\
+
+\begin{itemize}
+  \item Laravel utiliza inyección de dependencias y cuando detecta que se
+    recibe una variable request, sabe que debe inyectar el request que está
+    accediendo a la acción.
+  \item Contamos con un helper muy útil de Laravel que reemplaza el var\_dump y
+    el die; este helper es dd.
+\end{itemize}
+
+%% Clase 7
+\section{Configuración de laravel}%
+En nuestro archivo .env encontraremos mucha información sobre cómo se está
+configurando Laravel como el nombre, el entorno de desarrollo, si muestra o no
+debug, la URL de nuestra app, datos de conexión a nuestra base de datos, entre
+otras opciones.\\
+
+Toda la configuración que hacemos realmente se está llamando dentro de los
+archivos que están en la carpeta config\\
+
+\begin{itemize}
+  \item Si vienes del curso de introducción a PHP, seguramente tienes
+    PHPMyAdmin el cual puedes seguir usando o puedes cambiar a cualquier
+    cliente que te guste.
+\end{itemize}
+
+%% Clase 8
+\section{Cómo funcionan las Migraciones de DB}%
+Laravel ofrece un sistema de migraciones de bases de datos las cuales pueden
+ser vistas como una especie de control de código pero para bases de datos. Esto
+es muy útil para equipos de trabajo al poder tener los cambios en el
+repositorio y de esta manera cada miembro del equipo podrá ejecutar las
+migraciones para tener los esquemas adecuados.\\
+
+\begin{itemize}
+  \item Tenemos un comando llamado make:migration que nos permite generar
+    archivos de migraciones.
+  \item Contamos con una sección entera llamada migrate que nos servirá para
+    realizar diferentes acciones relacionadas con las migraciones. Si
+    ejecutamos migrate sin nada más, ejecutará todas las migraciones pendientes
+    en el equipo.
+  \item migrate:fresh va a borrar todas las tablas y las creará de nuevo
+    utilizando todas las migraciones que tenemos.
+  \item migrate:rollback nos permite regresar un paso.
+\end{itemize}
+
+Puedes encontrar las migraciones en la carpeta database/migrations. Laravel nos
+ofrece dos migraciones de inicio que son para crear tablas de usuarios y para
+crear una tabla de resets de passwords.\\
+
+Las migraciones tienen dos partes:
+
+\begin{itemize}
+  \item up, que nos dice qué va a crear la migración.
+  \item down, que revierte lo que se hizo en la migración, activado al hacer
+    rollback.
+\end{itemize}
+
+Al correr las migraciones se nos crearán 3 tablas, una de ella siendo
+migrations que nos llevará el control de cómo se va generando cada cambio.\\
+
+Laravel nos ofrece Schema que nos trae diferentes cosas para trabajar sobre los
+sistemas de bases de datos.\\
+
+
+%% Clase 9
+\section{Migraciones en Artisan}%
+Aprende más en el Curso de PHP con Laravel disponible en tu suscripción en:
+http://platzi.com/laravel\\
+
+Adquiere hoy la suscripción de Platzi en: http://platzi.com/precios\\
+
+Aprende a crear migraciones para estructurar las bases de datos que generamos
+por defecto con la ayuda de Laravel.\\
+
+Laravel es un framework de código abierto que agiliza el desarrollo de
+aplicaciones web con PHP utilizando la arquitectura MVC y nos permite resolver
+necesidades actuales como el manejo de eventos y la autenticación de usuarios.
+Además, cuenta con un código modular y extensible por medio de un administrador
+de paquetes y un soporte robusto para manejo de bases de datos.\\
+
+%% Clase 10
+\section{Modelos con Eloquent}%
+Un ORM es un sistema que nos permite mapear registros de la base de datos a
+objetos dentro dentro de nuestro código. No es exclusivo de PHP ya que se usa
+mucho en los lenguajes de programación orientada a objetos.\\
+
+\begin{itemize}
+  \item make:model crea una nueva clase para representar un modelo de Eloquent.
+  \item Cuando creamos las bases de datos es estándar que las tablas tengan el
+    nombre en plural pero los modelos como representan una clase que representa
+    un objeto, tendrán su nombre en singular.
+  \item Todos los modelos los podremos encontrar dentro de la carpeta app.
+    Laravel no tiene carpeta models porque los creadores creen que model puede
+    tener muchos significados.
+  \item El comando tinker nos ofrece un entorno de pruebas para ver cómo
+    funcionan las cosas que estamos haciendo. Tiene en cuenta variables de
+    entorno, lo que inicializa Laravel y también sabe que estamos usando
+    Eloquent.
+\end{itemize}
+
+%% Clase 11
+\section{Trabajando con un Modelo}%
+\begin{itemize}
+  \item No es aconsejable modificar una migración ya que si estamos trabajando
+    en equipo alguien puede haber ya corrido la migración con anterioridad y
+    esto le causaría conflictos. Lo aconsejable es crear una migración
+    adicional.
+  \item El comando migrate:fresh lo reinicia todo incluyendo la base de datos y
+    los elementos creados.
+\end{itemize}
+
+%% Clase 12
+\section{Controladores y recursos}%
+CRUD significa create (crear), read (leer), update (actualizar o editar),
+delete (eliminar).\\
+
+resource genera una clase de controlador de tipo recurso. Esto significa que
+tendremos todo lo necesario para poder hacer CRUD.\\
+
+\begin{itemize}
+  \item index: Aquí se despliegan todos los elementos a mostrar.
+  \item create: Creará nuevos elementos.
+  \item store: Guardará los elementos creados en create.
+  \item show: Mostrará a detalle un solo elemento y por eso es que recibe un id.
+  \item edit: Edita los elementos que mostramos en show.
+  \item update: Almacena los cambios de edit en la base de datos.
+  \item destroy: Eliminará los elementos.
+\end{itemize}
+
+En route:list podremos ver todas las rutas que tenemos definidas\\
+
+Para crear una ruta de un controlador resource no usamos get o post, sino
+directamente la estructura Route::resource(); ya que de esta manera se nos
+crearán rutas para cada uno de los métodos anteriormente mencionados que son
+creados por el controlador resource.
+
+
+%% Clase 13
+\section{Blade layout}%
+Cuando se tienen muchas vistas que repiten gran parte del código HTML, una
+mejor práctica para evitar esta repetición es crear layouts y extender de
+ellos. De esta manera el layout tendrá el contenido que siempre se repite y los
+hijos el código específico de ellos.\\
+
+\begin{itemize}
+  \item @yield marca la parte en donde irá el código de los hijos que extiendan
+    o hereden del layout.
+  \item En las vistas hijas se utiliza @section para decir que esa parte del
+    código es la que concuerda con el @yield del layout.
+\end{itemize}
+
+
+%% Clase 14
+\section{Form para agregar reportes}%
+
+%% Clase 15
+\section{CSRF}%
+CSRF (Cross-site request forgery) es un tipo de ataque que consiste en que un
+usuario puede intentar hacer muchas peticiones en nombre de otro. Para esto
+Laravel genera con cada sesión un token que se usará para validar que exista el
+usuario en el sistema y que sea él quien está haciendo la petición. Esto
+también implica que no se pueden hacer peticiones desde otra app hacia el post,
+debe manejarse de manera interna.\\
+
+Si queremos que un form pueda pasar la seguridad CSRF de Laravel, debemos
+agregar el helper @csrf el cual nos agrega un token.\\
+
+\begin{itemize}
+  \item Cuando estamos guardando nuevas entradas en la base de datos podemos
+    redireccionar adonde queramos en nuestra aplicación con una respuesta
+    especial de Laravel llamada redirect.
+\end{itemize}
+
+Estamos trabajando con Middlewares los cuales son muy usados en aplicaciones
+web que consisten en capas que contienen el request. Cuando llega un request,
+éste deberá pasar por diferentes capas o filtros (middlewares) quienes al final
+regresarán una respuesta. Cada uno de los filtros puede detener las peticiones
+en caso de que algo no cumpla.\\
+
+Si no se desea usar la protección CSRF se puede directamente quitar el
+middleware desde el archivo kernel.php. De la misma manera se pueden crear
+middleware propios y agregarlos aquí.\\
+
+%% Clase 16
+\section{Fake PUT/PATCH}%
+En Laravel cuando usamos recursos nos pone Put y Patch como una opción para
+modificar nuestros recursos. El problema de esto es que en un form no se puede
+especificar directamente que queremos hacer un Put o un Patch y por esto
+Laravel nos ofrece un mecanismo para hacer ”Fake PUT/PATCH” y podamos recibir y
+procesar los datos.\\
+
+Para que Laravel acepte el Put o Patch es necesario poner dentro del form de
+manera auxiliar @method(‘tipo de método usado’) y así aunque el form tenga un
+POST como método, realmente será traducido al que especifiquemos dentro del
+auxiliar.\\
+
+
+%% Clase 17
+\section{Borrando reportes}%
+De la misma forma en la que pudimos crear un “Fake PUT/PATCH” también podemos
+crear una especie de “Fake DELETE”.\\
+
+\begin{itemize}
+  \item Con Javascript podemos mostrar una alerta al borrar una entrada que nos
+    permita confirmar si la vamos a borrar o no.
+  \item Es bueno que las vistas hagan match con la acción porque permite
+    encontrar rápidamente qué vista le pertenece a qué acción.
+  \item Laravel nos ofrece el helper @method(‘delete’) ya que no se puede
+    especificar directamente en el form.
+  \item Tenemos con Laravel un método especial findOrFail que permitirá
+    regresar un error 404 si un usuario está haciendo algo no válido al
+    consultar o editar un registro en la base de datos.
+\end{itemize}
+
+%% Clase 18
+\section{Validaciones}%
+Es muy importante validar siempre la información que los usuarios ingresan en
+el sistema. En la mayoría de los casos tendrás usuarios bien intencionados que
+sólo busquen hacer uso del sistema, pero puede ocurrir que haya algún atacante
+que quiera obtener información que no le pertenece.\\
+
+Cuando por ejemplo se hace submit a un form vacío, no vamos a querer que el
+usuario final vea los errores como son lanzados sino manejarlos de alguna
+manera, así que los validamos con ayuda de Laravel.\\
+
+Laravel incluye todos los errores de validación que podamos encontrar dentro de
+un objeto especial llamado errors el cual podemos usar en nuestro template.\\
+
+\begin{itemize}
+  \item Se utiliza la línea vertical | para agregar más validaciones.
+  \item Si un usuario se equivoca al llenar los campos de formulario y al
+    intentarlo de nuevo debe ingresarlos todos otra vez, eso significará una
+    mala experiencia de usuario y creará frustración. Por esto mismo se deben
+    poner de nuevo los valores y para esto Laravel nos ofrece un auxiliar
+    especial llamado old que podemos usar en el valor del campo.
+\end{itemize}
+
+
+%% Clase 19
+\section{Creamos la vista de reportes}%
+\begin{itemize}
+  \item El método show despliega la información específica para un recurso
+    dado.
+  \item Existe una técnica en Laravel llamada model binding que antes de llegar
+    a la acción realiza el findOrFail y nos envía el objeto que se requiere.
+\end{itemize}
+
+%% Clase 20
+\section{Relaciones con eloquent}%
+\begin{itemize}
+  \item Si estamos hablando de un blogpost, es posible que éste esté
+    relacionado con múltiples comentarios y a su vez con un solo creador.
+    Existen muchas maneras para relacionar bases de datos y esto nos ayudará a
+    tener una integridad y una referencia hacia lo que necesitamos.
+  \item -m o –migration son exactamente lo mismo y se pueden usar
+    indistintamente.
+  \item Haremos una relación de muchos a uno, es decir que un reporte puede
+    tener muchos detalles.
+  \item PHP en sus últimas versiones nos ofrece que todas las clases contienen
+    la propiedad estática que es el nombre de la clase y la regresa
+    directamente.
+\end{itemize}
+
+
+%% Clase 21
+\section{Trabajando con relaciones}%
+Comenzaremos a usar tablas relacionadas
+
+
+%% Clase 22
+\section{Acción para enviar un mail}%
+Siguiendo el proyecto que se viene trabajando en el curso, y también en muchos
+otros proyectos que realices puedes querer implementar un sistema de envío de
+mails por diferentes motivos, sea avisar a alguien de tu empresa que deba salir
+de viaje sobre algo que esté sucediendo o avisar a tus clientes de alguna
+acción que se esté llevando a cabo en tu sistema o haya sido completada.\\
+
+%% Clase 23
+\section{Enviando emails}%
+Para enviar correos electrónicos necesitamos usar algún servicio especializado
+en lugar de cuentas propias tipo gmail porque estas últimas tienden a
+bloquearse al detectar mucha actividad de envíos. mailtrap.io ofrece un
+servicio especial para probar cómo funciona el envío de correos durante el
+desarrollo de una aplicación.\\
+
+\begin{itemize}
+  \item Dentro de tu cuenta de mailtrap tendrás tus diferentes bandejas de
+    entrada y al entrar a ellas encontrarás las credenciales necesarias para
+    configurar la aplicación. Lo más común es usar credenciales SMTP.
+  \item En nuestro archivo .env encontraremos cómo configurar el envío de
+    email. Necesitaremos el username y el password.
+  \item La configuración real se hace siempre dentro de la carpeta config en el
+    archivo mail.php
+  \item PHP artisan nos provee el comando make:mail que se usa para crear una
+    nueva clase de email. En Laravel los correos electrónicos son objetos que
+    podemos trabajar con ciertas características e incluso darles un template
+    para que sean rendereados.
+  \item Laravel nos ofrece un facade llamado Mail que nos ayuda a hacer el
+    envío.
+\end{itemize}
+
+%% Clase 24
+\section{Login}%
+Para evitar que todo el contenido de la aplicación sea público, es necesario
+utilizar un sistema de autentificación de los usuarios. Para esto tenemos
+muchos mecanismos en Laravel supremamente sencillos de utilizar.\\
+
+\begin{itemize}
+  \item PHP artisan nos ofrece make:auth que es una estructura para hacer un
+    login y registro básicos con las vistas y las rutas.
+  \item Al agregar la línea \$this$->$middleware('auth'); tenemos el controlador
+    protegido, lo que quiere decir que no puede ser accedido si el usuario no
+    está logueado.
+\end{itemize}
+
+%% Clase 25
+\section{Cierre}%
+
+
+
+
+
+
+
+
+
+
+
 
 
 
