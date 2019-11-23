@@ -56,7 +56,7 @@
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 
-\setlength{\parindent}{0px}  % Setea la indentacion de la primera linea de cada parrafo a cero pixeles.
+%% \setlength{\parindent}{0px}  % Setea la indentacion de la primera linea de cada parrafo a cero pixeles.
 
 
 \title{Introducción a JavaSE}
@@ -1374,29 +1374,254 @@ Podemos encontrar clases estáticas anidadas, clases internas que son locales a
 un método o clases internas anónimas. Las clases anidadas pueden llamar a
 cualquier tipo de elemento o método de nuestras clases.\\
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/039_clases_anidadas.png}
+\end{figure}
+
+Las clases internas anónimas se verán más a detenimiento en el curso de Java
+Orientado a la programación funcional.
+
 Las Clases Estáticas no necesitan ser instanciadas para poder ser llamadas y
 ejecutadas, aunque debes recordar que solo permiten llamar a los métodos
 estáticos de sus clases padre.\\
 
+\begin{minted}{java}
+  class ClaseExterior {
+    static class ClaseStaticaAnidada {
+
+    }
+
+    class ClaseInterna {
+
+    }
+  }
+\end{minted}
+
+Las clases estáticas anidadas no necesitan crear instancias para llamarlas.
+
+\begin{minted}{java}
+  public class Enclosing {
+    private static int x = 1;
+
+    public static class StaticNested {
+      private void run() {
+        // implementacion
+      }
+    }
+  }
+
+  public class Main {
+    public static void main(String[] args) {
+      Enclosing.StaticNested nested = new Enclosing.StaticNested();
+      nested.run();
+    }
+  }
+\end{minted}
 
 
+\textbf{Doctor.java}
+\begin{minted}{java}
+  import java.util.ArrayList;
+  import java.util.Date;
 
+  public class Doctor {
+      // Atributos
+      static int id = 0;   // Autoincrement
+      private String name;
+      private String email;
+      private String speciality;
 
+      Doctor() {
+          System.out.println("Construyendo el Objeto Doctor");
+      }
 
+      Doctor(String name, String speciality) {
+          System.out.println("El nombre  " + name);
+          id++;
+          this.name = name;
+          this.speciality = speciality;
+      }
 
+      // Comportamientos
+      public void showName() {
+          System.out.println(name);
+      }
 
+      public void showId() {
+          System.out.println("ID Doctor: " + id);
+      }
 
+      ArrayList<AvailableAppointment> availableAppointments = new ArrayList<>();
+      public void addAvailableAppointment(Date date, String time) {
+          availableAppointments.add(new Doctor.AvailableAppointment(date, time));
+      }
 
+      public ArrayList<AvailableAppointment> getAvailableAppointments() {
+          return availableAppointments;
+      }
 
+      public static class AvailableAppointment {
+          private int id;
+          private Date date;
+          private String time;
 
+          public AvailableAppointment(Date date, String time) {
+              this.date = date;
+              this.time = time;
+          }
 
+          public int getId() {
+              return id;
+          }
 
+          public void setId(int id) {
+              this.id = id;
+          }
 
+          public Date getDate() {
+              return date;
+          }
 
+          public void setDate(Date date) {
+              this.date = date;
+          }
 
+          public String getTime() {
+              return time;
+          }
+
+          public void setTime(String time) {
+              this.time = time;
+          }
+      }
+  }
+\end{minted}
+
+\textbf{Main.java}
+\begin{minted}{java}
+  import java.util.Date;
+
+  import static ui.UIMenu.*;
+
+  public class Main {
+      public static void main(String[] args) {
+
+          Doctor myDoctor = new Doctor("Anahí Salgado", "Pediatría");
+          myDoctor.addAvailableAppointment(new Date(), "4pm");
+          myDoctor.addAvailableAppointment(new Date(), "10pm");
+          myDoctor.addAvailableAppointment(new Date(), "1pm");
+
+          System.out.println(myDoctor.getAvailableAppointments());
+
+          /*
+          Patient patient = new Patient("Alejandra", "alejandra@mail.com");
+          patient.setWeight(54.6);
+          System.out.println(patient.getWeight());
+
+          patient.setPhoneNumber("12345678");
+          System.out.println(patient.getPhoneNumber());
+
+          */
+      }
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/040_clases_anidadas.png}
+\end{figure}
+
+Como se muestra al ejecutar el programa devuelve toda la lista de objetos.
+Ahora como solo se quiere imprimir las citas disponibles, entonces para eso
+podemos hacer un  \textbf{foreach}.\\
+
+\textbf{Main.java}
+\begin{minted}{java}
+  import java.util.Date;
+
+  import static ui.UIMenu.*;
+
+  public class Main {
+      public static void main(String[] args) {
+
+          Doctor myDoctor = new Doctor("Anahí Salgado", "Pediatría");
+          myDoctor.addAvailableAppointment(new Date(), "4pm");
+          myDoctor.addAvailableAppointment(new Date(), "10pm");
+          myDoctor.addAvailableAppointment(new Date(), "1pm");
+
+          System.out.println(myDoctor.getAvailableAppointments());
+
+          for (Doctor.AvailableAppointment aA: myDoctor.getAvailableAppointments()) {
+              System.out.println(aA.getDate() + " " + aA.getTime());
+          }
+
+          /*
+          Patient patient = new Patient("Alejandra", "alejandra@mail.com");
+          patient.setWeight(54.6);
+          System.out.println(patient.getWeight());
+
+          patient.setPhoneNumber("12345678");
+          System.out.println(patient.getPhoneNumber());
+
+          */
+      }
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/041_foreach.png}
+\end{figure}
 
 %% Clase 17
 \section{Clases Internas y Locales a un método}%
+
+Veamos las clases internas:\\
+
+\begin{minted}{java}
+  public class Outer {
+    public class Inner {
+
+    }
+  }
+
+  public class Main {
+    public static void main(String[] args) {
+      Outer outer = new Outer();
+      Outer.Inner inner = outer.new Inner();
+    }
+  }
+\end{minted}
+
+Ahora veamos las clases locales a un Método:\\
+
+
+\begin{minted}{java}
+  public class Enclosing {
+    void run() {
+      class Local {
+        void run() {
+
+        }
+      }
+
+      Local local = new Local();
+      local.run();
+    }
+  }
+
+  public class Main {
+    public static void main(String[] args) {
+      Enclosing enclosing = new Enclosing();
+      enclosing.run();
+    }
+  }
+
+\end{minted}
+
+En este punto es conveniente usar las clases estáticas ya que al no necesitar
+instanciarse los objetos ocupan menos espacio en la memoria.\\
 
 
 %% Clase 18
@@ -1423,16 +1648,16 @@ Puedo crear referencias de enumerations de la siguiente forma:\\
   Day day;
   switch (day) {
     case MONDAY:
-      System.out.println(“Mondays are good.”);
+      System.out.println("Mondays are good.");
       break;
     case FRIDAY:
-      System.out.println(“Fridays are nice”);
+      System.out.println("Fridays are nice");
       break;
     case SATURDAY: case: SUNDAY:
-      System.out.println(“Weekends are the best”);
+      System.out.println("Weekends are the best");
       break;
     default:
-      System.out.println(“Midweek are so-so”);
+      System.out.println("Midweek are so-so");
       break;
   }
 \end{minted}
@@ -1483,7 +1708,7 @@ Imprimirá: Lunes\\
 
 
 %% Clase 19
-\section{¿Qué es la Herencia? Don\'t repeat Yourself}%
+\section{¿Qué es la Herencia? Don't repeat Yourself}%
 Don’t repeat yourself (DRY) consiste en detectar cuando estamos repitiendo el
 mismo código una y otra vez para crear algún método o función que nos ayude a
 evitar estos repetidos.\\
@@ -1548,6 +1773,165 @@ anidada, subclase o superclase.\\
 \end{minted}
 
 
+\textbf{User.java}
+\begin{minted}{java}
+  public class User {
+      private int id;
+      private String name;
+      private String email;
+      private String address;
+      private String phoneNumber;
+
+      public User(String name, String email) {
+          this.name = name;
+          this.email = email;
+      }
+
+      public int getId() {
+          return id;
+      }
+
+      public void setId(int id) {
+          this.id = id;
+      }
+
+      public String getName() {
+          return name;
+      }
+
+      public void setName(String name) {
+          this.name = name;
+      }
+
+      public String getEmail() {
+          return email;
+      }
+
+      public void setEmail(String email) {
+          this.email = email;
+      }
+
+      public String getAddress() {
+          return address;
+      }
+
+      public void setAddress(String address) {
+          this.address = address;
+      }
+
+      public String getPhoneNumber() {
+          return phoneNumber;
+      }
+
+      public void setPhoneNumber(String phoneNumber) {
+          if (phoneNumber.length() > 8) {
+              System.out.println("El nro telefónico debe ser de 8 dígitos máximo");
+          } else if (phoneNumber.length() == 8) {
+              this.phoneNumber = phoneNumber;
+          }
+      }
+  }
+\end{minted}
+
+\textbf{Doctor.java}
+\begin{minted}{java}
+  import java.util.ArrayList;
+  import java.util.Date;
+
+  public class Doctor extends User {
+      // Atributo
+      private String speciality;
+
+      Doctor(String name, String email) {
+          super(name, email);
+      }
+
+      public String getSpeciality() {
+          return speciality;
+      }
+
+      public void setSpeciality(String speciality) {
+          this.speciality = speciality;
+      }
+
+      public void setAvailableAppointments(ArrayList<AvailableAppointment> availableAppointments) {
+          this.availableAppointments = availableAppointments;
+      }
+
+      ArrayList<AvailableAppointment> availableAppointments = new ArrayList<>();
+      public void addAvailableAppointment(Date date, String time) {
+          availableAppointments.add(new Doctor.AvailableAppointment(date, time));
+      }
+
+      public ArrayList<AvailableAppointment> getAvailableAppointments() {
+          return availableAppointments;
+      }
+
+      public static class AvailableAppointment {
+          private int id;
+          private Date date;
+          private String time;
+
+          public AvailableAppointment(Date date, String time) {
+              this.date = date;
+              this.time = time;
+          }
+
+          public Date getDate() {
+              return date;
+          }
+
+          public void setDate(Date date) {
+              this.date = date;
+          }
+
+          public String getTime() {
+              return time;
+          }
+
+          public void setTime(String time) {
+              this.time = time;
+          }
+      }
+  }
+\end{minted}
+
+\textbf{Patient.java}
+\begin{minted}{java}
+  public class Patient extends User {
+      // Atributos
+      private String birthday;
+      private double weight;
+      private double height;
+      String blood;
+
+      Patient(String name, String email) {
+          super(name, email);
+      }
+
+      public void setWeight(double weight) {
+          this.weight = weight;
+      }
+
+      public String getWeight() {
+          return weight + " Kg.";
+      }
+
+  }
+\end{minted}
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/042_herencia.png}
+\end{figure}
+
+Vemos como a pesar de haber refactorizado nuestro código nuestra aplicación aún
+sigue funcionando.\\
+
+\textbf{Nota: En Java no se permite la herencia múltiple.}
+
+
 %% Clase 21
 \section{Polimorfismo: Sobreescritura de Métodos}%
 El Polimorfismo es una característica de la programación orientada a objetos
@@ -1561,16 +1945,281 @@ comportamiento de los métodos que “heredan” todos nuestros objetos, así co
 La sobreescritura de constructores consiste en usar los miembros heredados de
 una supreclase pero con argumentos diferentes.\\
 
+\textbf{User.java}
+\begin{minted}{java}
+  public class User {
+      private int id;
+      private String name;
+      private String email;
+      private String address;
+      private String phoneNumber;
+
+      public User(String name, String email) {
+          this.name = name;
+          this.email = email;
+      }
+
+      public int getId() {
+          return id;
+      }
+
+      public void setId(int id) {
+          this.id = id;
+      }
+
+      public String getName() {
+          return name;
+      }
+
+      public void setName(String name) {
+          this.name = name;
+      }
+
+      public String getEmail() {
+          return email;
+      }
+
+      public void setEmail(String email) {
+          this.email = email;
+      }
+
+      public String getAddress() {
+          return address;
+      }
+
+      public void setAddress(String address) {
+          this.address = address;
+      }
+
+      public String getPhoneNumber() {
+          return phoneNumber;
+      }
+
+      public void setPhoneNumber(String phoneNumber) {
+          if (phoneNumber.length() > 8) {
+              System.out.println("El nro telefónico debe ser de 8 dígitos máximo");
+          } else if (phoneNumber.length() == 8) {
+              this.phoneNumber = phoneNumber;
+          }
+      }
+
+      @Override
+      public String toString() {
+          return "User: " + name + ", Email: " + email  +
+          "\nAddress: " + address + ". Phone: " + phoneNumber;
+      }
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/043_polimorfirmo.png}
+\end{figure}
+
+\textbf{Patient.java}
+\begin{minted}{java}
+  public class Patient extends User {
+      // Atributos
+      private String birthday;
+      private double weight;
+      private double height;
+      String blood;
+
+      Patient(String name, String email) {
+          super(name, email);
+          // mas instrucciones
+      }
+
+      public void setWeight(double weight) {
+          this.weight = weight;
+      }
+
+      public String getWeight() {
+          return weight + " Kg.";
+      }
+
+      public void setHeight(double height) {
+          this.height = height;
+      }
+
+      public String getHeight() {
+          return height + " Kg.";
+      }
+
+      @Override
+      public String toString() {
+          return super.toString() + "\nAge: " + birthday + "\n Weight: " + getWeight() +
+                  "\n Height:" + getHeight() + "\nBlood: " + blood;
+      }
+  }
+\end{minted}
+
+\textbf{Main.java}
+\begin{minted}{java}
+  import java.util.Date;
+
+  import static ui.UIMenu.*;
+
+  public class Main {
+      public static void main(String[] args) {
+
+          Doctor myDoctor = new Doctor("Anahí Salgado", "Pediatría");
+          myDoctor.addAvailableAppointment(new Date(), "4pm");
+          myDoctor.addAvailableAppointment(new Date(), "10pm");
+          myDoctor.addAvailableAppointment(new Date(), "1pm");
+
+          System.out.println(myDoctor.getAvailableAppointments());
+
+          for (Doctor.AvailableAppointment aA: myDoctor.getAvailableAppointments()) {
+              System.out.println(aA.getDate() + " " + aA.getTime());
+          }
+
+          System.out.println();
+          System.out.println();
+          Patient patient = new Patient("Alejandra", "alejandra@mail.com");
+          System.out.println(patient);
+      }
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/044_polimorfismo.png}
+\end{figure}
+
+
 Recuerda que no podemos sobrescribir los métodos marcados como final o
 static.\\
 
 
 %% Clase 22
 \section{Polimorfismo: Sobreescribiendo el método toString}%
+Recuerda que el método toString viene heredada de la clase Object. Todas las
+clases heredan de Object.\\
+
+\textbf{Doctor.java}
+\begin{minted}{java}
+  import java.util.ArrayList;
+  import java.util.Date;
+
+  public class Doctor extends User {
+      // Atributo
+      private String speciality;
+
+      Doctor(String name, String email) {
+          super(name, email);
+      }
+
+      public String getSpeciality() {
+          return speciality;
+      }
+
+      public void setSpeciality(String speciality) {
+          this.speciality = speciality;
+      }
+
+      public void setAvailableAppointments(ArrayList<AvailableAppointment> availableAppointments) {
+          this.availableAppointments = availableAppointments;
+      }
+
+      ArrayList<AvailableAppointment> availableAppointments = new ArrayList<>();
+      public void addAvailableAppointment(Date date, String time) {
+          availableAppointments.add(new Doctor.AvailableAppointment(date, time));
+      }
+
+      public ArrayList<AvailableAppointment> getAvailableAppointments() {
+          return availableAppointments;
+      }
+
+      @Override
+      public String toString() {
+          return super.toString() + "\nSpeciality: " + speciality +
+          "\nAvailable: " + availableAppointments.toString();
+      }
+
+      public static class AvailableAppointment {
+          private int id;
+          private Date date;
+          private String time;
+
+          public AvailableAppointment(Date date, String time) {
+              this.date = date;
+              this.time = time;
+          }
+
+          public Date getDate() {
+              return date;
+          }
+
+          public void setDate(Date date) {
+              this.date = date;
+          }
+
+          public String getTime() {
+              return time;
+          }
+
+          public void setTime(String time) {
+              this.time = time;
+          }
+
+          @Override
+          public String toString() {
+              return "Available Appointments \nDate: " + date + "\nTime: " + time;
+          }
+      }
+  }
+\end{minted}
+
+\textbf{Main.java}
+\begin{minted}{java}
+  import java.sql.SQLOutput;
+  import java.util.Date;
+
+  import static ui.UIMenu.*;
+
+  public class Main {
+      public static void main(String[] args) {
+
+          Doctor myDoctor = new Doctor("Anahí Salgado", "anahi@anahi.com");
+          myDoctor.addAvailableAppointment(new Date(), "4pm");
+          myDoctor.addAvailableAppointment(new Date(), "10pm");
+          myDoctor.addAvailableAppointment(new Date(), "1pm");
+
+          /*
+          System.out.println(myDoctor.getAvailableAppointments());
+
+          for (Doctor.AvailableAppointment aA: myDoctor.getAvailableAppointments()) {
+              System.out.println(aA.getDate() + " " + aA.getTime());
+          }
+          */
+
+          System.out.println(myDoctor);
+
+          System.out.println();
+          System.out.println();
+          Patient patient = new Patient("Alejandra", "alejandra@mail.com");
+          System.out.println(patient);
+      }
+  }
+\end{minted}
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/045_toString.png}
+\end{figure}
 
 
 %% Clase 23
 \section{Interfaces}%
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/046_diagrama.png}
+\end{figure}
+
 Las Interfaces son un tipo de referencia similar a una clase con solo
 constantes y definiciones de métodos, son de gran ayuda para definir los
 comportamientos que son redundantes y queremos reutilizar un más de una clase,
@@ -1594,18 +2243,194 @@ implementan en nuestras clases con implements.\\
 Recuerda que podemos heredar (implementar) más de una interfaz, pero no podemos
 hacerlo de las clases padres o superclases.\\
 
+\textbf{Model/AppointmentDoctor.java}
 \begin{minted}{java}
-  public interface ISchedulabe {
-    void schedule(Date date, String Time);
-  }
+  package Model;
+
+  import java.util.Date;
 
   public class AppointmentDoctor implements ISchedulable {
-    @Override
-    public void schedule(Date date, String Time) {
-      // ...
-    }
+      private int id;
+      private Patient patient;
+      private Doctor doctor;
+      private Date date;
+      private String time;
+
+      public int getId() {
+          return id;
+      }
+
+      public void setId(int id) {
+          this.id = id;
+      }
+
+      public Patient getPatient() {
+          return patient;
+      }
+
+      public void setPatient(Patient patient) {
+          this.patient = patient;
+      }
+
+      public Doctor getDoctor() {
+          return doctor;
+      }
+
+      public void setDoctor(Doctor doctor) {
+          this.doctor = doctor;
+      }
+
+      public Date getDate() {
+          return date;
+      }
+
+      public void setDate(Date date) {
+          this.date = date;
+      }
+
+      public String getTime() {
+          return time;
+      }
+
+      public void setTime(String time) {
+          this.time = time;
+      }
+
+      @Override
+      public void schedule(Date date, String time) {
+
+      }
   }
 \end{minted}
+
+\textbf{Model/Nurse.java}
+\begin{minted}{java}
+  package Model;
+
+  public class Nurse extends User {
+
+      private String speciality;
+
+      public Nurse(String name, String email) {
+          super(name, email);
+      }
+
+      public String getSpeciality() {
+          return speciality;
+      }
+
+      public void setSpeciality(String speciality) {
+          this.speciality = speciality;
+      }
+  }
+\end{minted}
+
+\textbf{Model/AppointmentNurse.java}
+\begin{minted}{java}
+  package Model;
+
+  import java.util.Date;
+
+  public class AppointmentNurse implements ISchedulable {
+      private int id;
+      private Nurse nurse;
+      private Patient patient;
+      private Date date;
+      private String time;
+
+      public int getId() {
+          return id;
+      }
+
+      public void setId(int id) {
+          this.id = id;
+      }
+
+      public Nurse getNurse() {
+          return nurse;
+      }
+
+      public void setNurse(Nurse nurse) {
+          this.nurse = nurse;
+      }
+
+      public Patient getPatient() {
+          return patient;
+      }
+
+      public void setPatient(Patient patient) {
+          this.patient = patient;
+      }
+
+      public Date getDate() {
+          return date;
+      }
+
+      public void setDate(Date date) {
+          this.date = date;
+      }
+
+      public String getTime() {
+          return time;
+      }
+
+      public void setTime(String time) {
+          this.time = time;
+      }
+
+      @Override
+      public void schedule(Date date, String time) {
+
+      }
+  }
+\end{minted}
+
+\textbf{ISchedulable.java}
+\begin{minted}{java}
+  package Model;
+
+  import java.util.Date;
+
+  public interface ISchedulable {
+
+      void schedule(Date date, String time);
+  }
+\end{minted}
+
+\textbf{Main.java}
+\begin{minted}{java}
+  import Model.Doctor;
+  import Model.Patient;
+
+  import java.util.Date;
+
+  public class Main {
+      public static void main(String[] args) {
+
+          Doctor myDoctor = new Doctor("Anahí Salgado", "anahi@anahi.com");
+          myDoctor.addAvailableAppointment(new Date(), "4pm");
+          myDoctor.addAvailableAppointment(new Date(), "10pm");
+          myDoctor.addAvailableAppointment(new Date(), "1pm");
+
+          /*
+          System.out.println(myDoctor.getAvailableAppointments());
+
+          for (Model.Doctor.AvailableAppointment aA: myDoctor.getAvailableAppointments()) {
+              System.out.println(aA.getDate() + " " + aA.getTime());
+          }
+          */
+
+          System.out.println(myDoctor);
+
+          System.out.println();
+          System.out.println();
+          Patient patient = new Patient("Alejandra", "alejandra@mail.com");
+          System.out.println(patient);
+      }
+  }
+\end{minted}
+
+
 
 
 %% Clase 25
@@ -1775,6 +2600,74 @@ métodos ni tampoco crearemos instancias.\\
   }
 \end{minted}
 
+\textbf{Model/User.java}
+\begin{minted}{java}
+  package Model;
+
+  public abstract class User {
+      private int id;
+      private String name;
+      private String email;
+      private String address;
+      private String phoneNumber;
+
+      public User(String name, String email) {
+          this.name = name;
+          this.email = email;
+      }
+
+      public int getId() {
+          return id;
+      }
+
+      public void setId(int id) {
+          this.id = id;
+      }
+
+      public String getName() {
+          return name;
+      }
+
+      public void setName(String name) {
+          this.name = name;
+      }
+
+      public String getEmail() {
+          return email;
+      }
+
+      public void setEmail(String email) {
+          this.email = email;
+      }
+
+      public String getAddress() {
+          return address;
+      }
+
+      public void setAddress(String address) {
+          this.address = address;
+      }
+
+      public String getPhoneNumber() {
+          return phoneNumber;
+      }
+
+      public void setPhoneNumber(String phoneNumber) {
+          if (phoneNumber.length() > 8) {
+              System.out.println("El nro telefónico debe ser de 8 dígitos máximo");
+          } else if (phoneNumber.length() == 8) {
+              this.phoneNumber = phoneNumber;
+          }
+      }
+
+      @Override
+      public String toString() {
+          return "Model.User: " + name + ", Email: " + email  +
+          "\nAddress: " + address + ". Phone: " + phoneNumber;
+      }
+  }
+\end{minted}
+
 
 %% Clase 27
 \section{Miembros abstractos}%
@@ -1799,6 +2692,278 @@ Recuerda los métodos abstractos solo se pueden implementar en clases
 abstractas. Y las clases abstractas no necesitan ser instanciadas para ser
 implementadas.\\
 
+\textbf{Model/User.java}
+\begin{minted}{java}
+  package Model;
+
+  public abstract class User {
+      private int id;
+      private String name;
+      private String email;
+      private String address;
+      private String phoneNumber;
+
+      public User(String name, String email) {
+          this.name = name;
+          this.email = email;
+      }
+
+      public int getId() {
+          return id;
+      }
+
+      public void setId(int id) {
+          this.id = id;
+      }
+
+      public String getName() {
+          return name;
+      }
+
+      public void setName(String name) {
+          this.name = name;
+      }
+
+      public String getEmail() {
+          return email;
+      }
+
+      public void setEmail(String email) {
+          this.email = email;
+      }
+
+      public String getAddress() {
+          return address;
+      }
+
+      public void setAddress(String address) {
+          this.address = address;
+      }
+
+      public String getPhoneNumber() {
+          return phoneNumber;
+      }
+
+      public void setPhoneNumber(String phoneNumber) {
+          if (phoneNumber.length() > 8) {
+              System.out.println("El nro telefónico debe ser de 8 dígitos máximo");
+          } else if (phoneNumber.length() == 8) {
+              this.phoneNumber = phoneNumber;
+          }
+      }
+
+      @Override
+      public String toString() {
+          return "Model.User: " + name + ", Email: " + email  +
+          "\nAddress: " + address + ". Phone: " + phoneNumber;
+      }
+
+      public abstract void showDataUser();
+  }
+\end{minted}
+
+\textbf{Model/Doctor.java}
+\begin{minted}{java}
+  package Model;
+
+  import java.util.ArrayList;
+  import java.util.Date;
+
+  public class Doctor extends User {
+      // Atributo
+      private String speciality;
+
+      public Doctor(String name, String email) {
+          super(name, email);
+      }
+
+      public String getSpeciality() {
+          return speciality;
+      }
+
+      public void setSpeciality(String speciality) {
+          this.speciality = speciality;
+      }
+
+      public void setAvailableAppointments(ArrayList<AvailableAppointment> availableAppointments) {
+          this.availableAppointments = availableAppointments;
+      }
+
+      ArrayList<AvailableAppointment> availableAppointments = new ArrayList<>();
+      public void addAvailableAppointment(Date date, String time) {
+          availableAppointments.add(new Doctor.AvailableAppointment(date, time));
+      }
+
+      public ArrayList<AvailableAppointment> getAvailableAppointments() {
+          return availableAppointments;
+      }
+
+      @Override
+      public String toString() {
+          return super.toString() + "\nSpeciality: " + speciality +
+          "\nAvailable: " + availableAppointments.toString();
+      }
+
+      @Override
+      public void showDataUser() {
+          System.out.println("Hospital: Cruz Roja");
+          System.out.println("Departamento: Cancerología");
+      }
+
+      public static class AvailableAppointment {
+          private int id;
+          private Date date;
+          private String time;
+
+          public AvailableAppointment(Date date, String time) {
+              this.date = date;
+              this.time = time;
+          }
+
+          public Date getDate() {
+              return date;
+          }
+
+          public void setDate(Date date) {
+              this.date = date;
+          }
+
+          public String getTime() {
+              return time;
+          }
+
+          public void setTime(String time) {
+              this.time = time;
+          }
+
+          @Override
+          public String toString() {
+              return "Available Appointments \nDate: " + date + "\nTime: " + time;
+          }
+      }
+  }
+\end{minted}
+
+\textbf{Model/Nurse.java}
+\begin{minted}{java}
+  package Model;
+
+  public class Nurse extends User {
+
+      private String speciality;
+
+      public Nurse(String name, String email) {
+          super(name, email);
+      }
+
+      @Override
+      public void showDataUser() {
+          System.out.println("Hospital: Cruz Verde");
+          System.out.println("Departamento: Nutriología, Pediatría");
+      }
+
+      public String getSpeciality() {
+          return speciality;
+      }
+
+      public void setSpeciality(String speciality) {
+          this.speciality = speciality;
+      }
+  }
+\end{minted}
+
+\textbf{Model/Patient.java}
+\begin{minted}{java}
+  package Model;
+
+  public class Patient extends User {
+      // Atributos
+      private String birthday;
+      private double weight;
+      private double height;
+      String blood;
+
+      public Patient(String name, String email) {
+          super(name, email);
+          // mas instrucciones
+      }
+
+      public void setWeight(double weight) {
+          this.weight = weight;
+      }
+
+      public String getWeight() {
+          return weight + " Kg.";
+      }
+
+      public void setHeight(double height) {
+          this.height = height;
+      }
+
+      public String getHeight() {
+          return height + " Kg.";
+      }
+
+      @Override
+      public String toString() {
+          return super.toString() + "\nAge: " + birthday + "\n Weight: " + getWeight() +
+                  "\n Height:" + getHeight() + "\nBlood: " + blood;
+      }
+
+      @Override
+      public void showDataUser() {
+          System.out.println("Paciente");
+          System.out.println("Historial completo desde nacimiento");
+      }
+  }
+\end{minted}
+
+\textbf{Main.java}
+\begin{minted}{java}
+  import Model.Doctor;
+  import Model.Patient;
+  import Model.User;
+
+  import java.util.Date;
+
+  public class Main {
+      public static void main(String[] args) {
+
+          Doctor myDoctor = new Doctor("Anahí Salgado", "anahi@anahi.com");
+          myDoctor.addAvailableAppointment(new Date(), "4pm");
+          myDoctor.addAvailableAppointment(new Date(), "10pm");
+          myDoctor.addAvailableAppointment(new Date(), "1pm");
+
+          User user = new Doctor("Anahi", "ana@ana.com");
+          user.showDataUser();
+
+          User userPa = new Patient("Anahi", "ana@ana.com");
+          userPa.showDataUser();
+
+          /*
+          System.out.println(myDoctor.getAvailableAppointments());
+
+          for (Model.Doctor.AvailableAppointment aA: myDoctor.getAvailableAppointments()) {
+              System.out.println(aA.getDate() + " " + aA.getTime());
+          }
+          */
+
+          System.out.println(myDoctor);
+
+          System.out.println();
+          System.out.println();
+          Patient patient = new Patient("Alejandra", "alejandra@mail.com");
+          System.out.println(patient);
+      }
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/050_polimorfismo_abstracto.png}
+\end{figure}
+
+
 %% Clase 28
 \section{Clases Anónimas}%
 Las Clases Anónimas son una forma de instanciar clases abstractas sin necesidad
@@ -1806,20 +2971,62 @@ de usar sus clases hijas. Pero este tipo de instanciación tiene algunas
 restricciones: el ciclo de vida de estas instancias NO es duradero, no las
 tendremos disponibles durante toda la ejecución del programa.
 
-\begin{minted}{java}
-  // Clase Abstracta:
-  public abstract class Figura {
-    abstract void dibujar();
-  }
 
-  // Clase Anónima:
-  User user = new User() {
-    @Override
-    public void showDataUser() {
-      // Instrucciones...
-    }
-  };
+\textbf{Main.java}
+\begin{minted}{java}
+  import Model.Doctor;
+  import Model.Patient;
+  import Model.User;
+
+  import java.util.Date;
+
+  public class Main {
+      public static void main(String[] args) {
+
+          Doctor myDoctor = new Doctor("Anahí Salgado", "anahi@anahi.com");
+          myDoctor.addAvailableAppointment(new Date(), "4pm");
+          myDoctor.addAvailableAppointment(new Date(), "10pm");
+          myDoctor.addAvailableAppointment(new Date(), "1pm");
+
+          User user = new Doctor("Anahi", "ana@ana.com");
+          user.showDataUser();
+
+          User userPa = new Patient("Anahi", "ana@ana.com");
+          userPa.showDataUser();
+
+          User user1 = new User("Anahi", "ana@ana.com") {
+              @Override
+              public void showDataUser() {
+                  System.out.println("Doctor\n");
+                  System.out.println("Hospital: Cruz Verde");
+                  System.out.println("Departamento: Geriatría");
+              }
+          };
+          user1.showDataUser();
+
+          /*
+          System.out.println(myDoctor.getAvailableAppointments());
+
+          for (Model.Doctor.AvailableAppointment aA: myDoctor.getAvailableAppointments()) {
+              System.out.println(aA.getDate() + " " + aA.getTime());
+          }
+          */
+
+          System.out.println(myDoctor);
+
+          System.out.println();
+          System.out.println();
+          Patient patient = new Patient("Alejandra", "alejandra@mail.com");
+          System.out.println(patient);
+      }
+  }
 \end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/051_clase_anonima.png}
+\end{figure}
+
 
 
 %% Clase 29
@@ -1904,10 +3111,208 @@ comportamiento, si es el caso.\\
 
 %% Clase 32
 \section{Simulando autenticación de usuarios}%
+En este momento la capa de modelo que maneja los objetos, vamos a unirla con la
+capa de User Interface.\\
+
+\textbf{ui/UIMenu.java}
+\begin{minted}{java}
+  package ui;
+
+  import Model.Doctor;
+  import Model.Patient;
+
+  import java.util.ArrayList;
+  import java.util.Scanner;
+
+  public class UIMenu {
+
+      public static final String[] MONTHS = {
+          "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+          "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"
+      };
+      public static Doctor doctorLogged;
+      public static Patient patientLogged;
+
+      public static void showMenu() {
+          System.out.println("Welcome to My Appointments");
+          System.out.println("Selecciona la acción deseada");
+
+          int response = 0;
+          do {
+              System.out.println("1. Doctor");
+              System.out.println("2. Patient");
+              System.out.println("0. Salir");
+
+              Scanner sc = new Scanner(System.in);
+              response = Integer.valueOf(sc.nextLine());
+
+
+              switch (response) {
+                  case 1:
+                      response = 0;
+                      System.out.println("Doctor");
+                      authUser(1);
+                      break;
+                  case 2:
+                      response = 0;
+                      authUser(2);
+                      break;
+                  case 0:
+                      System.out.println("Thank you for you visit.");
+                      break;
+                  default:
+                      System.out.println("Please select a correct answer.");
+              }
+          } while (response != 0);
+      }
+
+      private static void authUser(int userType) {
+          // userType = 1 Doctor
+          // userType = 2 Paciente
+
+          ArrayList<Doctor> doctors = new ArrayList<>();
+          doctors.add(new Doctor("Alejandro Martinez", "alejandro@mail.com"));
+          doctors.add(new Doctor("Karen Sosa", "karen@mail.com"));
+          doctors.add(new Doctor("Rocío Gómez", "rocio@mail.com"));
+
+          ArrayList<Patient> patients = new ArrayList<>();
+          patients.add(new Patient("Anahí Salgado", "anahi@mail.com"));
+          patients.add(new Patient("Roberto Rodríguez", "roberto@mail.com"));
+          patients.add(new Patient("Carlos Sánchez", "carlos@mail.com"));
+
+          boolean emailCorrect = false;
+
+          do {
+              System.out.println("Insert your email: [a@a.com] ");
+              Scanner sc = new Scanner(System.in);
+              String email = sc.nextLine();
+              if (userType == 1) {
+                  for (Doctor d: doctors) {
+                      if (d.getEmail().equals(email)) {
+                          emailCorrect = true;
+                          // Obtener el usuario logeado
+                          doctorLogged = d;
+                          // ShowDoctorMenu
+                      }
+                  }
+              }
+
+              if (userType == 2) {
+                  for (Patient p: patients) {
+                      if (p.getEmail().equals(email)) {
+                          emailCorrect = true;
+                          // Obtener el usuario logeado
+                          patientLogged = p;
+                          // ShowPatientMenu
+                      }
+                  }
+              }
+          } while (!emailCorrect);
+      }
+
+      public static void showPatientMenu() {
+          int response = 0;
+          do {
+              System.out.println("\n\n");
+              System.out.println("Model.Patient");
+              System.out.println("1. Book an appointment");
+              System.out.println("2. My appointments");
+              System.out.println("0. Return");
+
+              Scanner sc = new Scanner(System.in);
+              response = Integer.valueOf(sc.nextLine());
+
+              switch (response) {
+                  case 1:
+                      System.out.println("::Book an appointment");
+                      for (int i = 0; i < 3; i++) {
+                          System.out.println(i + ". " + MONTHS[i]);
+                      }
+                      break;
+                  case 2:
+                      System.out.println("::My appointments");
+                      break;
+                  case 0:
+                      showMenu();
+                      break;
+              }
+          } while (response != 0);
+      }
+  }
+\end{minted}
+
 
 
 %% Clase 33
 \section{Modularizando la UI de Doctores}%
+Acabamos de hacer la simulación de la autenticación de un usuario. Ahora vamos
+a modularizar nuestra interfaz de usuario.\\
+
+\textbf{ui/UIDoctorMenu.java}
+\begin{minted}{java}
+  package ui;
+
+  import java.util.Scanner;
+
+  public class UIDoctorMenu {
+      public static void showDoctorMenu() {
+          int response = 0;
+          do {
+              System.out.println("\n\n");
+              System.out.println("Doctor");
+              System.out.println("Welcome " + UIMenu.doctorLogged.getName());
+              System.out.println("1. Add Available Appointment");
+              System.out.println("2. My Schedule Appointment");
+              System.out.println("0. Logout");
+
+              Scanner sc = new Scanner(System.in);
+              response = Integer.valueOf(sc.nextLine());
+
+              switch ( response ) {
+                  case 1:
+                      break;
+                  case 2:
+                      break;
+                  case 0:
+                      UIMenu.showMenu();
+                      break;
+              }
+          } while (response != 0)
+      }
+
+      private static void showAddAvailableAppointmentsMenu() {
+          int response = 0;
+          do {
+              System.out.println();
+              System.out.println("::Add Available Appointment");
+              System.out.println(":: Select a Month");
+
+              for (int i = 0; i < 3; i++) {
+                  int j = i + 1;
+                  System.out.println(j + ". " + UIMenu.MONTHS[i]);
+              }
+              System.out.println("0. Return");
+
+              Scanner sc = new Scanner(System.in);
+              response = Integer.valueOf(sc.nextLine());
+
+              if (response > 0 && response < 4) {
+                  // 1, 2, 3
+                  int monthSelected = response;
+                  System.out.println(monthSelected + " . " + UIMenu.MONTHS[monthSelected]);
+
+                  System.out.println("Insert the date available: [dd/mm/yy] ");
+                  String date = sc.nextLine();
+
+                  System.out.println("You date is: " + date + "\n1. Correct \n2. Change Date");
+              } else if (response == 0) {
+                  showDoctorMenu();
+              }
+          } while( response != 0 );
+      }
+  }
+\end{minted}
+
 
 
 %% Clase 34
@@ -1926,8 +3331,607 @@ veces como String. Para resolver esto podemos usar SimpleDateFormat.\\
 \end{minted}
 
 
+\textbf{ui/UIDoctorMenu.java}
+\begin{minted}{java}
+  package ui;
+
+  import Model.Doctor;
+
+  import java.util.ArrayList;
+  import java.util.Scanner;
+
+  public class UIDoctorMenu {
+
+      public static ArrayList<Doctor> doctorsAvailableAppointments = new ArrayList<>();
+
+      public static void showDoctorMenu() {
+          int response = 0;
+          do {
+              System.out.println("\n\n");
+              System.out.println("Doctor");
+              System.out.println("Welcome " + UIMenu.doctorLogged.getName());
+              System.out.println("1. Add Available Appointment");
+              System.out.println("2. My Schedule Appointment");
+              System.out.println("0. Logout");
+
+              Scanner sc = new Scanner(System.in);
+              response = Integer.valueOf(sc.nextLine());
+
+              switch ( response ) {
+                  case 1:
+                      break;
+                  case 2:
+                      break;
+                  case 0:
+                      UIMenu.showMenu();
+                      break;
+              }
+          } while (response != 0);
+      }
+
+      private static void showAddAvailableAppointmentsMenu() {
+          int response = 0;
+          do {
+              System.out.println();
+              System.out.println("::Add Available Appointment");
+              System.out.println(":: Select a Month");
+
+              for (int i = 0; i < 3; i++) {
+                  int j = i + 1;
+                  System.out.println(j + ". " + UIMenu.MONTHS[i]);
+              }
+              System.out.println("0. Return");
+
+              Scanner sc = new Scanner(System.in);
+              response = Integer.valueOf(sc.nextLine());
+
+              if (response > 0 && response < 4) {
+                  // 1, 2, 3
+                  int monthSelected = response;
+                  System.out.println(monthSelected + " . " + UIMenu.MONTHS[monthSelected]);
+
+                  System.out.println("Insert the date available: [dd/mm/yy] ");
+                  String date = sc.nextLine();
+
+                  System.out.println("You date is: " + date + "\n1. Correct \n2. Change Date");
+                  int responseDate = Integer.valueOf(sc.nextLine());
+                  if (responseDate == 2) continue;
+
+                  int responseTime = 0;
+                  String time = "";
+                  do {
+                      System.out.println("Insert the time available for date: " + date + " [16:00] ");
+                      time = sc.nextLine();
+                      System.out.println("Your time is: " + time + "\n1. Correct \n2. Change Time");
+                      responseTime = Integer.valueOf(sc.nextLine());
+                  } while (responseTime == 2);
+
+                  UIMenu.doctorLogged.addAvailableAppointment(date, time);
+                  checkDoctorAvailableAppointments(UIMenu.doctorLogged);
+              } else if (response == 0) {
+                  showDoctorMenu();
+              }
+          } while( response != 0 );
+      }
+
+      private static void checkDoctorAvailableAppointments (Doctor doctor) {
+          if (doctor.getAvailableAppointments().size() > 0
+              && !doctorsAvailableAppointments.contains(doctor)) {
+              doctorsAvailableAppointments.add(doctor);
+          }
+      }
+  }
+\end{minted}
+
+\textbf{ui/UIMenu.java}
+\begin{minted}{java}
+  package ui;
+
+  import Model.Doctor;
+  import Model.Patient;
+
+  import java.util.ArrayList;
+  import java.util.Scanner;
+
+  public class UIMenu {
+
+      public static final String[] MONTHS = {
+          "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+          "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"
+      };
+      public static Doctor doctorLogged;
+      public static Patient patientLogged;
+
+      public static void showMenu() {
+          System.out.println("Welcome to My Appointments");
+          System.out.println("Selecciona la acción deseada");
+
+          int response = 0;
+          do {
+              System.out.println("1. Doctor");
+              System.out.println("2. Patient");
+              System.out.println("0. Salir");
+
+              Scanner sc = new Scanner(System.in);
+              response = Integer.valueOf(sc.nextLine());
+
+
+              switch (response) {
+                  case 1:
+                      response = 0;
+                      System.out.println("Doctor");
+                      authUser(1);
+                      break;
+                  case 2:
+                      response = 0;
+                      authUser(2);
+                      break;
+                  case 0:
+                      System.out.println("Thank you for you visit.");
+                      break;
+                  default:
+                      System.out.println("Please select a correct answer.");
+              }
+          } while (response != 0);
+      }
+
+      private static void authUser(int userType) {
+          // userType = 1 Doctor
+          // userType = 2 Paciente
+
+          ArrayList<Doctor> doctors = new ArrayList<>();
+          doctors.add(new Doctor("Alejandro Martinez", "alejandro@mail.com"));
+          doctors.add(new Doctor("Karen Sosa", "karen@mail.com"));
+          doctors.add(new Doctor("Rocío Gómez", "rocio@mail.com"));
+
+          ArrayList<Patient> patients = new ArrayList<>();
+          patients.add(new Patient("Anahí Salgado", "anahi@mail.com"));
+          patients.add(new Patient("Roberto Rodríguez", "roberto@mail.com"));
+          patients.add(new Patient("Carlos Sánchez", "carlos@mail.com"));
+
+          boolean emailCorrect = false;
+
+          do {
+              System.out.println("Insert your email: [a@a.com] ");
+              Scanner sc = new Scanner(System.in);
+              String email = sc.nextLine();
+              if (userType == 1) {
+                  for (Doctor d: doctors) {
+                      if (d.getEmail().equals(email)) {
+                          emailCorrect = true;
+                          // Obtener el usuario logeado
+                          doctorLogged = d;
+                          // ShowDoctorMenu
+                      }
+                  }
+              }
+
+              if (userType == 2) {
+                  for (Patient p: patients) {
+                      if (p.getEmail().equals(email)) {
+                          emailCorrect = true;
+                          // Obtener el usuario logeado
+                          patientLogged = p;
+                          // ShowPatientMenu
+                      }
+                  }
+              }
+          } while (!emailCorrect);
+      }
+
+      public static void showPatientMenu() {
+          int response = 0;
+          do {
+              System.out.println("\n\n");
+              System.out.println("Model.Patient");
+              System.out.println("1. Book an appointment");
+              System.out.println("2. My appointments");
+              System.out.println("0. Return");
+
+              Scanner sc = new Scanner(System.in);
+              response = Integer.valueOf(sc.nextLine());
+
+              switch (response) {
+                  case 1:
+                      System.out.println("::Book an appointment");
+                      for (int i = 0; i < 3; i++) {
+                          System.out.println(i + ". " + MONTHS[i]);
+                      }
+                      break;
+                  case 2:
+                      System.out.println("::My appointments");
+                      break;
+                  case 0:
+                      showMenu();
+                      break;
+              }
+          } while (response != 0);
+      }
+  }
+\end{minted}
+
+\textbf{Model/Doctor.java}
+\begin{minted}{java}
+  package Model;
+
+  import java.text.ParseException;
+  import java.text.SimpleDateFormat;
+  import java.util.ArrayList;
+  import java.util.Date;
+
+  public class Doctor extends User {
+      // Atributo
+      private String speciality;
+
+      public Doctor(String name, String email) {
+          super(name, email);
+      }
+
+      public String getSpeciality() {
+          return speciality;
+      }
+
+      public void setSpeciality(String speciality) {
+          this.speciality = speciality;
+      }
+
+      public void setAvailableAppointments(ArrayList<AvailableAppointment> availableAppointments) {
+          this.availableAppointments = availableAppointments;
+      }
+
+      ArrayList<AvailableAppointment> availableAppointments = new ArrayList<>();
+      public void addAvailableAppointment(String date, String time) {
+
+          availableAppointments.add(new Doctor.AvailableAppointment(date, time));
+      }
+
+      public ArrayList<AvailableAppointment> getAvailableAppointments() {
+          return availableAppointments;
+      }
+
+      @Override
+      public String toString() {
+          return super.toString() + "\nSpeciality: " + speciality +
+          "\nAvailable: " + availableAppointments.toString();
+      }
+
+      @Override
+      public void showDataUser() {
+          System.out.println("Hospital: Cruz Roja");
+          System.out.println("Departamento: Cancerología");
+      }
+
+      public static class AvailableAppointment {
+          private int id;
+          private Date date;
+          private String time;
+          SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+          public AvailableAppointment(String date, String time) {
+              try {
+                  this.date = format.parse(date);
+              } catch (ParseException e) {
+                  e.printStackTrace();
+              }
+              this.time = time;
+          }
+
+          public Date getDate() {
+              return date;
+          }
+
+          public String getDate(String DATE) {
+              return format.format(date);
+          }
+
+          public void setDate(Date date) {
+              this.date = date;
+          }
+
+          public String getTime() {
+              return time;
+          }
+
+          public void setTime(String time) {
+              this.time = time;
+          }
+
+          @Override
+          public String toString() {
+              return "Available Appointments \nDate: " + date + "\nTime: " + time;
+          }
+      }
+  }
+\end{minted}
+
+
 %% Clase 35
 \section{Modularizando la UI de Pacientes}%
+Antes de correr nuestro proyecto, vamos a agregar los menus que acabamos de
+crear.\\
+
+\textbf{ui/UIMenu.java}
+\begin{minted}{java}
+  package ui;
+
+  import Model.Doctor;
+  import Model.Patient;
+
+  import java.util.ArrayList;
+  import java.util.Scanner;
+
+  public class UIMenu {
+
+      public static final String[] MONTHS = {
+          "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+          "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"
+      };
+      public static Doctor doctorLogged;
+      public static Patient patientLogged;
+
+      public static void showMenu() {
+          System.out.println("Welcome to My Appointments");
+          System.out.println("Selecciona la acción deseada");
+
+          int response = 0;
+          do {
+              System.out.println("1. Doctor");
+              System.out.println("2. Patient");
+              System.out.println("0. Salir");
+
+              Scanner sc = new Scanner(System.in);
+              response = Integer.valueOf(sc.nextLine());
+
+
+              switch (response) {
+                  case 1:
+                      response = 0;
+                      System.out.println("Doctor");
+                      authUser(1);
+                      break;
+                  case 2:
+                      response = 0;
+                      authUser(2);
+                      break;
+                  case 0:
+                      System.out.println("Thank you for you visit.");
+                      break;
+                  default:
+                      System.out.println("Please select a correct answer.");
+              }
+          } while (response != 0);
+      }
+
+      private static void authUser(int userType) {
+          // userType = 1 Doctor
+          // userType = 2 Paciente
+
+          ArrayList<Doctor> doctors = new ArrayList<>();
+          doctors.add(new Doctor("Alejandro Martinez", "alejandro@mail.com"));
+          doctors.add(new Doctor("Karen Sosa", "karen@mail.com"));
+          doctors.add(new Doctor("Rocío Gómez", "rocio@mail.com"));
+
+          ArrayList<Patient> patients = new ArrayList<>();
+          patients.add(new Patient("Anahí Salgado", "anahi@mail.com"));
+          patients.add(new Patient("Roberto Rodríguez", "roberto@mail.com"));
+          patients.add(new Patient("Carlos Sánchez", "carlos@mail.com"));
+
+          boolean emailCorrect = false;
+
+          do {
+              System.out.println("Insert your email: [a@a.com] ");
+              Scanner sc = new Scanner(System.in);
+              String email = sc.nextLine();
+              if (userType == 1) {
+                  for (Doctor d: doctors) {
+                      if (d.getEmail().equals(email)) {
+                          emailCorrect = true;
+                          // Obtener el usuario logeado
+                          doctorLogged = d;
+                          UIDoctorMenu.showDoctorMenu();
+                      }
+                  }
+              }
+
+              if (userType == 2) {
+                  for (Patient p: patients) {
+                      if (p.getEmail().equals(email)) {
+                          emailCorrect = true;
+                          // Obtener el usuario logeado
+                          patientLogged = p;
+                          // ShowPatientMenu
+                      }
+                  }
+              }
+          } while (!emailCorrect);
+      }
+
+      public static void showPatientMenu() {
+          int response = 0;
+          do {
+              System.out.println("\n\n");
+              System.out.println("Model.Patient");
+              System.out.println("1. Book an appointment");
+              System.out.println("2. My appointments");
+              System.out.println("0. Return");
+
+              Scanner sc = new Scanner(System.in);
+              response = Integer.valueOf(sc.nextLine());
+
+              switch (response) {
+                  case 1:
+                      System.out.println("::Book an appointment");
+                      for (int i = 0; i < 3; i++) {
+                          System.out.println(i + ". " + MONTHS[i]);
+                      }
+                      break;
+                  case 2:
+                      System.out.println("::My appointments");
+                      break;
+                  case 0:
+                      showMenu();
+                      break;
+              }
+          } while (response != 0);
+      }
+  }
+\end{minted}
+
+\textbf{ui/UIDoctorMenu.java}
+\begin{minted}{java}
+  package ui;
+
+  import Model.Doctor;
+
+  import java.util.ArrayList;
+  import java.util.Scanner;
+
+  public class UIDoctorMenu {
+
+      public static ArrayList<Doctor> doctorsAvailableAppointments = new ArrayList<>();
+
+      public static void showDoctorMenu() {
+          int response = 0;
+          do {
+              System.out.println("\n\n");
+              System.out.println("Doctor");
+              System.out.println("Welcome " + UIMenu.doctorLogged.getName());
+              System.out.println("1. Add Available Appointment");
+              System.out.println("2. My Schedule Appointment");
+              System.out.println("0. Logout");
+
+              Scanner sc = new Scanner(System.in);
+              response = Integer.valueOf(sc.nextLine());
+
+              switch ( response ) {
+                  case 1:
+                      showAddAvailableAppointmentsMenu();
+                      break;
+                  case 2:
+                      break;
+                  case 0:
+                      UIMenu.showMenu();
+                      break;
+              }
+          } while (response != 0);
+      }
+
+      private static void showAddAvailableAppointmentsMenu() {
+          int response = 0;
+          do {
+              System.out.println();
+              System.out.println("::Add Available Appointment");
+              System.out.println(":: Select a Month");
+
+              for (int i = 0; i < 3; i++) {
+                  int j = i + 1;
+                  System.out.println(j + ". " + UIMenu.MONTHS[i]);
+              }
+              System.out.println("0. Return");
+
+              Scanner sc = new Scanner(System.in);
+              response = Integer.valueOf(sc.nextLine());
+
+              if (response > 0 && response < 4) {
+                  // 1, 2, 3
+                  int monthSelected = response;
+                  System.out.println(monthSelected + " . " + UIMenu.MONTHS[monthSelected-1]);
+
+                  System.out.println("Insert the date available: [dd/mm/yy] ");
+                  String date = sc.nextLine();
+
+                  System.out.println("You date is: " + date + "\n1. Correct \n2. Change Date");
+                  int responseDate = Integer.valueOf(sc.nextLine());
+                  if (responseDate == 2) continue;
+
+                  int responseTime = 0;
+                  String time = "";
+                  do {
+                      System.out.println("Insert the time available for date: " + date + " [16:00] ");
+                      time = sc.nextLine();
+                      System.out.println("Your time is: " + time + "\n1. Correct \n2. Change Time");
+                      responseTime = Integer.valueOf(sc.nextLine());
+                  } while (responseTime == 2);
+
+                  UIMenu.doctorLogged.addAvailableAppointment(date, time);
+                  checkDoctorAvailableAppointments(UIMenu.doctorLogged);
+              } else if (response == 0) {
+                  showDoctorMenu();
+              }
+          } while( response != 0 );
+      }
+
+      private static void checkDoctorAvailableAppointments (Doctor doctor) {
+          if (doctor.getAvailableAppointments().size() > 0
+              && !doctorsAvailableAppointments.contains(doctor)) {
+              doctorsAvailableAppointments.add(doctor);
+          }
+      }
+  }
+\end{minted}
+
+\textbf{Main.java}
+\begin{minted}{java}
+  import static ui.UIMenu.showMenu;
+
+  public class Main {
+      public static void main(String[] args) {
+          showMenu();
+      }
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/052_uidoctor_funcional.png}
+\end{figure}
+
+
+Ahora vamos a empezar a trabajar con el interfaz de usuario para Patient.\\
+
+\textbf{ui/UIPatientMenu.java}
+\begin{minted}{java}
+  package ui;
+
+  import java.util.Scanner;
+
+  public class UIPatientMenu {
+
+      public static void showPatientMenu() {
+          int response = 0;
+          do {
+              System.out.println("\n\n");
+              System.out.println("Patient");
+              System.out.println("Welcome: " + UIMenu.patientLogged);
+              System.out.println("1. Book an appointment");
+              System.out.println("2. My Appointments");
+              System.out.println("0. Logout");
+
+              Scanner sc = new Scanner(System.in);
+              response = Integer.valueOf(sc.nextLine());
+
+              switch (response) {
+                  case 1:
+                      break;
+                  case 2:
+                      break;
+                  case 0:
+                      UIMenu.showMenu();
+                      break;
+              }
+          } while (response != 0);
+      }
+
+      private static void showBookAppointmentMenu() {
+          int response = 0;
+          do {
+              System.out.println("::Book an appointment");
+              System.out.println(":: Select date: ");
+          } while (response != 0);
+      }
+
+  }
+\end{minted}
 
 
 %% Clase 36
@@ -1956,8 +3960,300 @@ citas médicas.\\
   Map<Integer, Map<Integer, Doctor>> doctors = new TreeMap<>();
 \end{minted}
 
+\textbf{ui/UIPatientMenu.java}
+\begin{minted}{java}
+  package ui;
+
+  import Model.Doctor;
+
+  import java.util.ArrayList;
+  import java.util.Map;
+  import java.util.Scanner;
+  import java.util.TreeMap;
+
+  public class UIPatientMenu {
+
+      public static void showPatientMenu() {
+          int response = 0;
+          do {
+              System.out.println("\n\n");
+              System.out.println("Patient");
+              System.out.println("Welcome: " + UIMenu.patientLogged);
+              System.out.println("1. Book an appointment");
+              System.out.println("2. My Appointments");
+              System.out.println("0. Logout");
+
+              Scanner sc = new Scanner(System.in);
+              response = Integer.valueOf(sc.nextLine());
+
+              switch (response) {
+                  case 1:
+                      break;
+                  case 2:
+                      break;
+                  case 0:
+                      UIMenu.showMenu();
+                      break;
+              }
+          } while (response != 0);
+      }
+
+      private static void showBookAppointmentMenu() {
+          int response = 0;
+          do {
+              System.out.println("::Book an appointment");
+              System.out.println(":: Select date: ");
+              // Numeracion de la lista de fechas
+              // Indice de la fecha seleccionada
+              // [doctors]
+              // 1.- doctor 1
+                      // - 1 fecha 1
+                      // - 2 fecha 2
+              // 2.- doctor 2
+              // 3.- doctor 3
+              Map<Integer, Map<Integer, Doctor>> doctors = new TreeMap<>();
+              int k=0;
+              for (int i=1; i<UIDoctorMenu.doctorsAvailableAppointments.size(); i++) {
+                  ArrayList<Doctor.AvailableAppointment> availableAppointments
+                          = UIDoctorMenu.doctorsAvailableAppointments.get(i).getAvailableAppointments();
+
+                  Map<Integer, Doctor> doctorAppointments = new TreeMap<>();
+
+                  for (int j = 0; j < availableAppointments.size(); j++) {
+                      k++;
+                      System.out.println(k + ". " + availableAppointments.get(j).getDate());
+                      doctorAppointments.put(Integer.valueOf(j), UIDoctorMenu.doctorsAvailableAppointments.get(i));
+                      doctors.put(Integer.valueOf(k), doctorAppointments);
+                  }
+              }
+
+              Scanner sc = new Scanner(System.in);
+              int responseDateSelected = Integer.valueOf(sc.nextLine());
+
+          } while (response != 0);
+      }
+
+  }
+\end{minted}
+
+
+\textbf{Model/Doctor.java}
+\begin{minted}{java}
+  package Model;
+
+  import java.text.ParseException;
+  import java.text.SimpleDateFormat;
+  import java.util.ArrayList;
+  import java.util.Date;
+
+  public class Doctor extends User {
+      // Atributo
+      private String speciality;
+      private ArrayList<AvailableAppointment> availableAppointments = new ArrayList<>();
+
+      public Doctor(String name, String email) {
+          super(name, email);
+      }
+
+      public String getSpeciality() {
+          return speciality;
+      }
+
+      public void setSpeciality(String speciality) {
+          this.speciality = speciality;
+      }
+
+      public void setAvailableAppointments(ArrayList<AvailableAppointment> availableAppointments) {
+          this.availableAppointments = availableAppointments;
+      }
+
+      public void addAvailableAppointment(String date, String time) {
+
+          availableAppointments.add(new Doctor.AvailableAppointment(date, time));
+      }
+
+      public ArrayList<AvailableAppointment> getAvailableAppointments() {
+          return availableAppointments;
+      }
+
+      @Override
+      public String toString() {
+          return super.toString() + "\nSpeciality: " + speciality +
+          "\nAvailable: " + availableAppointments.toString();
+      }
+
+      @Override
+      public void showDataUser() {
+          System.out.println("Hospital: Cruz Roja");
+          System.out.println("Departamento: Cancerología");
+      }
+
+      public static class AvailableAppointment {
+          private int id;
+          private Date date;
+          private String time;
+          SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+          public AvailableAppointment(String date, String time) {
+              try {
+                  this.date = format.parse(date);
+              } catch (ParseException e) {
+                  e.printStackTrace();
+              }
+              this.time = time;
+          }
+
+          public Date getDate(String DATE) {
+              return date;
+          }
+
+          public String getDate() {
+              return format.format(date);
+          }
+
+          public void setDate(Date date) {
+              this.date = date;
+          }
+
+          public String getTime() {
+              return time;
+          }
+
+          public void setTime(String time) {
+              this.time = time;
+          }
+
+          @Override
+          public String toString() {
+              return "Available Appointments \nDate: " + date + "\nTime: " + time;
+          }
+      }
+  }
+\end{minted}
+
+
 %% Clase 37
 \section{Agendando Citas}%
+
+\textbf{ui/UIPatientMenu.java}
+\begin{minted}{java}
+  package ui;
+
+  import Model.Doctor;
+
+  import java.util.ArrayList;
+  import java.util.Map;
+  import java.util.Scanner;
+  import java.util.TreeMap;
+
+  public class UIPatientMenu {
+
+      public static void showPatientMenu() {
+          int response = 0;
+          do {
+              System.out.println("\n\n");
+              System.out.println("Patient");
+              System.out.println("Welcome: " + UIMenu.patientLogged);
+              System.out.println("1. Book an appointment");
+              System.out.println("2. My Appointments");
+              System.out.println("0. Logout");
+
+              Scanner sc = new Scanner(System.in);
+              response = Integer.valueOf(sc.nextLine());
+
+              switch (response) {
+                  case 1:
+                      showBookAppointmentMenu();
+                      break;
+                  case 2:
+                      break;
+                  case 0:
+                      UIMenu.showMenu();
+                      break;
+              }
+          } while (response != 0);
+      }
+
+      private static void showBookAppointmentMenu() {
+          int response = 0;
+          do {
+              System.out.println("::Book an appointment");
+              System.out.println(":: Select date: ");
+              // Numeracion de la lista de fechas
+              // Indice de la fecha seleccionada
+              // [doctors]
+              // 1.- doctor 1
+                      // - 1 fecha 1
+                      // - 2 fecha 2
+              // 2.- doctor 2
+              // 3.- doctor 3
+              Map<Integer, Map<Integer, Doctor>> doctors = new TreeMap<>();
+              int k=0;
+              for (int i=1; i<UIDoctorMenu.doctorsAvailableAppointments.size(); i++) {
+                  ArrayList<Doctor.AvailableAppointment> availableAppointments
+                          = UIDoctorMenu.doctorsAvailableAppointments.get(i).getAvailableAppointments();
+
+                  Map<Integer, Doctor> doctorAppointments = new TreeMap<>();
+
+                  for (int j = 0; j < availableAppointments.size(); j++) {
+                      k++;
+                      System.out.println(k + ". " + availableAppointments.get(j).getDate());
+                      doctorAppointments.put(Integer.valueOf(j), UIDoctorMenu.doctorsAvailableAppointments.get(i));
+                      doctors.put(Integer.valueOf(k), doctorAppointments);
+                  }
+              }
+
+              Scanner sc = new Scanner(System.in);
+              int responseDateSelected = Integer.valueOf(sc.nextLine());
+              Map<Integer, Doctor> doctorAvailableSelected = doctors.get(responseDateSelected);
+              Integer indexDate = 0;
+              Doctor doctorSelected = new Doctor("", "");
+
+              for (Map.Entry<Integer, Doctor> doc :doctorAvailableSelected.entrySet()) {
+                  indexDate = doc.getKey();
+                  doctorSelected = doc.getValue();
+              }
+
+              System.out.println(doctorSelected.getName() +
+                      ". Date: " + doctorSelected.getAvailableAppointments().get(indexDate).getDate() +
+                      ". Time: " + doctorSelected.getAvailableAppointments().get(indexDate).getTime());
+
+              System.out.println("Confirm your appointment: \n1. Yes \n2. Change Data");
+              response = Integer.valueOf(sc.nextLine());
+
+              if (response == 1) {
+                  UIMenu.patientLogged.addAppointmentDoctors(
+                          doctorSelected,
+                          doctorSelected.getAvailableAppointments().get(indexDate).getDate(null),
+                          doctorSelected.getAvailableAppointments().get(indexDate).getTime());
+
+                  showPatientMenu();
+              }
+          } while (response != 0);
+      }
+
+      private static void showPatientMyAppointments() {
+          int response = 0;
+          do {
+              System.out.println("::My Appointments");
+              if (UIMenu.patientLogged.getAppointmentDoctors().size() == 0) {
+                  System.out.println("Don't have appointments");
+                  break;
+              }
+
+              for (int i = 0; i < UIMenu.patientLogged.getAppointmentDoctors().size(); i++) {
+                  int j = i + 1;
+                  System.out.println(j + ". " +
+                          "Date: " + UIMenu.patientLogged.getAppointmentDoctors().get(i).getDate() +
+                          " Time: " + UIMenu.patientLogged.getAppointmentDoctors().get(i).getTime() +
+                          "\n Doctor: " + UIMenu.patientLogged.getAppointmentDoctors().get(i).getDoctor().getName());
+              }
+
+              System.out.println("0. Return");
+          } while (response != 0);
+      }
+  }
+\end{minted}
 
 
 %% Clase 38
