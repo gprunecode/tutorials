@@ -1037,19 +1037,113 @@ sistemas de bases de datos.\\
 
 %% Clase 9
 \section{Migraciones en Artisan}%
-Aprende más en el Curso de PHP con Laravel disponible en tu suscripción en:
-http://platzi.com/laravel\\
-
-Adquiere hoy la suscripción de Platzi en: http://platzi.com/precios\\
-
-Aprende a crear migraciones para estructurar las bases de datos que generamos
-por defecto con la ayuda de Laravel.\\
-
 Laravel es un framework de código abierto que agiliza el desarrollo de
 aplicaciones web con PHP utilizando la arquitectura MVC y nos permite resolver
 necesidades actuales como el manejo de eventos y la autenticación de usuarios.
 Además, cuenta con un código modular y extensible por medio de un administrador
 de paquetes y un soporte robusto para manejo de bases de datos.\\
+
+
+\begin{minted}{bash}
+  php artisan make:migration create_table_expense_reports --create=expense_reports
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/026_create_table_artisan.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/027_migration_file.png}
+\end{figure}
+
+
+\begin{minted}{bash}
+  php artisan migrate
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/028_migrate.png}
+\end{figure}
+
+Luego vemos que se ha creado la tabla correctamente, con algunos campos
+predeterminados.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/029_table_created.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/030_expense_reports.png}
+\end{figure}
+
+Como se observa ahora se ha agregado el nombre del fichero a la tabla
+migrations.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/031_migrations_table.png}
+\end{figure}
+
+Nótece los números que se encuentran en el campo \textbf{batch}.\\
+Estos números nos sirven de guía cuando hagamos \textbf{rollback}.
+
+\begin{minted}{bash}
+  php artisan migrate:rollback
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/032_rollback.png}
+\end{figure}
+
+Veamos la tabla \textbf{migrations} esta vez.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/033_migrations_table.png}
+\end{figure}
+
+Si hacemos nuevamente un \textbf{rollback}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/034_rolback.png}
+\end{figure}
+
+Como observamos ahora, no hay ningun registro en nuestra tabla
+\textbf{migrations}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/035_migrations_table.png}
+\end{figure}
+
+Sin embargo los archivos de migración aún se encuentran en nuestro directorio
+\textbf{database/migrations}.\\
+Podemos usar el siguiente comando para reestableces nuestras tablas.\\
+
+\begin{minted}{bash}
+  php artisan migrate
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/036_migrate_again.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/037_migrations_table.png}
+\end{figure}
+
+Como se observa, ahora todos los registros en nuestra tabla \textbf{migrations}
+tienen \textbf{batch} con valor 1.
+
 
 %% Clase 10
 \section{Modelos con Eloquent}%
