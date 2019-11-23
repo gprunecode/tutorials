@@ -1165,6 +1165,64 @@ mucho en los lenguajes de programación orientada a objetos.\\
     Eloquent.
 \end{itemize}
 
+Siempre podemos visualizar información de ayuda para el uso de los comandos
+agregando el flag --help.
+
+\begin{minted}{bash}
+  php artisan make:model --help
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/038_make_model_help.png}
+\end{figure}
+
+Ahora vamos a crear un Modelo.
+
+\begin{minted}{bash}
+  php artisan make:model ExpenseReport
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/039_model_created.png}
+\end{figure}
+
+Con Laravel no hay una carpeta \textbf{Model} o \textbf{Entity}, sino que todos
+los modelos se almacenan dentro de la carpeta \textbf{app/}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/039_model_created_tree.png}
+\end{figure}
+
+Hay una herramienta que nos permite interactuar con nuestro código, como una
+expecie de entorno de pruebas o sandbox y carga todos los componentes
+inicializados que estan incluidos en Laravel, en este caso usaremos Eloquent y
+vamos a jugar un poco.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/040_artisan_tinker.png}
+\end{figure}
+
+Como se ve con la primera instrucción le consultamos cuantos ExpertReports
+tenemos actualmente y nos devolvió una colección de Eloquent pero como un array
+vacío. En la segunda instrucción creamos un nuevo reporte y nos devuelve que se
+creó el reporte, pero es un objeto en memoria. Con la tercera instrucción
+persistimos el reporte con el metodo \textbf{save}, esto nos devuelve un true
+que indica que se realizó exitosamente. Con la cuarta instrucción volvemos a
+consultar el contenido de la tabla con el modelo ExpenseReport y nos devuelve
+una colección de eloquent con la propiedad all con el primer ExpenseReport
+creado con el id 1 y las fechas de created\_at y updated\_at. Esto lo podemos
+visualizar también en nuestro cliente de Base de Datos.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/041_registro_expense_reports.png}
+\end{figure}
+
+
 %% Clase 11
 \section{Trabajando con un Modelo}%
 \begin{itemize}
