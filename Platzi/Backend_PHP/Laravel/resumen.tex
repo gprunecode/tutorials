@@ -888,14 +888,37 @@ configurando Laravel como el nombre, el entorno de desarrollo, si muestra o no
 debug, la URL de nuestra app, datos de conexión a nuestra base de datos, entre
 otras opciones.\\
 
+\textbf{APP\_NAME} indica el nombre de la aplicación, \textbf{APP\_ENV} recibe
+"local" cuando se está en desarrollo y \textbf{production} es cuando ya lo
+liberamos, en \textbf{APP\_DEBUG} especificamos si nuestra aplicación muestra
+los errores o no los muestra, en \textbf{DB\_CONNECTION} indica la base de datos
+en la que estás trabajando (recuerda que Laravel trabaja con un ORM llamado
+Eloquent), \textbf{DB\_HOST} almacena la dirección del host, \textbf{DB\_PORT} el
+puerto, \textbf{DB\_DATABASE} el nombre de la base de datos,
+\textbf{DB\_USERNAME} el nombre de usuario, \textbf{DB\_PASSWORD} la
+contraseña.\\
+
+Para este ejemplo vamos a utilizar como nombre de nuestra base de datos
+\textbf{cursolaravel} y en  \textbf{DB\_HOST} ya que estamos trabajando en
+devilbox entonces indicaremos el virtualhost creado, en nuestro caso se llama
+\textbf{my\_laravel.loc}\\
+
 Toda la configuración que hacemos realmente se está llamando dentro de los
 archivos que están en la carpeta config\\
+
+Ahora vamos a crear una nueva base de datos:
 
 \begin{itemize}
   \item Si vienes del curso de introducción a PHP, seguramente tienes
     PHPMyAdmin el cual puedes seguir usando o puedes cambiar a cualquier
     cliente que te guste.
 \end{itemize}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/022_bd.png}
+\end{figure}
+
 
 %% Clase 8
 \section{Cómo funcionan las Migraciones de DB}%
