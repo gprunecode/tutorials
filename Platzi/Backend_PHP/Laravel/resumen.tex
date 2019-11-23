@@ -992,8 +992,33 @@ migraciones para tener los esquemas adecuados.\\
 \end{itemize}
 
 Puedes encontrar las migraciones en la carpeta database/migrations. Laravel nos
-ofrece dos migraciones de inicio que son para crear tablas de usuarios y para
-crear una tabla de resets de passwords.\\
+ofrece tres migraciones de inicio que son para crear tablas de usuarios, para
+crear una tabla de resets de passwords y otra tabla para registrar trabajos
+fallidos.\\
+
+\begin{minted}{bash}
+  php artisan migrate
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/023_migrate.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/024_migrate.png}
+\end{figure}
+
+Si vemos el contenido de la tabla migrations, encontraremos los ficheros que se
+encontraban en database/migrations, si en caso nosotros añadimos algun fichero
+entonces este no figurará en esta tabla hasta que hagamos la migración.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/025_table_migrations.png}
+\end{figure}
+
 
 Las migraciones tienen dos partes:
 
