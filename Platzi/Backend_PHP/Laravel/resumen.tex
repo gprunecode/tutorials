@@ -2219,6 +2219,13 @@ dentro de los grupos en esta misma sección.\\
 
 %% Clase 16
 \section{Fake PUT/PATCH}%
+Ahora que ya podemos crear reportes, vamos a \textbf{editarlos}. Normalmente
+cuando estamos trabajando en edición, enviamos también métodos post hacia un
+endpoint especial y en ese endpoint guardamos cualquier cambio que se quiera
+hacer al objeto. Pero en Laravel cuando estamos utilizando \textbf{recursos}
+ellos nos proponen que utilicemos el Put y el Path como una opción para
+modificar nuestros recursos.\\
+
 En Laravel cuando usamos recursos nos pone Put y Patch como una opción para
 modificar nuestros recursos. El problema de esto es que en un form no se puede
 especificar directamente que queremos hacer un Put o un Patch y por esto
@@ -2229,6 +2236,376 @@ Para que Laravel acepte el Put o Patch es necesario poner dentro del form de
 manera auxiliar @method(‘tipo de método usado’) y así aunque el form tenga un
 POST como método, realmente será traducido al que especifiquemos dentro del
 auxiliar.\\
+
+\textbf{resources/views/expenseReport/index.blade.php}
+\begin{minted}{html+php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>Reports</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-primary" href="/expense_reports/create">Create a new report</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <table class="table">
+                  @foreach ($expenseReports as $expenseReport)
+                      <tr>
+                          <td>{{ $expenseReport->title }}</td>
+                          <td><a href="/expense_reports/{{$expenseReport->id}}/edit">Edit</a></td>
+                      </tr>
+                  @endforeach
+              </table>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+Como se verifica se ha creado una nueva columna con el enlace \textbf{Edit} que
+nos redireccionará un enlace en el que editaremos el registro.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/070_columna_edit.png}
+\end{figure}
+
+Se puede ver el url que incluye el id del registro que vamos a modificar.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/071_url_edit.png}
+\end{figure}
+
+Laravel nos indica que en el método \textbf{edit} será el encargado de mostrar
+el formulario que editará el recurso especificado.\\
+
+Vamos a crear una nueva vista, esta vez para \textbf{edit} basándonos en
+\textbf{create}:
+
+\textbf{resources/views/expenseReport/edit.blade.php}
+\begin{minted}{html+php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>Edit Report {{ $report->id }}</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-secondary" href="/expense_reports">Back</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <form action="/expense_reports" method="post">
+                  @csrf
+                  @method('put')
+                  <div class="form-group">
+                      <label for="title">Title:</label>
+                      <input type="text" class="form-control" name="title" id="title" placeholder="Type a title">
+                  </div>
+                  <button class="btn btn-primary" type="submit">Submit</button>
+              </form>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+Así mismo en el método \textbf{edit} retornaremos la vista pasándole el objeto
+\textbf{\$report}.
+
+\textbf{app/Http/Controllers/ExpenseReportController.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use App\ExpenseReport;
+  use Illuminate\Http\Request;
+
+  class ExpenseReportController extends Controller
+  {
+      /**
+      * Display a listing of the resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function index()
+      {
+          return view('expenseReport.index', [
+              'expenseReports' => ExpenseReport::all()
+          ]);
+      }
+
+      /**
+      * Show the form for creating a new resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function create()
+      {
+          return view('expenseReport.create');
+      }
+
+      /**
+      * Store a newly created resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @return \Illuminate\Http\Response
+      */
+      public function store(Request $request)
+      {
+          $report = new ExpenseReport();
+          $report->title = $request->get('title');
+          $report->save();
+
+          return redirect('/expense_reports');
+      }
+
+      /**
+      * Display the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function show($id)
+      {
+          //
+      }
+
+      /**
+      * Show the form for editing the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function edit($id)
+      {
+          $report = ExpenseReport::find($id);
+          return view('expenseReport.edit', [
+              'report' => $report
+          ]);
+      }
+
+      /**
+      * Update the specified resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function update(Request $request, $id)
+      {
+          dd('put update');
+      }
+
+      /**
+      * Remove the specified resource from storage.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function destroy($id)
+      {
+          //
+      }
+  }
+\end{minted}
+
+Ahora hacemos submit en el formulario para editar y con el método \textbf{dd}
+verificaremos si se esta ingresando al método update.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/072_submit_test.png}
+\end{figure}
+
+Se verifica un error que menciona que la ruta indicada no soporta el método
+PUT. Esto se debe a que el url \textbf{expense\_report} sin un id no acepta al
+método PUT.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/073_error_put.png}
+\end{figure}
+
+Entonces vamos a modificar el url indicado en \textbf{action} del formulario.\\
+
+\textbf{resources/views/expenseReport/edit.blade.php}
+\begin{minted}{php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>Edit Report {{ $report->id }}</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-secondary" href="/expense_reports">Back</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <form action="/expense_reports/{{ $report->id }}" method="post">
+                  @csrf
+                  @method('put')
+                  <div class="form-group">
+                      <label for="title">Title:</label>
+                      <input type="text" class="form-control" name="title" id="title" placeholder="Type a title">
+                  </div>
+                  <button class="btn btn-primary" type="submit">Submit</button>
+              </form>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+Ahora recargamos nuestra página y volvemos a dar clic en editar y probamos
+enviar cualquier contenido en el formulario con submit. Entonces obtendremos lo
+siguiente:\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/073_error_put.png}
+\end{figure}
+
+Ahora que ya pudimos ingresar al método \textbf{update}, entonces vamos
+modificar su comportamiento para poder persistir los cambios de la edición.\\
+
+\textbf{app/Http/Controllers/ExpenseReportController.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use App\ExpenseReport;
+  use Illuminate\Http\Request;
+
+  class ExpenseReportController extends Controller
+  {
+      /**
+      * Display a listing of the resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function index()
+      {
+          return view('expenseReport.index', [
+              'expenseReports' => ExpenseReport::all()
+          ]);
+      }
+
+      /**
+      * Show the form for creating a new resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function create()
+      {
+          return view('expenseReport.create');
+      }
+
+      /**
+      * Store a newly created resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @return \Illuminate\Http\Response
+      */
+      public function store(Request $request)
+      {
+          $report = new ExpenseReport();
+          $report->title = $request->get('title');
+          $report->save();
+
+          return redirect('/expense_reports');
+      }
+
+      /**
+      * Display the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function show($id)
+      {
+          //
+      }
+
+      /**
+      * Show the form for editing the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function edit($id)
+      {
+          $report = ExpenseReport::find($id);
+          return view('expenseReport.edit', [
+              'report' => $report
+          ]);
+      }
+
+      /**
+      * Update the specified resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function update(Request $request, $id)
+      {
+          $report = ExpenseReport::find($id);
+          $report->title = $request->get('title');
+          $report->save();
+
+          return redirect('/expense_reports');
+      }
+
+      /**
+      * Remove the specified resource from storage.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function destroy($id)
+      {
+          //
+      }
+  }
+\end{minted}
+
+Luego de hacer esto, provamos editar el títuto \textbf{Vacaciones} por
+\textbf{Vacaiones de verano}.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/074_edit_vacaciones.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/075_vacaciones_verano.png}
+\end{figure}
+
+Como se visualiza, los cambios se han realizado exitosamente.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/076_update_ok.png}
+\end{figure}
+
+
+
 
 
 %% Clase 17
