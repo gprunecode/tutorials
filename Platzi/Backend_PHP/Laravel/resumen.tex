@@ -3137,10 +3137,250 @@ que quiera obtener información que no le pertenece.\\
 
 Cuando por ejemplo se hace submit a un form vacío, no vamos a querer que el
 usuario final vea los errores como son lanzados sino manejarlos de alguna
-manera, así que los validamos con ayuda de Laravel.\\
+manera, así que los validamos con ayuda de Laravel. Se considerará vació cuando
+sea null, no se haya enviado contenido en el formulario, cadena de solo
+espacios, si es un arreglo o un objeto Countable o si no hay archivo en el
+path cuando se quiere subir archivos.\\
+
+Si en el formulario damos clic en Submit sin escribir nada en el campo,
+entonces obtendremos un error.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/086_add_report_null.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/087_add_report_null_error.png}
+\end{figure}
+
+Vamos a usar validaciones, para esto podemos ver la
+\href{https://laravel.com/docs/6.x/validation#rule-required}{documentación} de
+Laravel.\\
+
+Entonces modificamos nuestro controller para poder agregar la validación.\\
+
+\textbf{app/Http/Controllers/ExpenseReportController.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use App\ExpenseReport;
+  use Illuminate\Http\Request;
+
+  class ExpenseReportController extends Controller
+  {
+      /**
+      * Display a listing of the resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function index()
+      {
+          return view('expenseReport.index', [
+              'expenseReports' => ExpenseReport::all()
+          ]);
+      }
+
+      /**
+      * Show the form for creating a new resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function create()
+      {
+          return view('expenseReport.create');
+      }
+
+      /**
+      * Store a newly created resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @return \Illuminate\Http\Response
+      */
+      public function store(Request $request)
+      {
+          $validData = $request->validate([
+              'title' => 'required'
+          ]);
+
+          $report = new ExpenseReport();
+          $report->title = $request->get('title');
+          $report->save();
+
+          return redirect('/expense_reports');
+      }
+
+      /**
+      * Display the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function show($id)
+      {
+          //
+      }
+
+      /**
+      * Show the form for editing the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function edit($id)
+      {
+          $report = ExpenseReport::findOrFail($id);
+          return view('expenseReport.edit', [
+              'report' => $report
+          ]);
+      }
+
+      /**
+      * Update the specified resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function update(Request $request, $id)
+      {
+          $report = ExpenseReport::findOrFail($id);
+          $report->title = $request->get('title');
+          $report->save();
+
+          return redirect('/expense_reports');
+      }
+
+      /**
+      * Remove the specified resource from storage.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function destroy($id)
+      {
+          $report = ExpenseReport::findOrFail($id);
+          $report->delete();
+
+          return redirect('/expense_reports');
+      }
+
+      public function confirmDelete($id) {
+          $report = ExpenseReport::findOrFail($id);
+          return view('expenseReport.confirmDelete', [
+              'report' => $report
+          ]);
+      }
+  }
+\end{minted}
+
+Ahora si realizamos el mismo procedimiento entonces simplemente volverá cargar
+la página. Esto está bien pero también queremos que se informe al usuario el
+porqué simplemente está recargando la misma página.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/088_validate_without_message.png}
+\end{figure}
 
 Laravel incluye todos los errores de validación que podamos encontrar dentro de
 un objeto especial llamado errors el cual podemos usar en nuestro template.\\
+
+\textbf{resources/views/expenseReport/create.blade.php}
+\begin{minted}{php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>New Report</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-secondary" href="/expense_reports">Back</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              @if($errors->any())
+                  <div class="alert alert-danger">
+                      Error
+                  </div>
+              @endif
+              <form action="/expense_reports" method="post">
+                  @csrf
+                  <div class="form-group">
+                      <label for="title">Title:</label>
+                      <input type="text" class="form-control" name="title" id="title" placeholder="Type a title">
+                  </div>
+                  <button class="btn btn-primary" type="submit">Submit</button>
+              </form>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/089_validate_div_error.png}
+\end{figure}
+
+Ha sido un gran avance en nuestro proyecto, pero aún falta que nos indique el
+tipo de error.\\
+
+Entonces vamos a trabajar con el objeto \textbf{\$errors} en nuestra vista.\\
+
+\textbf{resources/views/expenseReport/create.blade.php}
+\begin{minted}{php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>New Report</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-secondary" href="/expense_reports">Back</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              @if($errors->any())
+                  <div class="alert alert-danger">
+                      <ul>
+                          @foreach ($errors->all() as $error)
+                              <li>{{ $error }}</li>
+                          @endforeach
+                      </ul>
+                  </div>
+              @endif
+              <form action="/expense_reports" method="post">
+                  @csrf
+                  <div class="form-group">
+                      <label for="title">Title:</label>
+                      <input type="text" class="form-control" name="title" id="title" placeholder="Type a title">
+                  </div>
+                  <button class="btn btn-primary" type="submit">Submit</button>
+              </form>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+Luego si queremos realizar el mismo procedimiento, entonces esta vez nos
+devolverá el error con el tipo.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/090_error_type.png}
+\end{figure}
+
 
 \begin{itemize}
   \item Se utiliza la línea vertical | para agregar más validaciones.
@@ -3150,6 +3390,197 @@ un objeto especial llamado errors el cual podemos usar en nuestro template.\\
     poner de nuevo los valores y para esto Laravel nos ofrece un auxiliar
     especial llamado old que podemos usar en el valor del campo.
 \end{itemize}
+
+\textbf{app/Http/Controllers/ExpenseReportController.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use App\ExpenseReport;
+  use Illuminate\Http\Request;
+
+  class ExpenseReportController extends Controller
+  {
+      /**
+      * Display a listing of the resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function index()
+      {
+          return view('expenseReport.index', [
+              'expenseReports' => ExpenseReport::all()
+          ]);
+      }
+
+      /**
+      * Show the form for creating a new resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function create()
+      {
+          return view('expenseReport.create');
+      }
+
+      /**
+      * Store a newly created resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @return \Illuminate\Http\Response
+      */
+      public function store(Request $request)
+      {
+          $validData = $request->validate([
+              'title' => 'required|min:3'
+          ]);
+
+          $report = new ExpenseReport();
+          $report->title = $request->get('title');
+          $report->save();
+
+          return redirect('/expense_reports');
+      }
+
+      /**
+      * Display the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function show($id)
+      {
+          //
+      }
+
+      /**
+      * Show the form for editing the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function edit($id)
+      {
+          $report = ExpenseReport::findOrFail($id);
+          return view('expenseReport.edit', [
+              'report' => $report
+          ]);
+      }
+
+      /**
+      * Update the specified resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function update(Request $request, $id)
+      {
+          $report = ExpenseReport::findOrFail($id);
+          $report->title = $request->get('title');
+          $report->save();
+
+          return redirect('/expense_reports');
+      }
+
+      /**
+      * Remove the specified resource from storage.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function destroy($id)
+      {
+          $report = ExpenseReport::findOrFail($id);
+          $report->delete();
+
+          return redirect('/expense_reports');
+      }
+
+      public function confirmDelete($id) {
+          $report = ExpenseReport::findOrFail($id);
+          return view('expenseReport.confirmDelete', [
+              'report' => $report
+          ]);
+      }
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/091_submit_a.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/092_min3_error.png}
+\end{figure}
+
+Como vimos cuando se refresca la página después de validar un error se pierde
+toda la información almacenanda en los campos de los formularios, esto puede
+ser una mala experiencia de uso para un usuario, más si se tratan de muchos
+campos que eventualmente éste tendría que llenar de nuevo. En este caso Laravel
+nos ofrece un auxiliar especial que se llama \textbf{old} que se agrega en el
+atributo \textbf{value} del input.\\
+
+\textbf{resources/views/expenseReport/create.blade.php}
+\begin{minted}{php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>New Report</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-secondary" href="/expense_reports">Back</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              @if($errors->any())
+                  <div class="alert alert-danger">
+                      <ul>
+                          @foreach ($errors->all() as $error)
+                              <li>{{ $error }}</li>
+                          @endforeach
+                      </ul>
+                  </div>
+              @endif
+              <form action="/expense_reports" method="post">
+                  @csrf
+                  <div class="form-group">
+                      <label for="title">Title:</label>
+                      <input type="text" class="form-control" name="title" id="title"
+                            placeholder="Type a title" value="{{ old('title') }}">
+                  </div>
+                  <button class="btn btn-primary" type="submit">Submit</button>
+              </form>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+Enviamos nuevamente una sola letra, en este caso b.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/093_submit_b.png}
+\end{figure}
+
+Nos devuelve un error después de refrescarse la página, pero como se observa en
+el campo del formulario aún se encuentra la información almacenada antes de que
+se refresque. Entonces cuando tengas varios campos, es una buena idea agregar
+este helper para almacenar esa información y brindarle una mejor experiencia de
+uso al usuario.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/094_min3_error_old.png}
+\end{figure}
 
 
 %% Clase 19
