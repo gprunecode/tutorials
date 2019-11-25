@@ -1956,6 +1956,22 @@ Entonces proseguimos con la creación del formulario:\\
 
 %% Clase 15
 \section{CSRF}%
+Ahora que ya tenemos creado el formulario, vamos a intentar enviar datos a
+través de él a nuestra base de datos con el botón Submint.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/059_enviando_form.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/060_error_419.png}
+\end{figure}
+
+Como se observa nos devuelve el error 419. Este error lo devuelve Laravel y
+significa que tenemos un posible ataque de CSRF.\\
+
 CSRF (Cross-site request forgery) es un tipo de ataque que consiste en que un
 usuario puede intentar hacer muchas peticiones en nombre de otro. Para esto
 Laravel genera con cada sesión un token que se usará para validar que exista el
@@ -1966,21 +1982,240 @@ debe manejarse de manera interna.\\
 Si queremos que un form pueda pasar la seguridad CSRF de Laravel, debemos
 agregar el helper @csrf el cual nos agrega un token.\\
 
+\textbf{resources/views/expenseReport/create.blade.php}
+\begin{minted}{php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>New Report</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-secondary" href="/expense_reports">Back</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <form action="/expense_reports" method="post">
+                  @csrf
+                  <div class="form-group">
+                      <label for="title">Title:</label>
+                      <input type="text" class="form-control" name="title" id="title" placeholder="Type a title">
+                  </div>
+                  <button class="btn btn-primary" type="submit">Submit</button>
+              </form>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+Si actualizamos nuestra página y luego inspeccionamos el input del formulario
+ahora ha aparecio un nuevo elemento que está oculto y que nos permitirá
+saltarnos el error 401 que apareción anteriormente.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/061_token_hidden_scrf.png}
+\end{figure}
+
+Damos click en Submit.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/062_submit_again.png}
+\end{figure}
+
+Como se observa, nos devuelve una página en blanco, y aún no se ha almacenado
+nada en nuestra base de datos.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/038_class_wrapper.png}
+\end{figure}
+
+Luego de esto ya estamos listos para trabajar en el método \textbf{store} que
+maneja los datos que vienen en el objeto \textbf{\$request} que nos envía
+Laravel.\\
+
+\textbf{app/Http/Controllers/ExpenseReportController.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use App\ExpenseReport;
+  use Illuminate\Http\Request;
+
+  class ExpenseReportController extends Controller
+  {
+      /**
+      * Display a listing of the resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function index()
+      {
+          return view('expenseReport.index', [
+              'expenseReports' => ExpenseReport::all()
+          ]);
+      }
+
+      /**
+      * Show the form for creating a new resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function create()
+      {
+          return view('expenseReport.create');
+      }
+
+      /**
+      * Store a newly created resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @return \Illuminate\Http\Response
+      */
+      public function store(Request $request)
+      {
+          $report = new ExpenseReport();
+          $report->title = $request->get('title');
+          $report->save();
+
+          return redirect('/expense_reports');
+      }
+
+      /**
+      * Display the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function show($id)
+      {
+          //
+      }
+
+      /**
+      * Show the form for editing the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function edit($id)
+      {
+          //
+      }
+
+      /**
+      * Update the specified resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function update(Request $request, $id)
+      {
+          //
+      }
+
+      /**
+      * Remove the specified resource from storage.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function destroy($id)
+      {
+          //
+      }
+  }
+\end{minted}
+
+Dentro del método \textbf{store} se ha creado un objeto \textbf{ExpenseReport}
+el cual recibe en su atributo \textbf{title} el valor del request en la llave
+\textbf{'title'} (se obtiene usando el método \textbf{get} que ingresa el
+argumento llave), que es como se nombró en la vista del formulario
+resources/views/expenseReport/create.blade.php\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/066_name_title.png}
+\end{figure}
+
+Luego se usa el método \textbf{save} para persistir en la base de datos.
+
 \begin{itemize}
   \item Cuando estamos guardando nuevas entradas en la base de datos podemos
     redireccionar adonde queramos en nuestra aplicación con una respuesta
     especial de Laravel llamada redirect.
 \end{itemize}
 
-Estamos trabajando con Middlewares los cuales son muy usados en aplicaciones
-web que consisten en capas que contienen el request. Cuando llega un request,
-éste deberá pasar por diferentes capas o filtros (middlewares) quienes al final
-regresarán una respuesta. Cada uno de los filtros puede detener las peticiones
-en caso de que algo no cumpla.\\
+Finalmente se retorna al url \textbf{expense\_reports} usando el método de
+Láravel llamado \textbf{redirect}.\\
+
+Enviamos un valor en el formulario dando clic en Submit.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/064_submit_cena.png}
+\end{figure}
+
+Como se observa esta vez nos redireciona a la lista de reportes y podemos
+visualizar nuestro último registro agregado junto al anterior.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/065_store_ok.png}
+\end{figure}
+
+También verificamos en PHPMyAdmin donde se visualizan dos registros entre ellos
+el último enviado.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/067_bd_ok.png}
+\end{figure}
+
+Estamos trabajando con \textbf{Middlewares} los cuales son muy usados en
+aplicaciones web que consisten en capas que contienen el request. Cuando llega
+un request, éste deberá pasar por diferentes capas o filtros (middlewares)
+quienes al final regresarán una respuesta. Cada uno de los filtros puede
+detener las peticiones en caso de que algo no cumpla. Por ejemplo si no cumple
+con el filtro de CSRF entonces retorna el error 419.\\
 
 Si no se desea usar la protección CSRF se puede directamente quitar el
-middleware desde el archivo kernel.php. De la misma manera se pueden crear
-middleware propios y agregarlos aquí.\\
+middleware desde el archivo \textbf{app/Http/kernel.php}. De la misma manera se
+pueden crear middleware propios y agregarlos aquí.\\
+
+En este archivo encontramos en \textbf{\$middleware} varios middlewares que se
+han creado por ejemplo para verificar el modo mantenimiento que si nosotros
+habilitamos entonces todas las peticiones que se hagan recibirán como respuesta
+el modo mantenimiento "La aplicación está en modo mantenimiento".
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/069_middlewareMaintenanceMode.png}
+\end{figure}
+
+En la parte de \textbf{\$middlewareGroups} econtramos dos secciones
+\textbf{'web'} (la que nosotros estamos usando) y \textbf{'api'} (relacionada
+con el archivo de rutas api.php). Y como podemos observar dentro del grupo web
+tenemos la clase que se llama \textbf{VeriyfyCsrfToken} que indica que todas
+las peticiones que apliquen y que necesiten utilizar el csrf tocken van a pasar
+por ese middleware. Si ustedes no quieren usar la protección csrf, pues una
+solución podría ser que quitemos esa línea de código del fichero. También hay
+la posibilidad que ustedes creen sus propios middlewares y los podrían agregar
+dentro de los grupos en esta misma sección.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/068_middlewareGroups.png}
+\end{figure}
+
 
 %% Clase 16
 \section{Fake PUT/PATCH}%
