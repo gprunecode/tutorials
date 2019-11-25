@@ -1737,6 +1737,223 @@ extendemos de \textbf{layouts/base.blade.php}\\
 %% Clase 14
 \section{Form para agregar reportes}%
 
+Vamos a crear una nueva vista para el formulario en la carpeta
+\textbf{expenseReport} llamado \textbf{create.blade.php}:\\
+
+\textbf{resources/views/expenseReport/create.blade.php}
+\begin{minted}{php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>New Report</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-secondary" href="/expense_reports">Back</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+También modificamos nuestra vista index.blade.php:\\
+
+\textbf{resources/views/expenseReport/index.blade.php}
+\begin{minted}{php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>Reports</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-primary" href="/expense_reports/create">Create a new report</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <table class="table">
+                  @foreach ($expenseReports as $expenseReport)
+                      <tr>
+                          <td>{{ $expenseReport->title }}</td>
+                      </tr>
+                  @endforeach
+              </table>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+Ahora modificamos la funcion create del controller
+\textbf{ExpenseReportController} para que retorne la vista \textbf{create} que
+acabamos de crear.\\
+
+\textbf{app/Http/Controllers/ExpenseReportController.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use App\ExpenseReport;
+  use Illuminate\Http\Request;
+
+  class ExpenseReportController extends Controller
+  {
+      /**
+      * Display a listing of the resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function index()
+      {
+          return view('expenseReport.index', [
+              'expenseReports' => ExpenseReport::all()
+          ]);
+      }
+
+      /**
+      * Show the form for creating a new resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function create()
+      {
+          return view('expenseReport.create');
+      }
+
+      /**
+      * Store a newly created resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @return \Illuminate\Http\Response
+      */
+      public function store(Request $request)
+      {
+          //
+      }
+
+      /**
+      * Display the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function show($id)
+      {
+          //
+      }
+
+      /**
+      * Show the form for editing the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function edit($id)
+      {
+          //
+      }
+
+      /**
+      * Update the specified resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function update(Request $request, $id)
+      {
+          //
+      }
+
+      /**
+      * Remove the specified resource from storage.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function destroy($id)
+      {
+          //
+      }
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/055_btn_create.png}
+\end{figure}
+
+El boton \textbf{Create a new report} nos lleva a la vista create con url
+\textbf{expense\_reports/create}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/056_new_report_btn_back.png}
+\end{figure}
+
+El botón \textbf{back} nos regresa a la vista index con url
+\textbf{/expense\_reports}.\\
+
+Ahora vamos crear un nuevo tag form. En este caso la acción va a seguir siendo
+\textbf{/expense_reports} y el método que usaremos sera \textbf{post}.\\
+
+Para comprender mejor esto podemos visualizar nuestra lista de rutas en la que
+el método \textbf{store} para expense\_reports tiene como endpoint al mismo url
+\textbf{expense\_reports} pero con el método \textbf{POST}.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/057_store_post.png}
+\end{figure}
+
+Entonces proseguimos con la creación del formulario:\\
+
+\textbf{resources/views/expenseReport/create.blade.php}
+\begin{minted}{php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>New Report</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-secondary" href="/expense_reports">Back</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <form action="/expense_reports" method="post">
+                  <div class="form-group">
+                      <label for="title">Title:</label>
+                      <input type="text" class="form-control" name="title" id="title" placeholder="Type a title">
+                  </div>
+                  <button class="btn btn-primary" type="submit">Submit</button>
+              </form>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/058_formulario.png}
+\end{figure}
+
+
+
 %% Clase 15
 \section{CSRF}%
 CSRF (Cross-site request forgery) es un tipo de ataque que consiste en que un
