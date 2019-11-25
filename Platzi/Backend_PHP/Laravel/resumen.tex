@@ -1657,6 +1657,82 @@ hijos el código específico de ellos.\\
     código es la que concuerda con el @yield del layout.
 \end{itemize}
 
+Veamos en el proyecto. Creamos una carpeta dentro de \textbf{resources/views}
+llamada \textbf{layouts} donde agregaremos el starter template de bootstrap que
+podemos encontrar al principio de su documentación en la siguiente
+\href{https://getbootstrap.com/docs/4.3/getting-started/introduction/}{página}
+en el archivo \textbf{base.blade.php}.\\
+
+\textbf{resouces/views/layouts/base.blade.php}
+\begin{minted}{html+php}
+  <!doctype html>
+  <html lang="en">
+    <head>
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1,
+                  shrink-to-fit=no">
+
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+            crossorigin="anonymous">
+
+      <title>Expense Reports</title>
+    </head>
+    <body>
+      <div class="container">
+        @yield('content')
+      </div>
+
+      <!-- Optional JavaScript -->
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+              integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+              crossorigin="anonymous"></script>
+      <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+      <script
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    </body>
+  </html>
+\end{minted}
+
+Luego modificamos el fichero \textbf{index.blade.php} ubicado en el directorio
+\textbf{expenseReport}. Borramos todo lo que se repite en el layout y
+extendemos de \textbf{layouts/base.blade.php}\\
+
+\textbf{resources/views/expenseReport/index.blade.php}
+\begin{minted}{php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>Reports</h1>
+              <table class="table">
+                  @foreach ($expenseReports as $expenseReport)
+                      <tr>
+                          <td>{{ $expenseReport->title }}</td>
+                      </tr>
+                  @endforeach
+              </table>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/054_extends_layout.png}
+\end{figure}
+
+
 
 %% Clase 14
 \section{Form para agregar reportes}%
