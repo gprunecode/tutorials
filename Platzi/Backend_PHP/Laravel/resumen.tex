@@ -3949,6 +3949,189 @@ tener que indicar el método findOrFail.\\
     directamente.
 \end{itemize}
 
+Vamos a la terminal y escribimos lo siguiente:
+
+\begin{minted}{bash}
+  php artisan make:model --help
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/102_make_model_migration.png}
+\end{figure}
+
+Como vemos, existe la posibilidad de que creemos la migración y después el
+modelo. Pero también existe la posibilidad de que usemos la opción \textbf{-m}
+que nos creará automáticamente la migración al crear el modelo. Vamos a
+probarlo.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/103_expense_model_m.png}
+\end{figure}
+
+Si te das cuenta Laravel ya save que se va a crear una tabla y el nombre está
+en el plural del de nuestro modelo.\\
+
+Si nos vamos al código observamos que ya se ha creado nuestro modelo y nuestra
+migración. Ahora vamos a modificar la migración para indicarle los campos que
+tendrá nuestra tabla.\\
+
+\textbf{database/migrations/2019\_11\_26\_105352\_create\_expenses\_table.php}
+\begin{minted}{php}
+  <?php
+
+  use Illuminate\Database\Migrations\Migration;
+  use Illuminate\Database\Schema\Blueprint;
+  use Illuminate\Support\Facades\Schema;
+
+  class CreateExpensesTable extends Migration
+  {
+      /**
+      * Run the migrations.
+      *
+      * @return void
+      */
+      public function up()
+      {
+          Schema::create('expenses', function (Blueprint $table) {
+              $table->bigIncrements('id');
+              $table->unsignedInteger('expense_report_id');
+              $table->text('description');
+              $table->decimal('amount');
+              $table->timestamps();
+          });
+      }
+
+      /**
+      * Reverse the migrations.
+      *
+      * @return void
+      */
+      public function down()
+      {
+          Schema::dropIfExists('expenses');
+      }
+  }
+\end{minted}
+
+Después de esto realizamos la migración:\\
+
+\begin{minted}{bash}
+  php migrate
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/104_artisan_migrate.png}
+\end{figure}
+
+Con esto se ha creado nuestra tabla \textbf{expenses} con todos los campos que
+hemos adicionado. Podemos ver la tabla en nuestro cliente de Base de Datos.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/105_tabla_creada.png}
+\end{figure}
+
+Ahora lo que sigue es relacionar las tablas \textbf{expenses} y
+\textbf{expense\_reports}. La relación entre expense_report y expenses es de
+uno a muchos. Esto se puede indicar agregando funciones dentro de los modelos.\\
+
+\textbf{app/ExpenseReport.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App;
+
+  use Illuminate\Database\Eloquent\Model;
+
+  class ExpenseReport extends Model
+  {
+      public function expenses() {
+          return $this->hasMany(Expense::class);
+      }
+  }
+\end{minted}
+
+Usamos el método \textbf{hasMany} que indica que un objeto de esta clase puede
+estar relacionado a varios obtejos de la clase Expense. Como argumento de la
+función \textbf{hasMany} debe ir como un string entre comillas el nombre de la
+clase, pero Laravel nos permite ingresar de esta manera lo que evita que
+cometamos errores al ingresar el nombre por ejemplo.
+
+\textbf{app/Expense.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App;
+
+  use Illuminate\Database\Eloquent\Model;
+
+  class Expense extends Model
+  {
+      public function expenseReport() {
+          return $this->belongsTo(ExpenseReport::class);
+      }
+  }
+\end{minted}
+
+Por otro lado en la clase \textbf{Expense} también agregaos una función llamada
+\textbf{expenseReport} que retorna el resultado del método \textbf{belongsTo}
+para indicar que pertenece a la clase ExpenseReport.\\
+
+Vamos a la terminal para hacer algunas pruebas y ver como está funcionando
+esta sección.\\
+
+\begin{minted}{bash}
+  php artisan tinker
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/106_tinker.png}
+\end{figure}
+
+Como ahora podemos usar \textbf{expenses} como atributo que nos devolverá todos
+los gastos considerados es esa tabla y que corresponde a la entidad
+expenseReports.\\
+
+El atributo \textbf{expenses} nosotros lo declaramos como un método, pero
+Laravel procesa esto y cuando lo llamamos sin los paréntesis como atributo de
+la clase ExpenseReport entonces contendrá la información procesada.\\
+
+Ahora vamos a nuestro cliente de Base de Datos e ingresamos manualmente
+infomación en la tabla \textbf{expenses} e indicamos el id de una de los
+expenseReports en el campo \textbf{expense\_report\_id}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/107_expenses_insert_manual.png}
+\end{figure}
+
+Luego vamos a tinker nuevamente y probamos listar los \textbf{expenses}
+nuevamente.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/108_expenses_ok.png}
+\end{figure}
+
+También a partir de la entidad \textbf{expenses} podemos ver el
+\textbf{expenseReport} relacionado.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/109_expenses_ok.png}
+\end{figure}
+
+Por defecto Laravel interpreta que expense\_repor\_id es el atributo que
+relaciona ambas tablas, esto sucede así porque usamos en el nombre al final un
+\_id. Podemos seguir trabajando de esta manera o podemos indicarle a Laravel si
+lo hacemos con otra convención.\\
+
+
+
 
 %% Clase 21
 \section{Trabajando con relaciones}%
