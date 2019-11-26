@@ -4135,7 +4135,430 @@ lo hacemos con otra convención.\\
 
 %% Clase 21
 \section{Trabajando con relaciones}%
-Comenzaremos a usar tablas relacionadas
+Ahora que ya tenemos creada nuestra relación y hemos hecho algunas pruebas
+usando \textbf{tinker} es el momento de que comenzemos a utilizarla dentro de
+nuestro proyecto.\\
+
+Vamos a la vista \textbf{show} para que muestre el contenido de la tabla
+\textbf{expenses}.
+
+\textbf{resources/views/expenseReport/show.blade.php}
+\begin{minted}{html+php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>Report: {{ $report->title }}</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-secondary" href="/expense_reports">Back</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <h3>Details</h3>
+              <table class="table">
+                  @foreach ($report->expenses as $expense)
+                      <tr>
+                          <td>{{ $expense->description }}</td>
+                          <td>{{ $expense->created_at }}</td>
+                          <td>{{ $expense->amount }}</td>
+                      </tr>
+                  @endforeach
+              </table>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/110_report_cena2.png}
+\end{figure}
+
+Ahora vamos a crear un crear un formulario para poder agregar nuevos reportes
+de gastos. Para eso vamos a crear un nuevo controlador tipo recurso.\\
+
+\begin{minted}{bash}
+  php artisan make:controller --resource ExpenseController
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/111_make_controller_expense.png}
+\end{figure}
+
+Luego vamos a crear una nueva columna con un botón que nos enviará al registro
+de los \textbf{expenses}. Para eso modificamos nuevamente nuestra vista show.\\
+
+
+\textbf{resources/views/expenseReport/show.blade.php}
+\begin{minted}{php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>Report: {{ $report->title }}</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-secondary" href="/expense_reports">Back</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <h3>Details</h3>
+              <table class="table">
+                  @foreach ($report->expenses as $expense)
+                      <tr>
+                          <td>{{ $expense->description }}</td>
+                          <td>{{ $expense->created_at }}</td>
+                          <td>{{ $expense->amount }}</td>
+                      </tr>
+                  @endforeach
+              </table>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-primary"
+                href="/expense_reports/{{ $report->id }}/expenses/create">New expense</a>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+Si probamos en el navegador nos retornará un error 404 ya que este url aún no
+ha sido rooteado.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/112_new_expense.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/113_404_new_expense.png}
+\end{figure}
+
+Ahora vamos a modificar nuestro fichero \textbf{web.php} en \textbf{routes}
+para incluir estas rutas.
+
+\textbf{routes/web.php b/routes/web.php}
+\begin{minted}{php}
+  <?php
+
+  /*
+  |--------------------------------------------------------------------------
+  | Web Routes
+  |--------------------------------------------------------------------------
+  |
+  | Here is where you can register web routes for your application. These
+  | routes are loaded by the RouteServiceProvider within a group which
+  | contains the "web" middleware group. Now create something great!
+  |
+  */
+
+  Route::get('/', 'HomeController@index');
+  Route::get('/dashboard', 'DashboardController@index');
+  Route::resource('/expense_reports', 'ExpenseReportController');
+  Route::get('/expense_reports/{id}/confirmDelete', 'ExpenseReportController@confirmDelete');
+  Route::get('/expense_reports/{expense_report}/expenses/create', 'ExpenseController@create');
+  Route::post('/expense_reports/{expense_report}/expenses', 'ExpenseController@store');
+\end{minted}
+
+Luego de esto si refrescamos el navegador veremos una página en blanco ya que
+todavía no hemos programado su comportamiento.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/114_blank_page.png}
+\end{figure}
+
+Para empezar creamos una vista para el formulario.
+
+\textbf{resources/views/expense/create.blade.php}
+\begin{minted}{html+php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>New Expense</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-secondary" href="/expense_reports/{{ $report->id }}">Back</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              @if($errors->any())
+                  <div class="alert alert-danger">
+                      <ul>
+                          @foreach ($errors->all() as $error)
+                              <li>{{ $error }}</li>
+                          @endforeach
+                      </ul>
+                  </div>
+              @endif
+              <form action="/expense_reports/{{ $report->id }}/expenses" method="post">
+                  @csrf
+                  <div class="form-group">
+                      <label for="description">Description:</label>
+                      <input type="text" class="form-control" name="description" id="description"
+                            placeholder="Type a description" value="{{ old('title') }}">
+                  </div>
+                  <div class="form-group">
+                      <label for="amount">Amount:</label>
+                      <input type="text" class="form-control" name="amount" id="amount"
+                            placeholder="Type a amount" value="{{ old('amount') }}">
+                  </div>
+                  <button class="btn btn-primary" type="submit">Submit</button>
+              </form>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+Luego vamos a modificar el controlador \textbf{ExpenseController} en sus
+métodos \textbf{create} para retornar la vista con el formulario y
+\textbf{store} para comprobar usando dd su acceso.
+
+\textbf{app/Http/Controllers/ExpenseController.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use Illuminate\Http\Request;
+  use App\ExpenseReport;
+
+  class ExpenseController extends Controller
+  {
+      /**
+      * Display a listing of the resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function index()
+      {
+          //
+      }
+
+      /**
+      * Show the form for creating a new resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function create(ExpenseReport $expenseReport)
+      {
+          return view('expense.create', [
+              'report' => $expenseReport
+          ]);
+      }
+
+      /**
+      * Store a newly created resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @return \Illuminate\Http\Response
+      */
+      public function store(Request $request)
+      {
+          dd($request->all());
+      }
+
+      /**
+      * Display the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function show($id)
+      {
+          //
+      }
+
+      /**
+      * Show the form for editing the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function edit($id)
+      {
+          //
+      }
+
+      /**
+      * Update the specified resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function update(Request $request, $id)
+      {
+          //
+      }
+
+      /**
+      * Remove the specified resource from storage.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function destroy($id)
+      {
+          //
+      }
+  }
+\end{minted}
+
+Ahora si refrescamos la página nuevamente, esta vez visualizaremos el
+formulario. Vamos a llenar los campos y damos clic en Submit para enviar.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/115_new_expense.png}
+\end{figure}
+
+Después de enviar, nos aparece otra página en la que se visualiza un arreglo
+con el tocken de csrf, descripcion y la cantidad. Esto se despliega por el
+método \textbf{dd} que usamos dentro de \textbf{store} del ExpenseController.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/116_dd_store.png}
+\end{figure}
+
+Ahora vamos a completar con el almacenamiento de los campos, para esto
+modificaremos el controller en su método store.
+
+\textbf{app/Http/Controllers/ExpenseController.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use Illuminate\Http\Request;
+  use App\ExpenseReport;
+  use App\Expense;
+
+  class ExpenseController extends Controller
+  {
+      /**
+      * Display a listing of the resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function index()
+      {
+          //
+      }
+
+      /**
+      * Show the form for creating a new resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function create(ExpenseReport $expenseReport)
+      {
+          return view('expense.create', [
+              'report' => $expenseReport
+          ]);
+      }
+
+      /**
+      * Store a newly created resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @return \Illuminate\Http\Response
+      */
+      public function store(Request $request, ExpenseReport $expenseReport)
+      {
+          $expense = new Expense();
+          $expense->description = $request->get('description');
+          $expense->amount = $request->get('amount');
+          $expense->expense_report_id = $expenseReport->id;
+          $expense->save();
+
+          return redirect('/expense_reports/' . $expenseReport->id);
+      }
+
+      /**
+      * Display the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function show($id)
+      {
+          //
+      }
+
+      /**
+      * Show the form for editing the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function edit($id)
+      {
+          //
+      }
+
+      /**
+      * Update the specified resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function update(Request $request, $id)
+      {
+          //
+      }
+
+      /**
+      * Remove the specified resource from storage.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function destroy($id)
+      {
+          //
+      }
+  }
+\end{minted}
+
+Luego de esto mandamos a refrescar la página aceptando el reenvío del
+formulario.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/117_refrescar.png}
+\end{figure}
+
+Como vemos nos redirecciona donde se muestra la información de los reportes y
+se verifica el registro.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/118_store_ok.png}
+\end{figure}
+
+Con esto ya se ha terminado el registro, lo que nos falta es validar los datos
+ingresados.
+
 
 
 %% Clase 22
@@ -4145,6 +4568,60 @@ otros proyectos que realices puedes querer implementar un sistema de envío de
 mails por diferentes motivos, sea avisar a alguien de tu empresa que deba salir
 de viaje sobre algo que esté sucediendo o avisar a tus clientes de alguna
 acción que se esté llevando a cabo en tu sistema o haya sido completada.\\
+
+Vamos a crear un nuevo botón para enviar nuestros reportes por email.
+
+\textbf{resources/views/expenseReport/show.blade.php}
+\begin{minted}{php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>Report: {{ $report->title }}</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-secondary" href="/expense_reports">Back</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-primary"
+                href="/expense_reports/{{ $report->id }}/confirmSendEmail">Send email</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <h3>Details</h3>
+              <table class="table">
+                  @foreach ($report->expenses as $expense)
+                      <tr>
+                          <td>{{ $expense->description }}</td>
+                          <td>{{ $expense->created_at }}</td>
+                          <td>{{ $expense->amount }}</td>
+                      </tr>
+                  @endforeach
+              </table>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-primary"
+                href="/expense_reports/{{ $report->id }}/expenses/create">New expense</a>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+Esto se verá reflejado de la siguiente manera en nuestro navegador.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/119_send_email.png}
+\end{figure}
+
 
 %% Clase 23
 \section{Enviando emails}%
