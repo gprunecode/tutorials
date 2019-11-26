@@ -3585,12 +3585,353 @@ uso al usuario.
 
 %% Clase 19
 \section{Creamos la vista de reportes}%
+En estos momentos ya hemos trabajado bastante con nuestros reportes, aunque
+estos reportes son inútiles porque no se están almacenando la información de
+los gastos. Vamos a continuar trabajando en el proyecto, para terminar la
+funcionalidad que requieren, pero antes de eso vamos a preparar una vista
+especial en la cual vamos a ir viendo todos los gastos que van a tener cada uno
+de nuestros reportes de gastos.
+
 \begin{itemize}
   \item El método show despliega la información específica para un recurso
     dado.
   \item Existe una técnica en Laravel llamada model binding que antes de llegar
     a la acción realiza el findOrFail y nos envía el objeto que se requiere.
 \end{itemize}
+
+Entonces vamos a trabajar en el método \textbf{show} que es el método que aún
+no definimos. Para esto primero cambiaremos nuestra vista \textbf{index} para
+que nuestros reportes sean ahora un enlace.\\
+
+\textbf{resources/views/expenseReport/index.blade.php}
+\begin{minted}{php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>Reports</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-primary" href="/expense_reports/create">Create a new report</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <table class="table">
+                  @foreach ($expenseReports as $expenseReport)
+                      <tr>
+                          <td><a href="/expense_reports/{{$expenseReport->id}}">{{ $expenseReport->title }}</a></td>
+                          <td><a href="/expense_reports/{{$expenseReport->id}}/edit">Edit</a></td>
+                          <td><a href="/expense_reports/{{$expenseReport->id}}/confirmDelete">Delete</a></td>
+                      </tr>
+                  @endforeach
+              </table>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/095_reports_as_links.png}
+\end{figure}
+
+Como aún no hemos creado la vista que se mostrará para este enlace, entonces se
+mostrará una página en blanco.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/096_blank_page.png}
+\end{figure}
+
+Ahora definimos el método \textbf{show} dentro de nuestro controller.\\
+
+\textbf{app/Http/Controllers/ExpenseReportController.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use App\ExpenseReport;
+  use Illuminate\Http\Request;
+
+  class ExpenseReportController extends Controller
+  {
+      /**
+      * Display a listing of the resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function index()
+      {
+          return view('expenseReport.index', [
+              'expenseReports' => ExpenseReport::all()
+          ]);
+      }
+
+      /**
+      * Show the form for creating a new resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function create()
+      {
+          return view('expenseReport.create');
+      }
+
+      /**
+      * Store a newly created resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @return \Illuminate\Http\Response
+      */
+      public function store(Request $request)
+      {
+          $validData = $request->validate([
+              'title' => 'required|min:3'
+          ]);
+
+          $report = new ExpenseReport();
+          $report->title = $request->get('title');
+          $report->save();
+
+          return redirect('/expense_reports');
+      }
+
+      /**
+      * Display the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function show($id)
+      {
+          $report = ExpenseReport::findOrFail($id);
+          return view('expenseReport.show', [
+            'report' => $report
+          ]);
+      }
+
+      /**
+      * Show the form for editing the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function edit($id)
+      {
+          $report = ExpenseReport::findOrFail($id);
+          return view('expenseReport.edit', [
+              'report' => $report
+          ]);
+      }
+
+      /**
+      * Update the specified resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function update(Request $request, $id)
+      {
+          $report = ExpenseReport::findOrFail($id);
+          $report->title = $request->get('title');
+          $report->save();
+
+          return redirect('/expense_reports');
+      }
+
+      /**
+      * Remove the specified resource from storage.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function destroy($id)
+      {
+          $report = ExpenseReport::findOrFail($id);
+          $report->delete();
+
+          return redirect('/expense_reports');
+      }
+
+      public function confirmDelete($id) {
+          $report = ExpenseReport::findOrFail($id);
+          return view('expenseReport.confirmDelete', [
+              'report' => $report
+          ]);
+      }
+  }
+\end{minted}
+
+Ahora si refrescamos nuestra página entonces ya obtendremos la vista.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/097_expense_report_id.png}
+\end{figure}
+
+Ahora en el método \textbf{show} vamos a utilizar una técnica que se llama
+\textbf{model binding} en la que Laravel antes de llegar a nuestra acción, hará
+el findOrFail y nos va a enviar ya el objeto que se requiere.\\
+
+\textbf{app/Http/Controllers/ExpenseReportController.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use App\ExpenseReport;
+  use Illuminate\Http\Request;
+
+  class ExpenseReportController extends Controller
+  {
+      /**
+      * Display a listing of the resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function index()
+      {
+          return view('expenseReport.index', [
+              'expenseReports' => ExpenseReport::all()
+          ]);
+      }
+
+      /**
+      * Show the form for creating a new resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function create()
+      {
+          return view('expenseReport.create');
+      }
+
+      /**
+      * Store a newly created resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @return \Illuminate\Http\Response
+      */
+      public function store(Request $request)
+      {
+          $validData = $request->validate([
+              'title' => 'required|min:3'
+          ]);
+
+          $report = new ExpenseReport();
+          $report->title = $request->get('title');
+          $report->save();
+
+          return redirect('/expense_reports');
+      }
+
+      /**
+      * Display the specified resource.
+      *
+      * @param ExpenseReport $expenseReport
+      * @return \Illuminate\Http\Response
+      */
+      public function show(ExpenseReport $expenseReport)
+      {
+          return view('expenseReport.show', [
+            'report' => $expenseReport
+          ]);
+      }
+
+      /**
+      * Show the form for editing the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function edit($id)
+      {
+          $report = ExpenseReport::findOrFail($id);
+          return view('expenseReport.edit', [
+              'report' => $report
+          ]);
+      }
+
+      /**
+      * Update the specified resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function update(Request $request, $id)
+      {
+          $report = ExpenseReport::findOrFail($id);
+          $report->title = $request->get('title');
+          $report->save();
+
+          return redirect('/expense_reports');
+      }
+
+      /**
+      * Remove the specified resource from storage.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function destroy($id)
+      {
+          $report = ExpenseReport::findOrFail($id);
+          $report->delete();
+
+          return redirect('/expense_reports');
+      }
+
+      public function confirmDelete($id) {
+          $report = ExpenseReport::findOrFail($id);
+          return view('expenseReport.confirmDelete', [
+              'report' => $report
+          ]);
+      }
+  }
+\end{minted}
+
+Esta parte la trabajamos usando \textbf{PHPStorm} y lo bueno de usar este IDE
+es que te ayuda a corregir posibles errores. En nuestro caso se genera un error
+de Phpdocs, que podemos solucionarla presionado \textbf{contrl} +
+\textbf{Enter}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/098_update_phpdoc.png}
+\end{figure}
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/099_expense_reports.png}
+\end{figure}
+
+Una vez realizado esto entonces podremos tener la misma vista de reportes que
+se ha programado para mostrarse en el método \textbf{show} solo que ahora sin
+tener que indicar el método findOrFail.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/099_expense_reports.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/100_expense_report_id.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/101_expense_report_id_error.png}
+\end{figure}
+
 
 %% Clase 20
 \section{Relaciones con eloquent}%
