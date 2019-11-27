@@ -69,6 +69,8 @@
 \author{@RuneCode}
 
 \begin{document}
+%% Portada
+\includepdf{./portada/portada.pdf}
 
 %% Clase 1
 \section{Intro y características}%
@@ -177,6 +179,8 @@ mezclarlos.\\
   \centering
   \includegraphics[scale=0.5]{./Pictures/004_test.png}
 \end{figure}
+
+\newpage
 
 \textbf{routes/web.php}
 \begin{minted}{php}
@@ -344,7 +348,7 @@ mezclarlos.\\
 \end{minted}
 
 \textbf{resources/views/test.blade.php}
-\begin{minted}{php}
+\begin{minted}{html+php}
   <!DOCTYPE html>
   <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
       <head>
@@ -614,6 +618,8 @@ para solventar esa falencia.\\
   \includegraphics[scale=0.5]{./Pictures/009_blade.png}
 \end{figure}
 
+\newpage
+
 %% Clase 5
 \section{Controladores en Laravel}%
 Basados en el modelo MVC, vimos que las vistas las tenemos en resources/views,
@@ -637,7 +643,7 @@ viene preparado para que trabajemos con controladores.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/010_artisan_make_controller.png}
+  \includegraphics[scale=0.65]{./Pictures/010_artisan_make_controller.png}
 \end{figure}
 
 \begin{minted}{bash}
@@ -646,11 +652,11 @@ viene preparado para que trabajemos con controladores.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/011_artisar_make_controller.png}
+  \includegraphics[scale=0.65]{./Pictures/011_artisar_make_controller.png}
 \end{figure}
 
-Luego vamos a modificar el HomeController que se ha creado dentro de nuestra
-ruta  \textbf{Http/Controllers/HomeController.php}\\
+Luego vamos a modificar el HomeController que se ha creado dentro de nuestra ruta \\
+\textbf{Http/Controllers/HomeController.php}\\
 
 \textbf{Http/Controllers/HomeController.php}
 \begin{minted}{php}
@@ -667,7 +673,9 @@ ruta  \textbf{Http/Controllers/HomeController.php}\\
   }
 \end{minted}
 
-También modificamos:
+\newpage
+
+También modificamos:\\
 
 \textbf{routes/web.php}
 \begin{minted}{php}
@@ -707,11 +715,11 @@ nuestro código para el proyecto.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/014_dashboardController.png}
+  \includegraphics[scale=0.75]{./Pictures/014_dashboardController.png}
 \end{figure}
 
 \textbf{app/Http/Controllers/DashboardController.php}
-\begin{minted}{java}
+\begin{minted}{php}
   <?php
 
   namespace App\Http\Controllers;
@@ -730,7 +738,7 @@ nuestro código para el proyecto.\\
 
 
 \textbf{routes/web.php}
-\begin{minted}{java}
+\begin{minted}{php}
   <?php
 
   /*
@@ -754,9 +762,11 @@ nuestro código para el proyecto.\\
 \end{figure}
 
 
+\newpage
 
 %% Clase 6
-\textbf{Request}
+\section{Request}%
+
 El Request es el que contendrá la información que llega cuando alguien hace una
 petición al servidor. Se podrán traer parámetros get, datos de formulario en
 post o datos en la URL.\\
@@ -879,6 +889,7 @@ post o datos en la URL.\\
   \includegraphics[scale=0.5]{./Pictures/021_title_hola_request.png}
 \end{figure}
 
+\newpage
 
 
 %% Clase 7
@@ -903,7 +914,7 @@ Para este ejemplo vamos a utilizar como nombre de nuestra base de datos
 devilbox entonces indicaremos el virtualhost creado, en nuestro caso se llama
 \textbf{my\_laravel.loc}\\
 
-Veamos el contenido de \textbf{.env} con los cambios realizados:
+Veamos el contenido de \textbf{.env} con los cambios realizados:\\
 
 \textbf{.env}
 \begin{minted}{php}
@@ -970,6 +981,8 @@ Ahora vamos a crear una nueva base de datos:
   \includegraphics[scale=0.5]{./Pictures/022_bd.png}
 \end{figure}
 
+\newpage
+
 
 %% Clase 8
 \section{Cómo funcionan las Migraciones de DB}%
@@ -1002,12 +1015,12 @@ fallidos.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/023_migrate.png}
+  \includegraphics[scale=0.75]{./Pictures/023_migrate.png}
 \end{figure}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/024_migrate.png}
+  \includegraphics[scale=0.6]{./Pictures/024_migrate.png}
 \end{figure}
 
 Si vemos el contenido de la tabla migrations, encontraremos los ficheros que se
@@ -1016,7 +1029,7 @@ entonces este no figurará en esta tabla hasta que hagamos la migración.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/025_table_migrations.png}
+  \includegraphics[scale=0.6]{./Pictures/025_table_migrations.png}
 \end{figure}
 
 
@@ -1032,7 +1045,9 @@ Al correr las migraciones se nos crearán 3 tablas, una de ella siendo
 migrations que nos llevará el control de cómo se va generando cada cambio.\\
 
 Laravel nos ofrece Schema que nos trae diferentes cosas para trabajar sobre los
-sistemas de bases de datos.\\
+sistemas de bases de datos.
+
+\newpage
 
 
 %% Clase 9
@@ -1050,12 +1065,12 @@ de paquetes y un soporte robusto para manejo de bases de datos.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/026_create_table_artisan.png}
+  \includegraphics[scale=0.55]{./Pictures/026_create_table_artisan.png}
 \end{figure}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/027_migration_file.png}
+  \includegraphics[scale=0.75]{./Pictures/027_migration_file.png}
 \end{figure}
 
 
@@ -1065,7 +1080,7 @@ de paquetes y un soporte robusto para manejo de bases de datos.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/028_migrate.png}
+  \includegraphics[scale=0.75]{./Pictures/028_migrate.png}
 \end{figure}
 
 Luego vemos que se ha creado la tabla correctamente, con algunos campos
@@ -1073,12 +1088,12 @@ predeterminados.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/029_table_created.png}
+  \includegraphics[scale=0.6]{./Pictures/029_table_created.png}
 \end{figure}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/030_expense_reports.png}
+  \includegraphics[scale=0.7]{./Pictures/030_expense_reports.png}
 \end{figure}
 
 Como se observa ahora se ha agregado el nombre del fichero a la tabla
@@ -1086,7 +1101,7 @@ migrations.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/031_migrations_table.png}
+  \includegraphics[scale=0.6]{./Pictures/031_migrations_table.png}
 \end{figure}
 
 Nótece los números que se encuentran en el campo \textbf{batch}.\\
@@ -1098,21 +1113,21 @@ Estos números nos sirven de guía cuando hagamos \textbf{rollback}.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/032_rollback.png}
+  \includegraphics[scale=0.75]{./Pictures/032_rollback.png}
 \end{figure}
 
 Veamos la tabla \textbf{migrations} esta vez.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/033_migrations_table.png}
+  \includegraphics[scale=0.75]{./Pictures/033_migrations_table.png}
 \end{figure}
 
 Si hacemos nuevamente un \textbf{rollback}.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/034_rolback.png}
+  \includegraphics[scale=0.75]{./Pictures/034_rolback.png}
 \end{figure}
 
 Como observamos ahora, no hay ningun registro en nuestra tabla
@@ -1120,7 +1135,7 @@ Como observamos ahora, no hay ningun registro en nuestra tabla
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/035_migrations_table.png}
+  \includegraphics[scale=0.75]{./Pictures/035_migrations_table.png}
 \end{figure}
 
 Sin embargo los archivos de migración aún se encuentran en nuestro directorio
@@ -1133,17 +1148,20 @@ Podemos usar el siguiente comando para reestableces nuestras tablas.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/036_migrate_again.png}
+  \includegraphics[scale=0.75]{./Pictures/036_migrate_again.png}
 \end{figure}
+
+\newpage
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/037_migrations_table.png}
+  \includegraphics[scale=0.75]{./Pictures/037_migrations_table.png}
 \end{figure}
 
 Como se observa, ahora todos los registros en nuestra tabla \textbf{migrations}
 tienen \textbf{batch} con valor 1.
 
+\newpage
 
 %% Clase 10
 \section{Modelos con Eloquent}%
@@ -1174,7 +1192,7 @@ agregando el flag --help.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/038_make_model_help.png}
+  \includegraphics[scale=0.65]{./Pictures/038_make_model_help.png}
 \end{figure}
 
 Ahora vamos a crear un Modelo.
@@ -1185,7 +1203,7 @@ Ahora vamos a crear un Modelo.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/039_model_created.png}
+  \includegraphics[scale=0.75]{./Pictures/039_model_created.png}
 \end{figure}
 
 Con Laravel no hay una carpeta \textbf{Model} o \textbf{Entity}, sino que todos
@@ -1193,8 +1211,10 @@ los modelos se almacenan dentro de la carpeta \textbf{app/}.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/039_model_created_tree.png}
+  \includegraphics[scale=0.7]{./Pictures/039_model_created_tree.png}
 \end{figure}
+
+\newpage
 
 Hay una herramienta que nos permite interactuar con nuestro código, como una
 expecie de entorno de pruebas o sandbox y carga todos los componentes
@@ -1203,7 +1223,7 @@ vamos a jugar un poco.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/040_artisan_tinker.png}
+  \includegraphics[scale=0.75]{./Pictures/040_artisan_tinker.png}
 \end{figure}
 
 Como se ve con la primera instrucción le consultamos cuantos ExpertReports
@@ -1219,9 +1239,10 @@ visualizar también en nuestro cliente de Base de Datos.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/041_registro_expense_reports.png}
+  \includegraphics[scale=0.75]{./Pictures/041_registro_expense_reports.png}
 \end{figure}
 
+\newpage
 
 %% Clase 11
 \section{Trabajando con un Modelo}%
@@ -1242,12 +1263,12 @@ de la tabla.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/040_migration_file.png}
+  \includegraphics[scale=0.55]{./Pictures/040_migration_file.png}
 \end{figure}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/042_php_migration.png}
+  \includegraphics[scale=0.75]{./Pictures/042_php_migration.png}
 \end{figure}
 
 \textbf{database/migrations/2019\_11\_23\_190804\_create\_column\_title\_in\_reports.php}
@@ -1286,6 +1307,8 @@ de la tabla.
   }
 \end{minted}
 
+\newpage
+
 Luego hacemos la migración:
 \begin{minted}{bash}
   php artisan migrate
@@ -1293,7 +1316,7 @@ Luego hacemos la migración:
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/041_migrate.png}
+  \includegraphics[scale=0.75]{./Pictures/041_migrate.png}
 \end{figure}
 
 Luego revisamos la tabla y verificamos que se ha creado el campo
@@ -1301,7 +1324,7 @@ Luego revisamos la tabla y verificamos que se ha creado el campo
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/043_title.png}
+  \includegraphics[scale=0.65]{./Pictures/043_title.png}
 \end{figure}
 
 También revisemos el contenido de la tabla \textbf{migrations} y observamos que
@@ -1317,12 +1340,12 @@ bases de datos y crear nuevamente las tablas.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/044_migrate_fresh.png}
+  \includegraphics[scale=0.75]{./Pictures/044_migrate_fresh.png}
 \end{figure}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/045_migration_fresh.png}
+  \includegraphics[scale=0.75]{./Pictures/045_migration_fresh.png}
 \end{figure}
 
 Como vemos la tabla \textbf{migrations} ahora tiene todos los registros con el
@@ -1331,8 +1354,10 @@ Como vemos la tabla \textbf{migrations} ahora tiene todos los registros con el
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/046_expense_report_dropped.png}
+  \includegraphics[scale=0.75]{./Pictures/046_expense_report_dropped.png}
 \end{figure}
+
+\newpage
 
 Entonces vamos usar \textbf{tinker} para crear un registro en la tabla.
 
@@ -1342,15 +1367,17 @@ Entonces vamos usar \textbf{tinker} para crear un registro en la tabla.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/047_new_reg_tinker.png}
+  \includegraphics[scale=0.75]{./Pictures/047_new_reg_tinker.png}
 \end{figure}
 
 También podemos visualizar el registro en nuestro cliente de Base de Datos.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/048_expense_report.png}
+  \includegraphics[scale=0.75]{./Pictures/048_expense_report.png}
 \end{figure}
+
+\newpage
 
 
 %% Clase 12
@@ -1380,14 +1407,14 @@ métodos en blanco para poder realizar CRUD con nuestro controller.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/049_controller_resource.png}
+  \includegraphics[scale=0.6]{./Pictures/049_controller_resource.png}
 \end{figure}
 
 En route:list podremos ver todas las rutas que tenemos definidas\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/050_route_list.png}
+  \includegraphics[scale=0.75]{./Pictures/050_route_list.png}
 \end{figure}
 
 Para crear una ruta de un controlador resource no usamos get o post, sino
@@ -1520,9 +1547,11 @@ mostrar todos los registros que tenga.
 
 Luego vamos a nuestro navegador y escribimos en el url /expense\_reports\\
 
+\newpage
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/052_expense_reports.png}
+  \includegraphics[scale=0.7]{./Pictures/052_expense_reports.png}
 \end{figure}
 
 Ahora vamos a añadirle una vista. Para esto vamos a copiar el contenido de la
@@ -1530,7 +1559,7 @@ vista \textbf{welcome.blade.php} en una nueva carpeta llamada
 \textbf{expenseReport}, con la finalidad de ir organizando nuestras vistas en
 el fichero llamado \textbf{index.blade.php}.\\
 
-Luego vamos a modificar el contenido de la siguiente manera:
+Luego vamos a modificar el contenido de la siguiente manera:\\
 
 \textbf{resources/views/expenseReport/index.blade.php}
 \begin{minted}{html+php}
@@ -1638,8 +1667,10 @@ Actualizamos en nuestro navegador y obtenemos:\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/053_expense_reports_ok.png}
+  \includegraphics[scale=0.6]{./Pictures/053_expense_reports_ok.png}
 \end{figure}
+
+\newpage
 
 
 
@@ -1708,7 +1739,7 @@ Luego modificamos el fichero \textbf{index.blade.php} ubicado en el directorio
 extendemos de \textbf{layouts/base.blade.php}\\
 
 \textbf{resources/views/expenseReport/index.blade.php}
-\begin{minted}{php}
+\begin{minted}{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -1729,9 +1760,10 @@ extendemos de \textbf{layouts/base.blade.php}\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/054_extends_layout.png}
+  \includegraphics[scale=0.6]{./Pictures/054_extends_layout.png}
 \end{figure}
 
+\newpage
 
 
 %% Clase 14
@@ -1741,7 +1773,7 @@ Vamos a crear una nueva vista para el formulario en la carpeta
 \textbf{expenseReport} llamado \textbf{create.blade.php}:\\
 
 \textbf{resources/views/expenseReport/create.blade.php}
-\begin{minted}{php}
+\begin{minted}{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -1765,7 +1797,7 @@ Vamos a crear una nueva vista para el formulario en la carpeta
 También modificamos nuestra vista index.blade.php:\\
 
 \textbf{resources/views/expenseReport/index.blade.php}
-\begin{minted}{php}
+\begin{minted}{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -1896,6 +1928,8 @@ acabamos de crear.\\
 El boton \textbf{Create a new report} nos lleva a la vista create con url
 \textbf{expense\_reports/create}.
 
+\newpage
+
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.5]{./Pictures/056_new_report_btn_back.png}
@@ -1919,7 +1953,7 @@ el método \textbf{store} para expense\_reports tiene como endpoint al mismo url
 Entonces proseguimos con la creación del formulario:\\
 
 \textbf{resources/views/expenseReport/create.blade.php}
-\begin{minted}{php}
+\begin{minted}{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -1947,11 +1981,14 @@ Entonces proseguimos con la creación del formulario:\\
   @endsection
 \end{minted}
 
+\newpage
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/058_formulario.png}
+  \includegraphics[scale=0.6]{./Pictures/058_formulario.png}
 \end{figure}
 
+\newpage
 
 
 %% Clase 15
@@ -1983,7 +2020,7 @@ Si queremos que un form pueda pasar la seguridad CSRF de Laravel, debemos
 agregar el helper @csrf el cual nos agrega un token.\\
 
 \textbf{resources/views/expenseReport/create.blade.php}
-\begin{minted}{php}
+\begin{minted}{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -2144,7 +2181,7 @@ resources/views/expenseReport/create.blade.php\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/066_name_title.png}
+  \includegraphics[scale=0.75]{./Pictures/066_name_title.png}
 \end{figure}
 
 Luego se usa el método \textbf{save} para persistir en la base de datos.
@@ -2159,6 +2196,8 @@ Finalmente se retorna al url \textbf{expense\_reports} usando el método de
 Láravel llamado \textbf{redirect}.\\
 
 Enviamos un valor en el formulario dando clic en Submit.
+
+\newpage
 
 \begin{figure}[h!]
   \centering
@@ -2199,7 +2238,7 @@ el modo mantenimiento "La aplicación está en modo mantenimiento".
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/069_middlewareMaintenanceMode.png}
+  \includegraphics[scale=0.75]{./Pictures/069_middlewareMaintenanceMode.png}
 \end{figure}
 
 En la parte de \textbf{\$middlewareGroups} econtramos dos secciones
@@ -2214,9 +2253,10 @@ dentro de los grupos en esta misma sección.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/068_middlewareGroups.png}
+  \includegraphics[scale=0.75]{./Pictures/068_middlewareGroups.png}
 \end{figure}
 
+\newpage
 
 %% Clase 16
 \section{Fake PUT/PATCH}%
@@ -2276,6 +2316,8 @@ nos redireccionará un enlace en el que editaremos el registro.
   \includegraphics[scale=0.5]{./Pictures/070_columna_edit.png}
 \end{figure}
 
+\newpage
+
 Se puede ver el url que incluye el id del registro que vamos a modificar.
 
 \begin{figure}[h!]
@@ -2287,7 +2329,7 @@ Laravel nos indica que en el método \textbf{edit} será el encargado de mostrar
 el formulario que editará el recurso especificado.\\
 
 Vamos a crear una nueva vista, esta vez para \textbf{edit} basándonos en
-\textbf{create}:
+\textbf{create}:\\
 
 \textbf{resources/views/expenseReport/edit.blade.php}
 \begin{minted}{html+php}
@@ -2321,7 +2363,7 @@ Vamos a crear una nueva vista, esta vez para \textbf{edit} basándonos en
 \end{minted}
 
 Así mismo en el método \textbf{edit} retornaremos la vista pasándole el objeto
-\textbf{\$report}.
+\textbf{\$report}.\\
 
 \textbf{app/Http/Controllers/ExpenseReportController.php}
 \begin{minted}{php}
@@ -2433,6 +2475,8 @@ Se verifica un error que menciona que la ruta indicada no soporta el método
 PUT. Esto se debe a que el url \textbf{expense\_report} sin un id no acepta al
 método PUT.\\
 
+\newpage
+
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.5]{./Pictures/073_error_put.png}
@@ -2441,7 +2485,7 @@ método PUT.\\
 Entonces vamos a modificar el url indicado en \textbf{action} del formulario.\\
 
 \textbf{resources/views/expenseReport/edit.blade.php}
-\begin{minted}{php}
+\begin{minted}{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -2474,6 +2518,8 @@ Entonces vamos a modificar el url indicado en \textbf{action} del formulario.\\
 Ahora recargamos nuestra página y volvemos a dar clic en editar y probamos
 enviar cualquier contenido en el formulario con submit. Entonces obtendremos lo
 siguiente:\\
+
+\newpage
 
 \begin{figure}[h!]
   \centering
@@ -2605,6 +2651,7 @@ Como se visualiza, los cambios se han realizado exitosamente.
   \includegraphics[scale=0.5]{./Pictures/076_update_ok.png}
 \end{figure}
 
+\newpage
 
 
 
@@ -2629,7 +2676,7 @@ Primero vamos a crear una nueva columna para mostrar la nueva opción de borrar
 el registro con una vista previa de confirmación.\\
 
 \textbf{resources/views/expenseReport/index.blade.php}
-\begin{minted}{php}
+\begin{minted}{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -2660,7 +2707,7 @@ el registro con una vista previa de confirmación.\\
 \end{minted}
 
 Como no tenemos mapeado la ruta \textbf{confirmDelete} ya que no existe
-previamente tenemos que añadirla de manera manual en las rutas.
+previamente tenemos que añadirla de manera manual en las rutas.\\
 
 \textbf{routes/web.php}
 \begin{minted}{php}
@@ -2687,7 +2734,7 @@ Como se visualiza, en esta ocasión tendremos que indicar el controller con el
 método al cual direccionará.\\
 
 Ahora crearemos el método en el controller y con \textbf{dd} verificaremos si
-accedemos.
+accedemos.\\
 
 \textbf{app/Http/Controllers/ExpenseReportController.php}
 \begin{minted}{php}
@@ -2810,10 +2857,10 @@ Delete.\\
 
 Ahora vamos a crear una nueva vista, podemos copiar el contenido de la vista
 \textbf{edit}. Como recomendación, puedes tratar de mantener el nombre de la
-acción en las vistas para poder relacionarlos de manera más rápida.
+acción en las vistas para poder relacionarlos de manera más rápida.\\
 
 \textbf{resources/views/expenseReport/confirmDelete.blade.php}
-\begin{minted}{php}
+\begin{minted}{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -2843,7 +2890,7 @@ Note como en formulario pasamos el helper \textbf{@method} para hacer un fake
 delete.\\
 
 También vamos a modificar el método \textbf{confirmDelete} para que retorne la
-vista con el objeto \textbf{\$report} correspondiente.
+vista con el objeto \textbf{\$report} correspondiente.\\
 
 \textbf{app/Http/Controllers/ExpenseReportController.php}
 \begin{minted}{php}
@@ -3087,6 +3134,8 @@ Ahora vamos al navegador y damos en eliminar el primer registros que es
 
 Confirmamos dando clic en el botón \textbf{Delete}.
 
+\newpage
+
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.5]{./Pictures/081_delete_confirm.png}
@@ -3126,6 +3175,8 @@ esté intentando hacer el procedimiento anterior mostrado que no es válido.\\
   \centering
   \includegraphics[scale=0.5]{./Pictures/085_404_fidOrFail.png}
 \end{figure}
+
+\newpage
 
 
 %% Clase 18
@@ -3281,6 +3332,8 @@ Ahora si realizamos el mismo procedimiento entonces simplemente volverá cargar
 la página. Esto está bien pero también queremos que se informe al usuario el
 porqué simplemente está recargando la misma página.\\
 
+\newpage
+
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.5]{./Pictures/088_validate_without_message.png}
@@ -3290,7 +3343,7 @@ Laravel incluye todos los errores de validación que podamos encontrar dentro de
 un objeto especial llamado errors el cual podemos usar en nuestro template.\\
 
 \textbf{resources/views/expenseReport/create.blade.php}
-\begin{minted}{php}
+\begin{minted}{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -3324,6 +3377,8 @@ un objeto especial llamado errors el cual podemos usar en nuestro template.\\
   @endsection
 \end{minted}
 
+\newpage
+
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.5]{./Pictures/089_validate_div_error.png}
@@ -3335,7 +3390,7 @@ tipo de error.\\
 Entonces vamos a trabajar con el objeto \textbf{\$errors} en nuestra vista.\\
 
 \textbf{resources/views/expenseReport/create.blade.php}
-\begin{minted}{php}
+\begin{minted}{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -3375,6 +3430,8 @@ Entonces vamos a trabajar con el objeto \textbf{\$errors} en nuestra vista.\\
 
 Luego si queremos realizar el mismo procedimiento, entonces esta vez nos
 devolverá el error con el tipo.
+
+\newpage
 
 \begin{figure}[h!]
   \centering
@@ -3525,7 +3582,7 @@ nos ofrece un auxiliar especial que se llama \textbf{old} que se agrega en el
 atributo \textbf{value} del input.\\
 
 \textbf{resources/views/expenseReport/create.blade.php}
-\begin{minted}{php}
+\begin{minted}{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -3571,6 +3628,8 @@ Enviamos nuevamente una sola letra, en este caso b.
   \includegraphics[scale=0.5]{./Pictures/093_submit_b.png}
 \end{figure}
 
+\newpage
+
 Nos devuelve un error después de refrescarse la página, pero como se observa en
 el campo del formulario aún se encuentra la información almacenada antes de que
 se refresque. Entonces cuando tengas varios campos, es una buena idea agregar
@@ -3582,6 +3641,7 @@ uso al usuario.
   \includegraphics[scale=0.5]{./Pictures/094_min3_error_old.png}
 \end{figure}
 
+\newpage
 
 %% Clase 19
 \section{Creamos la vista de reportes}%
@@ -3604,7 +3664,7 @@ no definimos. Para esto primero cambiaremos nuestra vista \textbf{index} para
 que nuestros reportes sean ahora un enlace.\\
 
 \textbf{resources/views/expenseReport/index.blade.php}
-\begin{minted}{php}
+\begin{minted}{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -3623,9 +3683,12 @@ que nuestros reportes sean ahora un enlace.\\
               <table class="table">
                   @foreach ($expenseReports as $expenseReport)
                       <tr>
-                          <td><a href="/expense_reports/{{$expenseReport->id}}">{{ $expenseReport->title }}</a></td>
-                          <td><a href="/expense_reports/{{$expenseReport->id}}/edit">Edit</a></td>
-                          <td><a href="/expense_reports/{{$expenseReport->id}}/confirmDelete">Delete</a></td>
+                          <td><a href="/expense_reports/{{$expenseReport->id}}">
+                                                 {{ $expenseReport->title }}</a></td>
+                          <td><a href="/expense_reports/{{$expenseReport->id}}/edit">
+                                                                        Edit</a></td>
+                          <td><a href="/expense_reports/{{$expenseReport->id}}/confirmDelete">
+                                                                               Delete</a></td>
                       </tr>
                   @endforeach
               </table>
@@ -3633,6 +3696,8 @@ que nuestros reportes sean ahora un enlace.\\
       </div>
   @endsection
 \end{minted}
+
+\newpage
 
 \begin{figure}[h!]
   \centering
@@ -3897,6 +3962,8 @@ el findOrFail y nos va a enviar ya el objeto que se requiere.\\
   }
 \end{minted}
 
+\newpage
+
 Esta parte la trabajamos usando \textbf{PHPStorm} y lo bueno de usar este IDE
 es que te ayuda a corregir posibles errores. En nuestro caso se genera un error
 de Phpdocs, que podemos solucionarla presionado \textbf{contrl} +
@@ -3904,7 +3971,7 @@ de Phpdocs, que podemos solucionarla presionado \textbf{contrl} +
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/098_update_phpdoc.png}
+  \includegraphics[scale=0.75]{./Pictures/098_update_phpdoc.png}
 \end{figure}
 
 
@@ -3932,6 +3999,7 @@ tener que indicar el método findOrFail.\\
   \includegraphics[scale=0.5]{./Pictures/101_expense_report_id_error.png}
 \end{figure}
 
+\newpage
 
 %% Clase 20
 \section{Relaciones con eloquent}%
@@ -3957,7 +4025,7 @@ Vamos a la terminal y escribimos lo siguiente:
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/102_make_model_migration.png}
+  \includegraphics[scale=0.6]{./Pictures/102_make_model_migration.png}
 \end{figure}
 
 Como vemos, existe la posibilidad de que creemos la migración y después el
@@ -3967,7 +4035,7 @@ probarlo.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/103_expense_model_m.png}
+  \includegraphics[scale=0.75]{./Pictures/103_expense_model_m.png}
 \end{figure}
 
 Si te das cuenta Laravel ya save que se va a crear una tabla y el nombre está
@@ -4023,7 +4091,7 @@ Después de esto realizamos la migración:\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/104_artisan_migrate.png}
+  \includegraphics[scale=0.75]{./Pictures/104_artisan_migrate.png}
 \end{figure}
 
 Con esto se ha creado nuestra tabla \textbf{expenses} con todos los campos que
@@ -4034,9 +4102,12 @@ hemos adicionado. Podemos ver la tabla en nuestro cliente de Base de Datos.
   \includegraphics[scale=0.5]{./Pictures/105_tabla_creada.png}
 \end{figure}
 
+\newpage
+
 Ahora lo que sigue es relacionar las tablas \textbf{expenses} y
-\textbf{expense\_reports}. La relación entre expense_report y expenses es de
-uno a muchos. Esto se puede indicar agregando funciones dentro de los modelos.\\
+\textbf{expense\_reports}. La relación entre expense\_report y expenses es de
+uno a muchos. Esto se puede indicar agregando funciones dentro de los
+modelos.\\
 
 \textbf{app/ExpenseReport.php}
 \begin{minted}{php}
@@ -4058,7 +4129,7 @@ Usamos el método \textbf{hasMany} que indica que un objeto de esta clase puede
 estar relacionado a varios obtejos de la clase Expense. Como argumento de la
 función \textbf{hasMany} debe ir como un string entre comillas el nombre de la
 clase, pero Laravel nos permite ingresar de esta manera lo que evita que
-cometamos errores al ingresar el nombre por ejemplo.
+cometamos errores al ingresar el nombre por ejemplo.\\
 
 \textbf{app/Expense.php}
 \begin{minted}{php}
@@ -4089,8 +4160,10 @@ esta sección.\\
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/106_tinker.png}
+  \includegraphics[scale=0.75]{./Pictures/106_tinker.png}
 \end{figure}
+
+\newpage
 
 Como ahora podemos usar \textbf{expenses} como atributo que nos devolverá todos
 los gastos considerados es esa tabla y que corresponde a la entidad
@@ -4106,7 +4179,7 @@ expenseReports en el campo \textbf{expense\_report\_id}.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/107_expenses_insert_manual.png}
+  \includegraphics[scale=0.6]{./Pictures/107_expenses_insert_manual.png}
 \end{figure}
 
 Luego vamos a tinker nuevamente y probamos listar los \textbf{expenses}
@@ -4114,7 +4187,7 @@ nuevamente.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/108_expenses_ok.png}
+  \includegraphics[scale=0.75]{./Pictures/108_expenses_ok.png}
 \end{figure}
 
 También a partir de la entidad \textbf{expenses} podemos ver el
@@ -4122,13 +4195,15 @@ También a partir de la entidad \textbf{expenses} podemos ver el
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/109_expenses_ok.png}
+  \includegraphics[scale=0.75]{./Pictures/109_expenses_ok.png}
 \end{figure}
 
 Por defecto Laravel interpreta que expense\_repor\_id es el atributo que
 relaciona ambas tablas, esto sucede así porque usamos en el nombre al final un
 \_id. Podemos seguir trabajando de esta manera o podemos indicarle a Laravel si
 lo hacemos con otra convención.\\
+
+\newpage
 
 
 
@@ -4140,7 +4215,7 @@ usando \textbf{tinker} es el momento de que comenzemos a utilizarla dentro de
 nuestro proyecto.\\
 
 Vamos a la vista \textbf{show} para que muestre el contenido de la tabla
-\textbf{expenses}.
+\textbf{expenses}.\\
 
 \textbf{resources/views/expenseReport/show.blade.php}
 \begin{minted}{html+php}
@@ -4186,9 +4261,11 @@ de gastos. Para eso vamos a crear un nuevo controlador tipo recurso.\\
   php artisan make:controller --resource ExpenseController
 \end{minted}
 
+\newpage
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/111_make_controller_expense.png}
+  \includegraphics[scale=0.7]{./Pictures/111_make_controller_expense.png}
 \end{figure}
 
 Luego vamos a crear una nueva columna con un botón que nos enviará al registro
@@ -4196,7 +4273,7 @@ de los \textbf{expenses}. Para eso modificamos nuevamente nuestra vista show.\\
 
 
 \textbf{resources/views/expenseReport/show.blade.php}
-\begin{minted}{php}
+\begin{minted}{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -4235,6 +4312,8 @@ de los \textbf{expenses}. Para eso modificamos nuevamente nuestra vista show.\\
 
 Si probamos en el navegador nos retornará un error 404 ya que este url aún no
 ha sido rooteado.
+
+\newpage
 
 \begin{figure}[h!]
   \centering
@@ -4280,7 +4359,9 @@ todavía no hemos programado su comportamiento.
   \includegraphics[scale=0.5]{./Pictures/114_blank_page.png}
 \end{figure}
 
-Para empezar creamos una vista para el formulario.
+Para empezar creamos una vista para el formulario.\\
+
+\newpage
 
 \textbf{resources/views/expense/create.blade.php}
 \begin{minted}{html+php}
@@ -4329,7 +4410,9 @@ Para empezar creamos una vista para el formulario.
 
 Luego vamos a modificar el controlador \textbf{ExpenseController} en sus
 métodos \textbf{create} para retornar la vista con el formulario y
-\textbf{store} para comprobar usando dd su acceso.
+\textbf{store} para comprobar usando dd su acceso.\\
+
+\newpage
 
 \textbf{app/Http/Controllers/ExpenseController.php}
 \begin{minted}{php}
@@ -4440,7 +4523,7 @@ método \textbf{dd} que usamos dentro de \textbf{store} del ExpenseController.\\
 \end{figure}
 
 Ahora vamos a completar con el almacenamiento de los campos, para esto
-modificaremos el controller en su método store.
+modificaremos el controller en su método store.\\
 
 \textbf{app/Http/Controllers/ExpenseController.php}
 \begin{minted}{php}
@@ -4559,6 +4642,7 @@ se verifica el registro.\\
 Con esto ya se ha terminado el registro, lo que nos falta es validar los datos
 ingresados.
 
+\newpage
 
 
 %% Clase 22
@@ -4572,7 +4656,7 @@ acción que se esté llevando a cabo en tu sistema o haya sido completada.\\
 Vamos a crear un nuevo botón para enviar nuestros reportes por email.
 
 \textbf{resources/views/expenseReport/show.blade.php}
-\begin{minted}{php}
+\begin{minted}{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -4617,6 +4701,8 @@ Vamos a crear un nuevo botón para enviar nuestros reportes por email.
 
 Esto se verá reflejado de la siguiente manera en nuestro navegador.
 
+\newpage
+
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.5]{./Pictures/119_send_email.png}
@@ -4630,7 +4716,7 @@ de rutas entonces devolverá un error 404.
   \includegraphics[scale=0.5]{./Pictures/120_404.png}
 \end{figure}
 
-Entonces agregaremos la ruta a nuestro archivo de rutas en \textbf{web.php}.
+Entonces agregaremos la ruta a nuestro archivo de rutas en \textbf{web.php}.\\
 
 \textbf{routes/web.php}
 \begin{minted}{php}
@@ -4657,7 +4743,7 @@ Entonces agregaremos la ruta a nuestro archivo de rutas en \textbf{web.php}.
   Route::post('/expense_reports/{expense_report}/expenses', 'ExpenseController@store');
 \end{minted}
 
-Creamos el método \textbf{confirmSendMail} en nuestro controlador.
+Creamos el método \textbf{confirmSendMail} en nuestro controlador.\\
 
 \textbf{app/Http/Controllers/ExpenseReportController.php}
 \begin{minted}{php}
@@ -4791,7 +4877,7 @@ página devuelta estará en blanco.\\
 \end{figure}
 
 Entonces procedemos a crear la nueva vista y a retornarla desde del método en
-nuestro controlador.
+nuestro controlador.\\
 
 \textbf{resources/views/expenseReport/confirmSendMail.blade.php}
 \begin{minted}{html+php}
@@ -4996,7 +5082,7 @@ con método post.\\
   Route::post('/expense_reports/{expense_report}/expenses', 'ExpenseController@store');
 \end{minted}
 
-Por ahora simplemente vamos a devolver el reporte tal cual.
+Por ahora simplemente vamos a devolver el reporte tal cual.\\
 
 \textbf{app/Http/Controllers/ExpenseReportController.php}
 \begin{minted}{php}
@@ -5136,6 +5222,8 @@ formato json.
   \includegraphics[scale=0.5]{./Pictures/123_report_json.png}
 \end{figure}
 
+\newpage
+
 
 %% Clase 23
 \section{Enviando emails}%
@@ -5182,6 +5270,8 @@ credenciales.
 Estas credenciales son las que usaremos para configurar en Laravel y podamos
 enviar correos.
 
+\newpage
+
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.5]{./Pictures/126_credentials.png}
@@ -5193,7 +5283,7 @@ en cuenta que en realidad donde se configura nuestro servicio es en la ruta
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/127_env_credentials.png}
+  \includegraphics[scale=0.75]{./Pictures/127_env_credentials.png}
 \end{figure}
 
 Laravel con artisan nos permite crear clases de tipo email.
@@ -5204,7 +5294,7 @@ Laravel con artisan nos permite crear clases de tipo email.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/128_make_mail_help.png}
+  \includegraphics[scale=0.6]{./Pictures/128_make_mail_help.png}
 \end{figure}
 
 Entonces usando esta funcionalidad, vamos a crear nuestra clase de tipo email
@@ -5216,7 +5306,7 @@ llamada \textbf{SummaryReport}.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{./Pictures/129_make_mail_created.png}
+  \includegraphics[scale=0.75]{./Pictures/129_make_mail_created.png}
 \end{figure}
 
 Luego de esto se ha creado una nueva carpeta en \textbf{app} llamada
@@ -5294,7 +5384,7 @@ formato a nuestro correo.\\
 
 Ahora ya tenemos tanto la clase para enviar el correo como la vista que le dará
 formato, solo nos falta usarlas para poder hacer el envío. Esto se hara desde
-el controller.
+el controller.\\
 
 \textbf{app/Http/Controllers/ExpenseReportController.php}
 \begin{minted}{php}
@@ -5437,6 +5527,8 @@ Ahora vamos a probar hacer el envío del correo.
   \includegraphics[scale=0.5]{./Pictures/130_send_mail.png}
 \end{figure}
 
+\newpage
+
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.5]{./Pictures/131_send_mail.png}
@@ -5457,6 +5549,7 @@ Ahora vamos a probar hacer el envío del correo.
   \includegraphics[scale=0.5]{./Pictures/134_send_mail_ok.png}
 \end{figure}
 
+\newpage
 
 %% Clase 24
 \section{Login}%
