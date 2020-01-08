@@ -1953,7 +1953,7 @@ el método \textbf{store} para expense\_reports tiene como endpoint al mismo url
 Entonces proseguimos con la creación del formulario:\\
 
 \textbf{resources/views/expenseReport/create.blade.php}
-\begin{minted}{html+php}
+\begin{minted}[fontsize=\footnotesize]{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -2020,7 +2020,7 @@ Si queremos que un form pueda pasar la seguridad CSRF de Laravel, debemos
 agregar el helper @csrf el cual nos agrega un token.\\
 
 \textbf{resources/views/expenseReport/create.blade.php}
-\begin{minted}{html+php}
+\begin{minted}[fontsize=\footnotesize]{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -2228,8 +2228,9 @@ detener las peticiones en caso de que algo no cumpla. Por ejemplo si no cumple
 con el filtro de CSRF entonces retorna el error 419.\\
 
 Si no se desea usar la protección CSRF se puede directamente quitar el
-middleware desde el archivo \textbf{app/Http/kernel.php}. De la misma manera se
-pueden crear middleware propios y agregarlos aquí.\\
+middleware desde el archivo\\
+\textbf{app/Http/kernel.php}. De la misma manera se pueden crear middleware
+propios y agregarlos aquí.\\
 
 En este archivo encontramos en \textbf{\$middleware} varios middlewares que se
 han creado por ejemplo para verificar el modo mantenimiento que si nosotros
@@ -2279,7 +2280,7 @@ POST como método, realmente será traducido al que especifiquemos dentro del
 auxiliar.\\
 
 \textbf{resources/views/expenseReport/index.blade.php}
-\begin{minted}{html+php}
+\begin{minted}[fontsize=\footnotesize]{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -2332,7 +2333,7 @@ Vamos a crear una nueva vista, esta vez para \textbf{edit} basándonos en
 \textbf{create}:\\
 
 \textbf{resources/views/expenseReport/edit.blade.php}
-\begin{minted}{html+php}
+\begin{minted}[fontsize=\footnotesize]{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -2485,7 +2486,7 @@ método PUT.\\
 Entonces vamos a modificar el url indicado en \textbf{action} del formulario.\\
 
 \textbf{resources/views/expenseReport/edit.blade.php}
-\begin{minted}{html+php}
+\begin{minted}[fontsize=\footnotesize]{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -2517,9 +2518,7 @@ Entonces vamos a modificar el url indicado en \textbf{action} del formulario.\\
 
 Ahora recargamos nuestra página y volvemos a dar clic en editar y probamos
 enviar cualquier contenido en el formulario con submit. Entonces obtendremos lo
-siguiente:\\
-
-\newpage
+siguiente:
 
 \begin{figure}[h!]
   \centering
@@ -2527,7 +2526,9 @@ siguiente:\\
 \end{figure}
 
 Ahora que ya pudimos ingresar al método \textbf{update}, entonces vamos
-modificar su comportamiento para poder persistir los cambios de la edición.\\
+modificar su comportamiento para poder persistir los cambios de la edición.
+
+\newpage
 
 \textbf{app/Http/Controllers/ExpenseReportController.php}
 \begin{minted}{php}
@@ -2632,7 +2633,9 @@ modificar su comportamiento para poder persistir los cambios de la edición.\\
 \end{minted}
 
 Luego de hacer esto, provamos editar el títuto \textbf{Vacaciones} por
-\textbf{Vacaiones de verano}.\\
+\textbf{Vacaciones de verano}.
+
+\newpage
 
 \begin{figure}[h!]
   \centering
@@ -2652,7 +2655,6 @@ Como se visualiza, los cambios se han realizado exitosamente.
 \end{figure}
 
 \newpage
-
 
 
 %% Clase 17
@@ -2676,7 +2678,7 @@ Primero vamos a crear una nueva columna para mostrar la nueva opción de borrar
 el registro con una vista previa de confirmación.\\
 
 \textbf{resources/views/expenseReport/index.blade.php}
-\begin{minted}{html+php}
+\begin{minted}[fontsize=\footnotesize]{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -3343,7 +3345,7 @@ Laravel incluye todos los errores de validación que podamos encontrar dentro de
 un objeto especial llamado errors el cual podemos usar en nuestro template.\\
 
 \textbf{resources/views/expenseReport/create.blade.php}
-\begin{minted}{html+php}
+\begin{minted}[fontsize=\footnotesize]{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -3377,8 +3379,6 @@ un objeto especial llamado errors el cual podemos usar en nuestro template.\\
   @endsection
 \end{minted}
 
-\newpage
-
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.5]{./Pictures/089_validate_div_error.png}
@@ -3390,7 +3390,7 @@ tipo de error.\\
 Entonces vamos a trabajar con el objeto \textbf{\$errors} en nuestra vista.\\
 
 \textbf{resources/views/expenseReport/create.blade.php}
-\begin{minted}{html+php}
+\begin{minted}[fontsize=\footnotesize]{html+php}
   @extends('layouts.base')
 
   @section('content')
@@ -3431,8 +3431,6 @@ Entonces vamos a trabajar con el objeto \textbf{\$errors} en nuestra vista.\\
 Luego si queremos realizar el mismo procedimiento, entonces esta vez nos
 devolverá el error con el tipo.
 
-\newpage
-
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.5]{./Pictures/090_error_type.png}
@@ -3447,6 +3445,8 @@ devolverá el error con el tipo.
     poner de nuevo los valores y para esto Laravel nos ofrece un auxiliar
     especial llamado old que podemos usar en el valor del campo.
 \end{itemize}
+
+\newpage
 
 \textbf{app/Http/Controllers/ExpenseReportController.php}
 \begin{minted}{php}
@@ -3627,8 +3627,6 @@ Enviamos nuevamente una sola letra, en este caso b.
   \centering
   \includegraphics[scale=0.5]{./Pictures/093_submit_b.png}
 \end{figure}
-
-\newpage
 
 Nos devuelve un error después de refrescarse la página, pero como se observa en
 el campo del formulario aún se encuentra la información almacenada antes de que
@@ -5564,6 +5562,468 @@ muchos mecanismos en Laravel supremamente sencillos de utilizar.\\
     protegido, lo que quiere decir que no puede ser accedido si el usuario no
     está logueado.
 \end{itemize}
+
+Laravel nos brinda una posibilidad de implementar auntentificación de manera
+muy sencilla veamos.\\
+
+Primero vamos a agregar una dependencia con composer:
+
+\begin{minted}{bash}
+  composer require laravel/ui --dev
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/125_composer_ui.png}
+\end{figure}
+
+Luego para generar el interface para el login de manera automágica usamos
+artisan.\\
+
+\begin{minted}{bash}
+  php artisan ui vue --auth
+\end{minted}
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/126_php_artisa_auth.png}
+\end{figure}
+
+Ahora para compilar el scaffolding de la autentificación usamos \textbf{npm}.
+
+\begin{minted}{bash}
+  npm install && npm run dev
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/126_nmp_install_run_dev.png}
+\end{figure}
+
+Ahora refrescamos nuestro navegador y veremos los siguiente cambios.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/127_login.png}
+\end{figure}
+
+Podemos crearnos un usario con un correo y contraseña.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/128_register.png}
+\end{figure}
+
+Una vez logeados nos envía a la ruta home.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/129_home.png}
+\end{figure}
+
+También podemos deslogearmos.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/130_logout.png}
+\end{figure}
+
+Sin embargo no tenemos protegida nuestra ruta \textbf{expense\_reports}.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/131_exp_reports_not_protected.png}
+\end{figure}
+
+Podemos proteger esta ruta modificando su constructor agregando el
+\textbf{middleware} llamado \textbf{auth}:\\
+
+\textbf{app/Http/Controllers/ExpenseReportController.php}
+\begin{minted}{php}
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use App\ExpenseReport;
+  use App\Mail\SummaryReport;
+  use Illuminate\Http\Request;
+  use Illuminate\Support\Facades\Mail;
+
+  class ExpenseReportController extends Controller
+  {
+      public function __construct() {
+          $this->middleware('auth');
+      }
+
+      /**
+      * Display a listing of the resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function index()
+      {
+          return view('expenseReport.index', [
+              'expenseReports' => ExpenseReport::all()
+          ]);
+      }
+
+      /**
+      * Show the form for creating a new resource.
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function create()
+      {
+          return view('expenseReport.create');
+      }
+
+      /**
+      * Store a newly created resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @return \Illuminate\Http\Response
+      */
+      public function store(Request $request)
+      {
+          $validData = $request->validate([
+              'title' => 'required|min:3'
+          ]);
+
+          $report = new ExpenseReport();
+          $report->title = $request->get('title');
+          $report->save();
+
+          return redirect('/expense_reports');
+      }
+
+      /**
+      * Display the specified resource.
+      *
+      * @param ExpenseReport $expenseReport
+      * @return \Illuminate\Http\Response
+      */
+      public function show(ExpenseReport $expenseReport)
+      {
+          return view('expenseReport.show', [
+            'report' => $expenseReport
+          ]);
+      }
+
+      /**
+      * Show the form for editing the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function edit($id)
+      {
+          $report = ExpenseReport::findOrFail($id);
+          return view('expenseReport.edit', [
+              'report' => $report
+          ]);
+      }
+
+      /**
+      * Update the specified resource in storage.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function update(Request $request, $id)
+      {
+          $report = ExpenseReport::findOrFail($id);
+          $report->title = $request->get('title');
+          $report->save();
+
+          return redirect('/expense_reports');
+      }
+
+      /**
+      * Remove the specified resource from storage.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+      public function destroy($id)
+      {
+          $report = ExpenseReport::findOrFail($id);
+          $report->delete();
+
+          return redirect('/expense_reports');
+      }
+
+      public function confirmDelete($id) {
+          $report = ExpenseReport::findOrFail($id);
+          return view('expenseReport.confirmDelete', [
+              'report' => $report
+          ]);
+      }
+
+      public function confirmSendMail($id) {
+          $report = ExpenseReport::findOrFail($id);
+          return view('expenseReport.confirmSendMail', [
+              'report' => $report
+          ]);
+      }
+
+      public function sendMail(Request $request, $id) {
+          $report = ExpenseReport::find($id);
+          Mail::to($request->get('email'))->send(new SummaryReport($report));
+
+          return redirect('/expense_reports/' . $id);
+      }
+  }
+\end{minted}
+
+Ahora si volvemos a intentar ir a la misma ruta sin autenticarnos primero
+entonces no cargará su contenido sino que redireccionará a la ruta
+\textbf{login} por defecto.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/132_exp_reports_protected.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/133_login_again.png}
+\end{figure}
+
+Si nos logeamos entonces nos dejará acceder a la ruta.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/134_login_user.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/135_reports_ok.png}
+\end{figure}
+
+También observamos que se ha creado dentro de \textbf{layouts} un template que
+nos ofrece Laravel por default llamado \textbf{app.blade.php}. Si queremos
+podemos usar este template dentro de nuestras vistas, para eso cambiamos el
+extends en nuestra vista index.\\
+
+\textbf{resources/views/expenseReport/index.blade.php}
+\begin{minted}{html+php}
+  @extends('layouts.base')
+
+  @section('content')
+      <div class="row">
+          <div class="col">
+              <h1>Edit Report {{ $report->id }}</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <a class="btn btn-secondary" href="/expense_reports">Back</a>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+              <form action="/expense_reports/{{ $report->id }}" method="post">
+                  @csrf
+                  @method('put')
+                  <div class="form-group">
+                      <label for="title">Title:</label>
+                      <input type="text" class="form-control" name="title"
+                             id="title" placeholder="Type a title">
+                  </div>
+                  <button class="btn btn-primary" type="submit">Submit</button>
+              </form>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+Luego verificaremos el siguiente cambio.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/136_reports_extends.png}
+\end{figure}
+
+Para cambiar el nombre de nuestra aplicación podemos modificar nuestro fichero
+\textbf{.env} el nombre de la variable \textbf{APP\_NAME}.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/138_env_file.png}
+\end{figure}
+
+\newpage
+
+Como observamos el nombre de la empresa ha cambiado.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/137_app_name.png}
+\end{figure}
+
+La plantilla de Laravel llamada \textbf{app} también usa el div content, pero
+no incluye en la plantilla al div \textbf{container} de Bootstrap, entonces
+para que se vea más centrado el contenido simplemente lo agregamos en nuestra
+vista expenseReport.index\\
+
+\textbf{resources/views/expenseReport/index.blade.php}
+\begin{minted}[fontsize=\footnotesize]{html+php}
+  @extends('layouts.app')
+
+  @section('content')
+      <div class="container">
+          <div class="row">
+              <div class="col">
+                  <h1>Reports</h1>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  <a class="btn btn-primary" href="/expense_reports/create">Create a new report</a>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  <table class="table">
+                      @foreach ($expenseReports as $expenseReport)
+                          <tr>
+                              <td><a href="/expense_reports/{{$expenseReport->id}}">
+                                   {{ $expenseReport->title }}</a></td>
+                              <td><a href="/expense_reports/{{$expenseReport->id}}/edit">Edit</a></td>
+                              <td><a href="/expense_reports/{{$expenseReport->id}}/confirmDelete">
+                                   Delete</a></td>
+                          </tr>
+                      @endforeach
+                  </table>
+              </div>
+          </div>
+      </div>
+  @endsection
+\end{minted}
+
+Ahora si refrescamos la página en la ruta \textbf{/expense\_reports}, veremos
+su contenido centrado.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/139_container_report.png}
+\end{figure}
+
+En la vista \textbf{app.blade.php} podemos agregar en el navbar un enlace que
+nos lleve al enlace \textbf{/expense\_reports}.\\
+
+\textbf{resources/views/layouts/app.blade.php}
+\begin{minted}[fontsize=\footnotesize]{html+php}
+  <!doctype html>
+  <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+
+      <!-- CSRF Token -->
+      <meta name="csrf-token" content="{{ csrf_token() }}">
+
+      <title>{{ config('app.name', 'Laravel') }}</title>
+
+      <!-- Scripts -->
+      <script src="{{ asset('js/app.js') }}" defer></script>
+
+      <!-- Fonts -->
+      <link rel="dns-prefetch" href="//fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+      <!-- Styles -->
+      <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+  </head>
+  <body>
+      <div id="app">
+          <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+              <div class="container">
+                  <a class="navbar-brand" href="{{ url('/') }}">
+                      {{ config('app.name', 'Laravel') }}
+                  </a>
+                  <button class="navbar-toggler" type="button" data-toggle="collapse"
+                          data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                          aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                      <span class="navbar-toggler-icon"></span>
+                  </button>
+
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                      <!-- Left Side Of Navbar -->
+                      <ul class="navbar-nav mr-auto">
+                          <li><a href="/expense_reports">Expense Reports</a></li>
+                      </ul>
+
+                      <!-- Right Side Of Navbar -->
+                      <ul class="navbar-nav ml-auto">
+                          <!-- Authentication Links -->
+                          @guest
+                              <li class="nav-item">
+                                  <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                              </li>
+                              @if (Route::has('register'))
+                                  <li class="nav-item">
+                                      <a class="nav-link" href="{{ route('register') }}">
+                                          {{ __('Register') }}</a>
+                                  </li>
+                              @endif
+                          @else
+                              <li class="nav-item dropdown">
+                                  <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#"
+                                    role="button" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false" v-pre>
+                                      {{ Auth::user()->name }} <span class="caret"></span>
+                                  </a>
+
+                                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                      <a class="dropdown-item" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();">
+                                          {{ __('Logout') }}
+                                      </a>
+
+                                      <form id="logout-form" action="{{ route('logout') }}"
+                                            method="POST" style="display: none;">
+                                          @csrf
+                                      </form>
+                                  </div>
+                              </li>
+                          @endguest
+                      </ul>
+                  </div>
+              </div>
+          </nav>
+
+          <main class="py-4">
+              @yield('content')
+          </main>
+      </div>
+  </body>
+  </html>
+\end{minted}
+
+Con esto tendremos un enlace que nos permitirá ir a Expense Reports.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/140_expense_reports_link.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/141_expense_reports_link_ok.png}
+\end{figure}
 
 %% Clase 25
 \section{Cierre}%
