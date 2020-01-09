@@ -2134,20 +2134,144 @@ Si vamos a \textbf{git log} vemos que el último commit es el que agregamos.
 Y si le damos \textbf{git log $--$stat} vemos mayor información de los archivos
 a los que se modificó.
 
+\newpage
+
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.75]{./Pictures/134_log_stat.png}
 \end{figure}
+
+También podemos ver usar log indicando el número de commits que quieres que te
+muestre.
 
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.75]{./Pictures/135_log_2_lines.png}
 \end{figure}
 
+Con eso ya estamos listos para crear nuestra rama. Ten en cuenta que la rama se
+va a crear desde el lugar donde está apuntando el HEAD, en nuestro caso el
+último commit de la rama master.\\
+
+Usando el comando \textbf{branch}, podemos ver las ramas en el repositorio y
+también indica en cuál de estas estamos trabajando. Si le agregamos como
+argumento el nombre de la cabecera entonces nos la crea.  En este caso
+crearemos la rama \textbf{cabecera}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/136_branch.png}
+\end{figure}
+
+Para posicionar el HEAD en \textbf{cabecera} podemos utilizar el comando
+\textbf{checkout}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/137_checkout_cabecera.png}
+\end{figure}
+
+Agregamos la cabecera modificando nuestro archivo \textbf{blogpost.html}.\\
+
+\newpage
+
+\begin{minted}{html}
+  <!DOCTYPE html>
+  <html lang="es">
+    <head>
+      <meta charset="utf-8">
+      <title>El titulo del post</title>
+      <link rel="stylesheet" href="css/estilos.css" type="text/css" media="all">
+    </head>
+    <body>
+      <div id="container">
+        <div id="cabecera">
+          Cabecera
+        </div>
+        <div id="post">
+          <h1>Este es el título atractivo e interesante del post</h1>
+          <p>Y es este es el párrafo de inicio donde vamos a explicar las cosas
+          increíbles que se pueden hacer con ramas</p>
+        </div>
+      </div>
+    </body>
+  </html>
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/138_cabecera.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/139_status.png}
+\end{figure}
+
+Luego agregamos los cambios en un nuevo commit.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/140_commit.png}
+\end{figure}
+
+
+Ahora podemos ver los cambios realizados en el último commit usando
+\textbf{show} y también usando log.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/141_show.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/142_git_log.png}
+\end{figure}
+
+Podemos ver como cambia el código del archivo \textbf{blogpost.html} a medida
+que nosotros cambiamos de la rama master a la rama cabecera o viceversa.\\
+
+Estos cambios los podrás visualizar automáticamente en el edito \textbf{Visual
+Studio Code}, y para que se actualice en \textbf{vim} deberás usar el modo
+comandos con \textbf{:e}.\\
+
+En las siguientes 3 capturas vemos cómo cambiamos de la rama
+\textbf{cabecera} a \textbf{master} y hacemos un log para ver los 2 últimos
+commits, ademas en el panel derecho visualizamos el código, no tiene el div
+cabecera, también vemos cómo se refleja esto en la página web.\\
+
+Si volvemos a la rama \textbf{cabecera} entonces nuestro código cambia y ahora
+además de otros cambios tiene un div \textbf{cabecera}.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/143_checkout_master_log.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/144_master_web.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/145_checkout_cabecera.png}
+\end{figure}
+
 
 Las ramas son la forma de hacer cambios en nuestro proyecto sin afectar el
 flujo de trabajo de la rama principal. Esto porque queremos trabajar una parte
 muy específica de la aplicación o simplemente experimentar.\\
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/146_git_checkout.png}
+\end{figure}
+
 
 La cabecera o HEAD representan la rama y el commit de esa rama donde estamos
 trabajando. Por defecto, esta cabecera aparecerá en el último commit de nuestra
@@ -2156,8 +2280,203 @@ checkout -b rama) o movernos en el tiempo a cualquier otro commit de cualquier
 otra rama con los comandos (git reset id-commit, git checkout
 rama-o-id-commit).\\
 
+
+\newpage
+
 %% Clase 16
 \section{Fusión de ramas con Git merge}%
+Tenemos nuestra rama master y nuestra rama cabecera. Voy hacer un par de
+cambios, voy a crear un nuevo commit dentro de la rama cabecera donde haré
+algunos cambios al archivo css y html para que la cabecera se ve a bonita, pero
+al mismo tiempo voy a crear un nuevo commit en el master donde le voy a agregar
+contenido al blogpost, y al final vamos a ver que pasa cuando los dos archivos
+son distintos en una versión final donde estén ambos códigos para enviarlos a
+producción y hacer \textbf{merge}.\\
+
+Cuando se hace un \textbf{merge} de \textbf{cabecera} a \textbf{master} lo que
+ocurre es que la rama cabecera desaparece y se une como un commit al final de
+la rama \textbf{master}, y la rama \textbf{master} puede continuar con otros
+commits e incluso surgir de alguno de sus commits alguna otra rama.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/147_git_merge.png}
+\end{figure}
+
+Este no es un curso de HTML y CSS, pero vamos a realizar cambios que harán que
+nuestra cabecera se vea bastante bien. Recuerda que estamos sobre la rama
+\textbf{cabecera}.
+
+\textbf{blogpost.html}
+\begin{minted}{html}
+  <!DOCTYPE html>
+  <html lang="es">
+    <head>
+      <meta charset="utf-8">
+      <title>El titulo del post</title>
+      <link rel="stylesheet" href="css/estilos.css" type="text/css" media="all">
+    </head>
+    <body>
+      <div id="container">
+        <div id="cabecera">
+          hyperblog <span id="tagline">Tu blog de confianza</span>
+        </div>
+        <div id="post">
+          <h1>Este es el título atractivo e interesante del post</h1>
+          <p>Y es este es el párrafo de inicio donde vamos a explicar las cosas
+          increíbles que se pueden hacer con ramas</p>
+        </div>
+      </div>
+    </body>
+  </html>
+\end{minted}
+
+\textbf{css/estilos.css}
+\begin{minted}{css}
+  body {
+    color: #333;
+    text-align: left;
+    font-family: "Arial";
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+  }
+
+  #cabecera {
+    background: #33A;
+    box-shadow: 0px 2px 20px 0px rgba(0,0,0,0.75);
+    color: white;
+    font-weight: bold;
+    margin: 0;
+    padding: 0.5em;
+  }
+
+  #cabecera #tagline {
+    padding: 0 0 0 1em;
+    font-weight: normal;
+    font-size: 0.8em;
+  }
+
+  #container {
+    width: 70%;
+    padding: 0;
+    text-align: left;
+    border: 1px solid #DDD;
+    margin: 0 auto;
+  }
+
+  #container h1 {
+    font-size: 20px;
+  }
+
+  #post {
+    padding: 1em;
+  }
+\end{minted}
+
+El resultado se ve como esto.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/148_web_header.png}
+\end{figure}
+
+Lo que quiero que veas es que se han hecho cambios significativos en los
+archivos \textbf{html} y \textbf{css}. Ahora lo que tenemos que hacer es hacer
+commit en las cabeceras.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/149_git_commit.png}
+\end{figure}
+
+Ahora nos vamos a master usando \textbf{checkout}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/150_checkout_master.png}
+\end{figure}
+
+Podemos continuar en master agregando por ejemplo un párrafo de contenido en
+nuestro blog.
+
+\textbf{blogpost.html}
+\begin{minted}{html}
+  <!DOCTYPE html>
+  <html lang="es">
+    <head>
+      <meta charset="utf-8">
+      <title>El titulo del post</title>
+      <link rel="stylesheet" href="css/estilos.css" type="text/css" media="all">
+    </head>
+    <body>
+      <div id="container">
+        <div id="post">
+          <h1>Este es el título atractivo e interesante del post</h1>
+          <p>Y es este es el párrafo de inicio donde vamos a explicar las cosas
+          increíbles que se pueden hacer con ramas</p>
+          <p>Los blogs son la mejor forma de compartir información y tus ideas.
+          Mucho mas que ir a conferencias o salir en Youtube. Excepto si eres un
+          rockstar. Pero estadísticamente no lo eres... por ahora.</p>
+        </div>
+      </div>
+    </body>
+  </html>
+\end{minted}
+
+Luego de hacer el cambio verifiquemos el estado...
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/152_master_konsole.png}
+\end{figure}
+
+Y también los cambios que se reflejan en la web, como se puede notar no tenemos
+la cabecera en \textbf{master}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/151_master_web.png}
+\end{figure}
+
+Podemos también hacer un cambio con el archivo \textbf{css}. Por ejemplo
+hagamos que la tipografía ahora sea \textbf{Courier} en lugar de Arial.\\
+
+\textbf{css/estilos.css}
+\begin{minted}{css}
+  body {
+    color: #333;
+    text-align: left;
+    font-family: Courier;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+  }
+
+  #container {
+    width: 70%;
+    padding: 1em;
+    text-align: left;
+    border: 1px solid #DDD;
+    margin: 0 auto;
+  }
+
+  #container h1 {
+    font-size: 20px;
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/153_tipografia.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/154_master_web.png}
+\end{figure}
+
+
 El comando git merge nos permite crear un nuevo commit con la combinación de
 dos ramas (la rama donde nos encontramos cuando ejecutamos el comando y la rama
 que indiquemos después del comando).\\
