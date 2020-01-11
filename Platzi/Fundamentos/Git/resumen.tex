@@ -2264,7 +2264,9 @@ además de otros cambios tiene un div \textbf{cabecera}.
 
 Las ramas son la forma de hacer cambios en nuestro proyecto sin afectar el
 flujo de trabajo de la rama principal. Esto porque queremos trabajar una parte
-muy específica de la aplicación o simplemente experimentar.\\
+muy específica de la aplicación o simplemente experimentar.
+
+\newpage
 
 
 \begin{figure}[h!]
@@ -2305,7 +2307,7 @@ commits e incluso surgir de alguno de sus commits alguna otra rama.
 
 Este no es un curso de HTML y CSS, pero vamos a realizar cambios que harán que
 nuestra cabecera se vea bastante bien. Recuerda que estamos sobre la rama
-\textbf{cabecera}.
+\textbf{cabecera}.\\
 
 \textbf{blogpost.html}
 \begin{minted}{html}
@@ -2375,6 +2377,8 @@ nuestra cabecera se vea bastante bien. Recuerda que estamos sobre la rama
 \end{minted}
 
 El resultado se ve como esto.
+
+\newpage
 
 \begin{figure}[h!]
   \centering
@@ -2476,22 +2480,142 @@ hagamos que la tipografía ahora sea \textbf{Courier} en lugar de Arial.\\
   \includegraphics[scale=0.75]{./Pictures/154_master_web.png}
 \end{figure}
 
+Ahora guardaremos estos cambios haciendo un commit en nuestra rama
+\textbf{cabecera}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/156_master_tipografia.png}
+\end{figure}
+
+Para finalizar vamos a unir los cambios realizados en la rama \textbf{cabecera}
+en \textbf{master}, para esto usamos \textbf{git merge}.\\
 
 El comando git merge nos permite crear un nuevo commit con la combinación de
 dos ramas (la rama donde nos encontramos cuando ejecutamos el comando y la rama
 que indiquemos después del comando).\\
 
-\begin{minted}{bash}
-  # Crear un nuevo commit en la rama master combinando
-  # los cambios de la rama cabecera:
-  git checkout master
-  git merge cabecera
+Entonces primero verificamos que estamos en la rama \textbf{master}, que es
+donde queremos se unan los cambios en un nuevo commit. En caso no nos
+encontremos en esta rama podemos usar git checkout.\\
 
-  # Crear un nuevo commit en la rama cabecera combinando
-  # los cambios de cualquier otra rama:
-  git checkout cabecera
-  git merge cualquier-otra-rama
+Recuerda que al ejecutar el comando git checkout para cambiar de rama o commit
+puedes perder el trabajo que no hayas guardado. Guarda tus cambios antes de
+hacer git checkout.\\
+
+Entonces hacemos el merge invocando la rama desde la que queremos unir los
+cambios, en nuestro caso \textbf{cabecera}.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/159_git_merge_cabecera.png}
+\end{figure}
+
+Luego de dar enter al comando escrito nos abrirá \textbf{vim} para que le
+coloquemos un mensaje para el commit del merge. También, podemos dejarlo con el
+mensaje predeterminado.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/160_git_merge_message.png}
+\end{figure}
+
+Como se observa nos hace \textbf{Auto-merging} para los dos archivos, es decir
+que los cambios se efectúan de manera automática. También puede pasar que
+tengamos que resolver conflictos de manera manual.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/161_git_merge_ok.png}
+\end{figure}
+
+Usando \textbf{git log} con la opción \textbf{graph} podemos ver gráficamente
+cómo se ha efectuado el merge de las dos ramas. En el ejemplo vemos los 5
+últimos commits.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/162_git_merge_graph.png}
+\end{figure}
+
+Los cambios se reflejan tanto en el código como en la página web evidentemente.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/163_web_merge.png}
+\end{figure}
+
+En nuestro proyecto podemos seguir haciendo cambios en la rama master. Por
+ejemplo podemos volver a usar la tipografía \textbf{Arial} que se ve un poco
+más `normal'. Para esto modificamos el archivo css.\\
+
+\textbf{css/estilos.css}
+\begin{minted}{css}
+  body {
+    color: #333;
+    text-align: left;
+    font-family: Arial;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+  }
+
+  #cabecera {
+    background: #33A;
+    box-shadow: 0px 2px 20px 0px rgba(0,0,0,0.75);
+    color: white;
+    font-weight: bold;
+    margin: 0;
+    padding: 0.5em;
+  }
+
+  #cabecera #tagline {
+    padding: 0 0 0 1em;
+    font-weight: normal;
+    font-size: 0.8em;
+  }
+
+  #container {
+    width: 70%;
+    padding: 0;
+    text-align: left;
+    border: 1px solid #DDD;
+    margin: 0 auto;
+  }
+
+  #container h1 {
+    font-size: 20px;
+  }
+
+  #post {
+    padding: 1em;
+  }
 \end{minted}
+
+Hacemos un nuevo commit, recuerda que estamos en la rama \textbf{master}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/164_nuevo_commit.png}
+\end{figure}
+
+Podemos ver el log de nuestro proyecto.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/165_nuevo_log.png}
+\end{figure}
+
+Y como se verá nuestra web con el cambio realizado.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/166_nueva_web.png}
+\end{figure}
 
 Asombroso, ¿verdad? Es como si Git tuviera super poderes para saber qué cambios
 queremos conservar de una rama y qué otros de la otra. El problema es que no
@@ -2500,12 +2624,309 @@ actualizaciones diferentes en ciertas líneas en los archivos. Esto lo conocemos
 como un \textbf{conflicto} y aprenderemos a solucionarlos en la siguiente
 clase.\\
 
-Recuerda que al ejecutar el comando git checkout para cambiar de rama o commit
-puedes perder el trabajo que no hayas guardado. Guarda tus cambios antes de
-hacer git checkout.
+\newpage
 
 %% Clase 17
 \section{Solución de conflictos al hacer un merge}%
+Ya hicimos el \textbf{merge} entre master y cabecera, pero ¿cómo quedó
+cabecera?, sabemos que \textbf{master} quedó bien, pero si hacemos checkout
+cabecera, vemos que esta rama sigue existiendo ya que git nunca borra nada,
+sigue existiendo en la historia de sus ramas. Git nunca borra nada a menos que
+nosotros se lo indiquemos.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/167_checkout_cabecera.png}
+\end{figure}
+
+Y si vemos como se ve la página notaremos que no tiene los cambios que se ven
+en el último commit de \textbf{master}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/168_web_cabecera.png}
+\end{figure}
+
+Lo que haremos es un \textbf{merge} inverso de master a cabecera para traer
+esos cambios.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/169_merge_inverso.png}
+\end{figure}
+
+En la web se verán reflejados estos cambios por el merge.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/170_merge_inverso_web.png}
+\end{figure}
+
+Lo que tenemos ahora es una copia del último commit de master en cabecera.
+Ahora para practicar, tanto en master como en cabecera vamos a crear un commit
+con cambios en las mismas líneas de código de los archivos html y css. Esto nos
+servirá para simular un conflicto al intentar hacer nuevamente un merge en
+master.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/171_commits_cabecera.png}
+\end{figure}
+
+Entonces vamos a arrancar dentro de la rama cabecera.\\
+
+\textbf{blogpost.html}
+\begin{minted}{html}
+  <!DOCTYPE html>
+  <html lang="es">
+    <head>
+      <meta charset="utf-8">
+      <title>El titulo del post</title>
+      <link rel="stylesheet" href="css/estilos.css" type="text/css" media="all">
+    </head>
+    <body>
+      <div id="container">
+        <div id="cabecera">
+          hyperblog <span id="tagline">Tu blog de cabecera</span>
+        </div>
+        <div id="post">
+          <h1>Este es el título atractivo e interesante del post</h1>
+          <p>Y este es el párrafo de inicio donde vamos a explicar las cosas
+          increíbles que se pueden hacer con ramas</p>
+          <p>Los blogs son la mejor forma de compartir información y tus ideas.
+          Mucho mas que ir a conferencias o salir en Youtube. Excepto si eres un
+          rockstar. Pero estadísticamente no lo eres... por ahora.</p>
+        </div>
+      </div>
+    </body>
+  </html>
+\end{minted}
+
+\textbf{css/estilos.css}
+\begin{minted}{css}
+  body {
+    color: red;
+    text-align: left;
+    font-family: Arial;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+  }
+
+  #cabecera {
+    background: #33A;
+    box-shadow: 0px 2px 20px 0px rgba(0,0,0,0.75);
+    color: white;
+    font-weight: bold;
+    margin: 0;
+    padding: 0.5em;
+  }
+
+  #cabecera #tagline {
+    padding: 0 0 0 1em;
+    font-weight: normal;
+    font-size: 0.8em;
+  }
+
+  #container {
+    width: 70%;
+    padding: 0;
+    text-align: left;
+    border: 1px solid #DDD;
+    margin: 0 auto;
+  }
+
+  #container h1 {
+    font-size: 20px;
+  }
+
+  #post {
+    padding: 1em;
+  }
+\end{minted}
+
+Luego de hacer los cambios veremos el blog cambiado en el navegador.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/172_cabecera_changed.png}
+\end{figure}
+
+\newpage
+
+Le haremos el \textbf{git commit -am} con su comentario.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/173_commit_cabecera.png}
+\end{figure}
+
+Ahora nos vamos a la rama master.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/174_checkout_master.png}
+\end{figure}
+
+Hacemos cambio en las mismas líneas de código y además agregamos un parrafo
+donde pide la subscripción.\\
+
+\textbf{blogpost.html}
+\begin{minted}{html}
+  <!DOCTYPE html>
+  <html lang="es">
+    <head>
+      <meta charset="utf-8">
+      <title>El titulo del post</title>
+      <link rel="stylesheet" href="css/estilos.css" type="text/css" media="all">
+    </head>
+    <body>
+      <div id="container">
+        <div id="cabecera">
+          hyperblog <span id="tagline">Tu blog maestro</span>
+        </div>
+        <div id="post">
+          <h1>Este es el título atractivo e interesante del post</h1>
+          <p>Y este es el párrafo de inicio donde vamos a explicar las cosas
+          increíbles que se pueden hacer con ramas</p>
+          <p>Los blogs son la mejor forma de compartir información y tus ideas.
+          Mucho mas que ir a conferencias o salir en Youtube. Excepto si eres un
+          rockstar. Pero estadísticamente no lo eres... por ahora.</p>
+          <p>Subscribete y dale like</p>
+        </div>
+      </div>
+    </body>
+  </html>
+\end{minted}
+
+\textbf{css/estilos.css}
+\begin{minted}{css}
+  body {
+    color: blue;
+    text-align: left;
+    font-family: Arial;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+  }
+
+  #cabecera {
+    background: #33A;
+    box-shadow: 0px 2px 20px 0px rgba(0,0,0,0.75);
+    color: white;
+    font-weight: bold;
+    margin: 0;
+    padding: 0.5em;
+  }
+
+  #cabecera #tagline {
+    padding: 0 0 0 1em;
+    font-weight: normal;
+    font-size: 0.8em;
+  }
+
+  #container {
+    width: 70%;
+    padding: 0;
+    text-align: left;
+    border: 1px solid #DDD;
+    margin: 0 auto;
+  }
+
+  #container h1 {
+    font-size: 20px;
+  }
+
+  #post {
+    padding: 1em;
+  }
+\end{minted}
+
+Esto se ve como se ve en la captura.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/176_master_web.png}
+\end{figure}
+
+\newpage
+
+Y hacemos el commit.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/175_commit_master.png}
+\end{figure}
+
+Estamos en master y vamos a fusionar los cambios de cabecera usando merge, pero
+esta vez veremos conflictos.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/177_merge_conflict.png}
+\end{figure}
+
+Si hacemos status, nos muestra los archivos que tienen conflictos. Además si
+nos percatamos en el prompt, nos muestra que estamos en la rama master pero con
+estado \textbf{MERGING}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/178_conflict_status.png}
+\end{figure}
+
+Usando Visual Studio Code podemos elegir fácilmente un cambio u otro para
+solucionar el conflicto. Sino de otro modo tendríamos que eliminar la parte de
+código que no queremos junto con los delimitadores del codigo en conflicto.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/179_conflict_blogpost.png}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/180_conflict_css.png}
+\end{figure}
+
+Podemos abrir \textbf{Visual Studio Code} desde terminal usando simplemente
+\textbf{code} o también con el nombre del archivo.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/181_konsole_conflict.png}
+\end{figure}
+
+En el conflicto del archivo \textbf{css} vamos a escoger el cambio de la rama
+\textbf{master}; sin embargo vamos a modificar el color a \textbf{\#333} para
+que sea el color gris oscuro que teníamos antes.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/182_mergin_ok.png}
+\end{figure}
+
+Como nos sugiere al hacer \textbf{status}, para marcar los archivos como
+solucionados del conflicto los agregamos al Staging Area. Para finalizar,
+tenemos que hacer commit para completar el git \textbf{merge}.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/183_commit.png}
+\end{figure}
+
+Ya sabemos que si no usamos la opción \textbf{-m} con un mensaje nos abrirá por
+defecto el editor \textbf{vim}. Escribimos el mensaje, guardamos los cambios y
+el \textbf{merge} se habrá realizado con éxito.\\
+
+\textbf{Repaso}:\\
+
 Git nunca borra nada a menos que nosotros se lo indiquemos. Cuando usamos los
 comandos git merge o git checkout estamos cambiando de rama o creando un nuevo
 commit, no borrando ramas ni commits (recuerda que puedes borrar commits con
@@ -2533,21 +2954,88 @@ Unstaged, algo así como un estado intermedio entre Untracked y Unstaged, solo
 debemos ejecutar git add para pasarlos al área de staging y git commit para
 aplicar los cambios en el repositorio.\\
 
+\newpage
 
 %% Clase 18
 \section{Uso de GitHub}%
 GitHub es una plataforma que nos permite guardar repositorios de Git que
 podemos usar como servidores remotos y ejecutar algunos comandos de forma
-visual e interactiva (sin necesidad de la consola de comandos).\\
+visual e interactiva (sin necesidad de la consola de comandos). Nos permite a
+cualquiera de nosotros crear un repositorio y compartirlo con las demás
+personas, así como también permite clonar repositorios existentes, esto
+facilita el trabajo colaborativo entre varios programadores.\\
 
 Luego de crear nuestra cuenta, podemos crear o importar repositorios, crear
 organizaciones y proyectos de trabajo, descubrir repositorios de otras
 personas, contribuir a esos proyectos, dar estrellas y muchas otras cosas.\\
 
+Le damos crear un nuevo repositorio.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/183_new_repository.png}
+\end{figure}
+
+Le colocamos un nombre al repositorio además de una descripción. Escogemos que
+nuestro repositorio sea público.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/184_new_repository.png}
+\end{figure}
+
+También podemos agregar un \textbf{Readme} en el primer commit, agregar una
+licencia e incluso un gitignore. Por el momento solo elegimos agregar el Readme
+y le damos \textbf{Create repository}.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/185_new_repository.png}
+\end{figure},
+
+\newpage
+
+Ahora tenemos ya una dirección para nuestro proyecto.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/186_repositorio.png}
+\end{figure}
+
+Además por Github podemos ver cada archivo, por ejemplo veamos el que nos creo
+por escoger \textbf{README}: README.md\\
+
+Para README.md como se observa tenemos 5 opciones en la parte superior derecha
+que corresponden a \textbf{Raw}, \textbf{Blame}, \textbf{History},
+\textbf{Editar} (lapiz), \textbf{Eliminar} (basurero).\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/187_repositorio.png}
+\end{figure}
+
+Si le damos clic en Raw, veremos que nos devuelve en pantalla el archivo en
+texto plano.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/187_repo_raw.png}
+\end{figure}
+
+Con blame nos sale en detalle quién creo o modificó el archivo en que commits.
+En \textbf{history} sale el historial de commits que modificaron el archivo.\\
+
 El README.md es el archivo que veremos por defecto al entrar a un repositorio.
 Es una muy buena práctica configurarlo para describir el proyecto, los
 requerimientos y las instrucciones que debemos seguir para contribuir
 correctamente.\\
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/187_repo_blame.png}
+\end{figure}
 
 Para clonar un repositorio desde GitHub (o cualquier otro servidor remoto)
 debemos copiar la URL (por ahora, usando HTTPS) y ejecutar el comando git clone
@@ -2558,7 +3046,6 @@ Sin embargo, esto solo funciona para las personas que quieren empezar a
 contribuir en el proyecto. Si queremos conectar el repositorio de GitHub con
 nuestro repositorio local, el que creamos con git init, debemos ejecutar las
 siguientes instrucciones:\\
-
 
 \begin{minted}{bash}
   # Primero: Guardar la URL del repositorio de GitHub
@@ -2581,6 +3068,201 @@ siguientes instrucciones:\\
   git push origin master
 \end{minted}
 
+
+Entonces vamos a traer a \textbf{hyperblog} todas las cosas que hemos trabajado
+en nuestro repositorio local hasta ahora. Para esto primero vamos agregar un
+origen remoto de nuestros archivos. Eso lo hacemos con \textbf{git remote add
+origin url}. El url lo obtenemos de Github.\\
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/188_clonar_github.png}
+\end{figure}
+
+Tenemos que verificar que nos encontremos en el directorio correcto. Con
+\textbf{git remote} podemos ver los origenes remotos que tenemos. Si le
+agregamos la bandera \textbf{-v} veremos los enlaces con las posibilidades
+fetch o push.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/189_remote_add.png}
+\end{figure}
+
+Ahora hacemos \textbf{git push origin master}. Nos pedirá ingresar nuestro
+usuario y contraseña en un cuadro de dialogo gráfico, de no ser así se podrán
+ingresar en la terminal.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/190_push_origin_master.png}
+\end{figure}
+
+Sin embargo obtenemos un error debido a que el repositorio remoto tiene un
+commit y un fichero que no tenemos incluido en nuestro repositorio local. Para
+solucionar esto tenemos que hacer primero un \textbf{git pull}.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/191_push_error.png}
+\end{figure}
+
+Hicimos el \textbf{pull}, pero obtenemos un nuevo error debido a que son
+historias diferentes por el primer commit con el fichero \textbf{README.md} del
+repositorio remoto.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/192_pull_error.png}
+\end{figure}
+
+Para poder realizar el pull tenemos que agregar la opción
+\textbf{{-}{-}allow-unrelated-histories}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/193_allow_unrelated_histories.png}
+\end{figure}
+
+Ya que el pull incluye a \textbf{fetch} y \textbf{merge}, se tiene que generar
+un commit, por eso nos abre vim para que le coloquemos un mensaje, una vez
+guardemos se habrá concretado el merge.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/194_commit_message.png}
+\end{figure}
+
+Si verificamos los archivos con el comando \textbf{ls} notaremos que se agregó
+también el fichero README.md en nuestro Working Directory.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/195_ls.png}
+\end{figure}
+
+Luego de esto, nuestro repositorio remoto en Github permanece igual.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/196_github_igual.png}
+\end{figure}
+
+Para actualizar el repositorio remoto con los cambios del repositorio local
+tendremos que hacer nuevamente \textbf{git push origin master}, esta vez no nos
+devolverá error. Colocamos el usuario y contraseña.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/197_username.png}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/198_password.png}
+\end{figure}
+
+Como se visualiza, el push se realiza exitosamente.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/199_push_ok.png}
+\end{figure}
+
+Si recargamos la página entonces notaremos que aparecen nuestros archivos en el
+repositorio remoto.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/200_github_update.png}
+\end{figure}
+
+Con Github podemos hacer muchas cosas, entre ver todo el historial de nuestro
+repositorio desde que lo creamos en local hasta editar ficheros y crear commits
+de manera muy intuitiva.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/201_github_edit.png}
+\end{figure}
+
+Por ejemplo vamos a editar \textbf{blogpost.html}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/202_blogpost_edit.png}
+\end{figure}
+
+Podemos previsualizar los cambios, similar a lo que haríamos por consola con
+git diff.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/203_preview_changes.png}
+\end{figure}
+
+Luego podemos crear el commit. No tenemos que hacer git add antes ya que de
+esto se encarga Github.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/204_github_commit.png}
+\end{figure}
+
+Los cambios incorporados en Github con el último commit no se pueden visualizar
+en nuestro Working Directory y tampoco se encuentran en nuestro repositorio
+local. Para que se actualice en nuestro entorno local entonces tenemos que
+realizar git pull.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/205_local_repository.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/206_pull_origin_master.png}
+\end{figure}
+
+Luego de realizar esto, confirmamos los cambios en el fichero.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/207_local_repo_changed.png}
+\end{figure}
+
+Incluso se verá el commit creado en Github usando git log.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/208_last_commit.png}
+\end{figure}
+
+En Github podemos ver todo el historial de commits de nuestro repositorio, ya
+que al momento de hacer el push también le cargamos todo el historial de
+cambios hecho en local.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/209_commits_github.png}
+\end{figure}
+
+
+\newpage
 
 %% clase 19
 \section{Cómo funcionan las clases públicas y privadas}%
