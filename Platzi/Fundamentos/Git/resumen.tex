@@ -3147,7 +3147,7 @@ también el fichero README.md en nuestro Working Directory.
   \includegraphics[scale=0.75]{./Pictures/195_ls.png}
 \end{figure}
 
-Luego de esto, nuestro repositorio remoto en Github permanece igual.
+Sin embargo, luego de esto nuestro repositorio remoto en Github permanece igual.
 
 \begin{figure}[h!]
   \centering
@@ -3177,8 +3177,8 @@ Como se visualiza, el push se realiza exitosamente.
   \includegraphics[scale=0.75]{./Pictures/199_push_ok.png}
 \end{figure}
 
-Si recargamos la página entonces notaremos que aparecen nuestros archivos en el
-repositorio remoto.
+Si recargamos la página entonces notaremos que ahora sí aparecen nuestros
+archivos en el repositorio remoto.
 
 \begin{figure}[h!]
   \centering
@@ -3268,7 +3268,8 @@ cambios hecho en local.
 \section{Cómo funcionan las clases públicas y privadas}%
 Las llaves públicas y privadas nos ayudan a cifrar y descifrar nuestros
 archivos de forma que los podamos compartir archivos sin correr el riesgo de
-que sean interceptados por personas con malas intenciones.\\
+que sean interceptados por personas con malas intenciones. Cifrado asimétrico
+de un solo camino.\\
 
 La forma de hacerlo es la siguiente:
 
@@ -3291,47 +3292,156 @@ Puedes compartir tu llave pública pero nunca tu llave privada.\\
 En la siguiente clase vamos a crear nuestras llaves para compartir archivos con
 GitHub sin correr el riesgo de que sean interceptados.\\
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.6]{./Pictures/210_asimetrico.png}
+\end{figure}
 
+
+
+\newpage
 %% Clase 20
 \section{Configura tus llaves SSH en local}%
-Primer paso: Generar tus llaves SSH. Recuerda que es muy buena idea proteger tu
-llave privada con una contraseña.
+Cuando te conectaste a \textbf{Github} pusiste tu nombre de usuario y tu
+contraseña, pero al hacerlo existen dos problemas, uno es que siempre tienes
+que hacerlo y el segundo es que en principio a pesar de que la conexión es
+segura porque es \textbf{https} el procedimiento implica que tu usuario y
+constraseña se están almacenando en tu entorno local, eso significa que si en
+algun punto te roban tu laptop o ingresen a tu pc via la red, eres vulnerable a
+password cracking.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/211_https.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/212_pwd_cracking.png}
+\end{figure}
+
+Para evitar esto, tenemos que agregarle una capa de seguridad mucho más fuerte,
+y como ya aprendimos lo que son las llaves públicas y privadas podemos crear
+ese entorno en git y Github. Además tiene la ventaja de que no tienes que
+volver a colocar tu usuario ni contraseña. Funciona de la siguiente manera.\\
+
+\textbf{Primer paso}: En tu computadora vas a generar tus llaves SSH (llave
+privada y pública). Recuerda que es muy buena idea proteger tu llave privada
+con una contraseña. Para esto nos dirigimos a la ruta \textbf{/\$HOME/.ssh}, de
+no existir el directorio entonces lo creamos y ejecutamos el siguiente comando.
 
 \begin{minted}{bash}
   ssh-keygen -t rsa -b 4096 -C "tu@email.com"
 \end{minted}
 
-Segundo paso: Terminar de configurar nuestro sistema.
-\textbf{En Windows y Linux:}
-\begin{minted}{bash}
-  # Encender el "servidor" de llaves SSH de tu computadora:
-  eval $(ssh-agent -s)
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/213_public_private_keys.png}
+\end{figure}
 
-  # Añadir tu llave SSH a este "servidor":
-  ssh-add ruta-donde-guardaste-tu-llave-privada
-\end{minted}
 
-En Mac:
+\newpage
 
-\begin{minted}{bash}
-  # Encender el "servidor" de llaves SSH de tu computadora:
-  eval "$(ssh-agent -s)"
+De esta manera si queremos compartir conexión con Github, simiplemente le
+enviamos nuestra llave pública. Recuerda que la llave privada no se debe
+compartir bajo ningún término.
 
-  # Si usas una versión de OSX superior a Mac Sierra (v10.12)
-  # debes crear o modificar un archivo "config" en la carpeta
-  # de tu usuario con el siguiente contenido (ten cuidado con
-  # las mayúsculas):
-  Host *
-          AddKeysToAgent yes
-          UseKeychain yes
-          IdentityFile ruta-donde-guardaste-tu-llave-privada
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/214_public_key.png}
+\end{figure}
 
- # Añadir tu llave SSH al "servidor" de llaves SSH de tu
- # computadora (en caso de error puedes ejecutar este
- # mismo comando pero sin el argumento -K):
- ssh-add -K ruta-donde-guardaste-tu-llave-privada
-\end{minted}
+Veamos en nuestra terminal.
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/219_ssh-keygen.png}
+\end{figure}
+
+Si listamos los ficheros dentro de nuestra carpeta podemos ver las llames.
+\textbf{id\_rsa} es la llave privada y \textbf{id\_rsa.pub} es la pública.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/220_id_rsa.png}
+\end{figure}
+
+Al realizar esto, nuestra computadora se conecta vía otro procolo nuevo:
+\textbf{ssh} (Secure Shell). También se debe usar \textbf{ssh} para conectarse
+a servidores remotos, a otras computadoras, en general computadoras Linux, Unix
+o Mac que queramos controlar por consola.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/215_push_ssh.png}
+\end{figure}
+
+\newpage
+
+En la primera conexión, Github es muy inteligente. Se va a dar cuenta que le
+enviaste una llave pública que está correlacionada con tu llave privada y te va
+a enviar cifrado con tu llave pública, su propia llave pública. Esto pasará
+automáticamente.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/216_github_public.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/217_github_public_me.png}
+\end{figure}
+
+Como tu tienes la llave pública de Github cifrada y Github tiene tu llave
+pública, entonces a partir de ahora puede haber una conexión de doble camino
+100\% cifrada por ssh y ya nunca más tienes que agregar contraseña.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/218_pull_ssh.png}
+\end{figure}
+
+Algo adicional que agregar es que a tu llave privada le puedes agregar una
+contraseña para darle incluso mayor seguridad. Para aún mayor seguridad, tu
+deberías estar cifrando tu disco, los discos se cifran en Windows con
+\textbf{Bitlocker} que solo funciona por ahora en Windows Professional o en Mac
+como una opción de la configuración de seguridad igual en Linux.\\
+
+% \textbf{Segundo paso}: Terminar de configurar nuestro sistema.  \textbf{En
+% Windows y Linux:}
+%
+% \begin{minted}{bash}
+%   # Encender el "servidor" de llaves SSH de tu computadora:
+%   eval $(ssh-agent -s)
+%
+%   # Añadir tu llave SSH a este "servidor":
+%   ssh-add ruta-donde-guardaste-tu-llave-privada
+% \end{minted}
+%
+% En Mac:
+%
+% \begin{minted}{bash}
+%   # Encender el "servidor" de llaves SSH de tu computadora:
+%   eval "$(ssh-agent -s)"
+%
+%   # Si usas una versión de OSX superior a Mac Sierra (v10.12)
+%   # debes crear o modificar un archivo "config" en la carpeta
+%   # de tu usuario con el siguiente contenido (ten cuidado con
+%   # las mayúsculas):
+%   Host *
+%           AddKeysToAgent yes
+%           UseKeychain yes
+%           IdentityFile ruta-donde-guardaste-tu-llave-privada
+%
+%  # Añadir tu llave SSH al "servidor" de llaves SSH de tu
+%  # computadora (en caso de error puedes ejecutar este
+%  # mismo comando pero sin el argumento -K):
+%  ssh-add -K ruta-donde-guardaste-tu-llave-privada
+% \end{minted}
+
+
+\newpage
 %% Clase 21
 \section{Conexión a GitHub con SSH}%
 Luego de crear nuestras llaves SSH podemos entregarle la llave pública a GitHub
@@ -3342,6 +3452,33 @@ Para esto debes entrar a la Configuración de Llaves SSH en GitHub, crear una
 nueva llave con el nombre que le quieras dar y el contenido de la llave pública
 de tu computadora.\\
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/222_repositorio.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/223_new_key.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/224_llave_publica.png}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/225_new_ssh_key.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/226_ssh_key_ok.png}
+\end{figure}
+
 Ahora podemos actualizar la URL que guardamos en nuestro repositorio remoto,
 solo que, en vez de guardar la URL con HTTPS, vamos a usar la URL con SSH:\\
 
@@ -3349,11 +3486,238 @@ solo que, en vez de guardar la URL con HTTPS, vamos a usar la URL con SSH:\\
   git remote set-url origin url-ssh-del-repositorio-en-github
 \end{minted}
 
+% \begin{figure}[h!]
+%   \centering
+%   \includegraphics[scale=0.75]{./Pictures/227_ssh_test.png}
+% \end{figure}
+
+El url lo obtenemos del github cambiando en la opción de \textbf{https} a
+\textbf{ssh}, luego nos vamos a nuestro proyecto y visualizamos el url con el
+que se encuentra enlazado.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/228_ssh_link.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/229_repo_local.png}
+\end{figure}
+
+\newpage
+
+Cambiamos el url y luego verifcamos con git remote -v.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/230_remote_update.png}
+\end{figure}
+
+Para verificar que funciona haremos un cambio en el repositorio modificando
+\textbf{blogspot.html}
+
+\begin{minted}{html}
+  <!DOCTYPE html>
+  <html lang="es">
+    <head>
+      <meta charset="utf-8">
+      <title>Bienvenido a Hyperblog 2.0</title>
+      <link rel="stylesheet" href="css/estilos.css" type="text/css" media="all">
+    </head>
+    <body>
+      <div id="container">
+        <div id="cabecera">
+          hyperblog <span id="tagline">Tu blog de cabecera</span>
+        </div>
+        <div id="post">
+          <h1>Este es el título atractivo e interesante del post</h1>
+          <p>Y este es el párrafo de inicio donde vamos a explicar las cosas
+          increíbles que se pueden hacer con ramas</p>
+          <p>Los blogs son la mejor forma de compartir información y tus ideas.
+          Mucho mas que ir a conferencias o salir en Youtube. Excepto si eres un
+          rockstar. Pero estadísticamente no lo eres... por ahora.</p>
+          <p>Subscribete y dale like</p>
+        </div>
+      </div>
+    </body>
+  </html>
+\end{minted}
+
+Es recomendable hacer un pull antes y después de realizar un commit, ya que si
+estamos desarrollando en colaboración de otros programadores entonces mientras
+realizamos el commit podría haber sucedido algún cambio y sería necesario
+incorporar los mismos para tener actualizado y no genere conflictos.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/231_pull.png}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/232_git_commit.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/233_push.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/234_changed_repo_github.png}
+\end{figure}
+
+Como se verifica esta vez no nos pidió username ni contraseña al momento de
+subir el repositorio local a Github.\\
+
+Siempre puedes comprobar si tu conexión con Github es correcta usando.
+
+\begin{minted}{bash}
+  ssh -T git@github.com
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/235_ssh_test.png}
+\end{figure}
+
+
+
+
+\newpage
 
 %% Clase 22
 \section{Tags y versiones en Git y GitHub}%
+Antes que todo vamos ver el uso de alias en git. Vamos a crear un alias llamado
+superlog que va a permitir visualizar de manera ordenada, agradable y resumida
+los commits.
+
+\begin{minted}{bash}
+  git log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) -
+  %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/238_git_log.png}
+\end{figure}
+
+Como se visualiza el comando anterior es demasiado largo y dificil de escribir,
+en estos casos nos ayuda usar alias.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/239_gitalias.png}
+\end{figure}
+
 Los tags o etiquetas nos permiten asignar versiones a los commits con cambios
-más importantes o significativos de nuestro proyecto.\\
+más importantes o significativos de nuestro proyecto.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/236_superlog.png}
+\end{figure}
+
+\newpage
+
+En este ejemplo creamos un tag para el commit \textbf{3bf7c46} que copiamos del
+log mostrado en la captura anterior. Con \textbf{git tag} podemos visualizar
+los tags.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/237_gittag.png}
+\end{figure}
+
+Podemos ver el hash del commit referenciado con el tag usando
+\textbf{show-ref}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/237_showref_tags.png}
+\end{figure}
+
+Ahora podemos enviar los tags a la plataforma Web, que es donde más relevancia
+toma los tags. Recuerda que debes agregar \textbf{{-}{-}tags} en lugar de
+master.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/238_push_tags.png}
+\end{figure}
+
+Como se observó en la figura, es importante siempre hacer pull primero antes de
+un push para evitar errores.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/239_tags_github.png}
+\end{figure}
+
+Ahora vamos a crear un tag llamado \textbf{dormido} que lo crearemos
+simplemente para mostrar como eliminar un tag.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/240_tag_dormido.png}
+\end{figure}
+
+\newpage
+
+Seguimos el flujo anteriormente mostrado para subir el tag a Github.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/241_push_tag_dormido.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/241_tag_dormido_github.png}
+\end{figure}
+
+Ahora vamos a eliminar el tag dormido e intentamos subir el cambio como lo
+hicimos anteriormente.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/242_delete_tag.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/243_push_tag.png}
+\end{figure}
+
+Como se observa git nos indica que todo está actualizado, pero cuando vamos a
+ver el Github, ahí sigue apareciendo nuestro tag \textbf{dormido}.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/244_dormido_github.png}
+\end{figure}
+
+Entonces para que el tag ya no aparezca en Github debemos hacer push del
+\textbf{refs} del tag dormido, tal y como se observa en la captura siguiente.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/245_push_delete_tag.png}
+\end{figure}
+
+Como se observa esta vez en Github ya no figura el tag \textbf{dormigo}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/246_tag_delete_github.png}
+\end{figure}
+
 
 Comandos para trabajar con etiquetas:
 
@@ -3368,22 +3732,107 @@ Comandos para trabajar con etiquetas:
     push origin :refs/tags/nombre-del-tag.
 \end{itemize}
 
+\newpage
+
 %% Clase 23
 \section{Manejo de ramas en GitHub}%
-Puedes trabajar con ramas que nunca envias a GitHub, así como pueden haber
-ramas importantes en GitHub que nunca usas en el repositorio local. Lo
-importantes que aprendas a manejarlas para trabajar profesionalmente.\\
+En Github normalmente siempre vas a ver la rama \textbf{master}, que es la rama
+principal donde está la última versión, pero que pasa con las ramas de
+desarrollo. Normalmente hay una versión estable de software pero luego tu
+empiezas a crear cambios de los que no necesariamente puedes estar seguro si se
+van a agregar al proyecto o también suelen haber múltiples programadores en
+ramas distintas.\\
 
-\begin{itemize}
-  \item Crear una rama en el repositorio local: git branch nombre-de-la-rama o
-    git checkout -b nombre-de-la-rama.
-  \item Publicar una rama local al repositorio remoto: git push origin
-    nombre-de-la-rama.
-\end{itemize}
+Como estamos haciendo un blog, vamos a dividir el desarrollo de la cabecera en
+un rama y el desarrollo del pie de página o footer en otra rama. Ya usamos la
+rama \textbf{cabecera} pero para efectos prácticos a partir de ahora la
+llamaremos \textbf{header} de tal manera que que la rama master queda como un
+historia aparte, en el header manejamos el cambio de la parte superior de la
+página y en el footer la parte inferior.\\
 
-Recuerda que podemos ver gráficamente nuestro entorno y flujo de trabajo local
-con Git usando el comando gitk.
+Vimos que con \textbf{git branch} podemos ver nuestras ramas, pero también
+podemos hacerlo con \textbf{git show-branch}.
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/247_show_branch.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/248_show_branch_all.png}
+\end{figure}
+
+Tenemos una herramienta gráfica que normalmente viene incluida al instalar
+gitbash. En \textbf{Fedora} tienes que instalarla usando el comando. Luego de
+su instalación simplemente lo invocamos usando el comando \textbf{gitk}.\\
+
+Su uso es recomendado solo como una ayuda de ver la situación general del
+proyecto, pero recuerda que los profesionales trabajan siempre en la consola
+así que es recomendable que practiques y te acostumbres.
+
+\begin{minted}{bash}
+  sudo dnf install gitk
+\end{minted}
+
+Para instalar debemos confirmar escribiendo \textbf{y} luego \textbf{enter}
+para confirmar.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/256_gitk_install.png}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/249_gitk.png}
+\end{figure}
+
+Cuando hacemos \textbf{git branch} verificamos las dos ramas que tenemos master
+y cabecera, pero a github no le hemos enviado cabecera. Entonces para enviar la
+rama \textbf{cabecera} entonces hacemos un push con el nombre de la rama.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/250_push_cabecera.png}
+\end{figure}
+
+Luego verifiquemos en Github y en la parte superior izquierda aparecen las
+ramas.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/251_cabecera_github.png}
+\end{figure}
+
+Ahora vamos a crear dos ramas: header y footer. Además las enviaremos a Github.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/252_new_branches.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/253_push_header.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/254_push_footer.png}
+\end{figure}
+
+Una vez enviadas las podremos ver desde Github.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/255_branches_github.png}
+\end{figure}
+
+
+\newpage
 %% Clase 24
 \section{Configurar múltiples colaboradores en un repositorio GitHub}%
 Por defecto, cualquier persona puede clonar o descargar tu proyecto desde
