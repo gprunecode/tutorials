@@ -3807,6 +3807,8 @@ ramas.
   \includegraphics[scale=0.75]{./Pictures/251_cabecera_github.png}
 \end{figure}
 
+\newpage
+
 Ahora vamos a crear dos ramas: header y footer. Además las enviaremos a Github.
 
 \begin{figure}[h!]
@@ -3836,18 +3838,521 @@ Una vez enviadas las podremos ver desde Github.
 %% Clase 24
 \section{Configurar múltiples colaboradores en un repositorio GitHub}%
 Por defecto, cualquier persona puede clonar o descargar tu proyecto desde
-GitHub, pero no pueden crear commits, ni ramas, ni nada.\\
+GitHub, pero no pueden crear commits, ni ramas, ni nada.  Por ejemplo
+supongamos que nuestra empresa ha contratado a un nuevo programador llamado
+\textbf{John Doe} y esta es su cuenta de Github.
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/257_jdoe_platzi.png}
+\end{figure}
+
+Desde su cuenta John puede buscar el proyecto y clonarlo usando git. Para esto
+él podría crear una carpeta dentro de Documents usando \textbf{mkdir}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/258_jdoe_proyecto.png}
+\end{figure}
+
+Luego John puede copiar el url sea usando ssh o https dependiendo de si
+configuró o no sus llaves ssh con Github.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/259_clone_repository.png}
+\end{figure}
+
+\newpage
+
+Luego haciendo \textbf{git clone} puede traerse todo el proyecto completo a un
+directorio con el nombre del proyecto, esto por defecto, o si le indicamos el
+nombre del directorio entonces como en nuestro caso que le indicamos el
+directorio actual con \textbf{./}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/260_clone.png}
+\end{figure}
+
+Podemos ver que descarga los archivos en la carpeta proyecto1 que era nuestro
+directorio actual cuando hicimos el git clone.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/261_lslha.png}
+\end{figure}
+
+Podemos entrar al directorio usando cd y listamos el contenido del proyecto.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/262_lslha.png}
+\end{figure}
+
+Imaginemos que John está muy emocionado y quiere participar en el desarrollo
+del proyecto y modifica un archivo.\\
+
+\textbf{historia.txt}
+\begin{minted}{python}
+  Esta es la historia de Freddy Vega
+
+  Freddy Vega tiene 32 años y nació en Colombia
+
+  John Platzi tiene 41 años y nació en Internet
+
+  Mañana nos enfocaremos en su vida laboral
+\end{minted}
+
+Una vez modificado el archivo John decide visualizar el status, también hacer
+el commit y luego el push al repositorio remoto, pero obtiene un error.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/263_historia_mod.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/264_push_error.png}
+\end{figure}
+
+Esto pasa porque nadie más que el dueño del repositorio puede hacer push en el
+mismo, a menos de que él envíe una invitación de aportar en el repositorio.
 Existen varias formas de solucionar esto para poder aceptar contribuciones. Una
 de ellas es añadir a cada persona de nuestro equipo como colaborador de nuestro
 repositorio.\\
 
-Solo debemos entrar a la configuración de colaboradores de nuestro proyecto
-(Repositorio $>$ Settings $>$ Collaborators) y añadir el email o username de los
-nuevos colaboradores.\\
+Solo debemos entrar a la configuración de colaboradores de nuestro proyecto,
+desde la cuenta propietaria del repositorio, (Repositorio $>$ Settings $>$
+Collaborators) y añadir el email o username de los nuevos colaboradores.\\
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/265_add_collaborator.png}
+\end{figure}
+
+\newpage
+
+Podríamos enviarle el link de invitación vía email a nuestro futuro
+colaborador.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/266_collaborator_awaiting.png}
+\end{figure}
+
+John nuestro colaborador que acabamos de agregar, visualizará la invitación
+accediendo desde el enlace que el propietario del repositorio le compartió, y
+podrá aceptar o rechazar la invitación.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/267_hyperblog_invitations.png}
+\end{figure}
+
+Al aceptar le saldrá un mensaje en la parte superior que le indica que ahora ya
+puede hacer push en ese repositorio.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/268_push_available.png}
+\end{figure}
+
+\newpage
+Entonces John hace el push con los cambios que realizó.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/269_push_anita.png}
+\end{figure}
+
+Una vez hecho esto, si nosotros (el propietario del proyecto) visualizamos
+nuestro repositorio del proyecto, no se visualiza el último commit enviado por
+John. Entoces hacemos un git pull para traernos esos cambios.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/270_paewe_pull.png}
+\end{figure}
+
+Ahora sí podemos ver el log del último commit hecho por John.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/271_paewe_log.png}
+\end{figure}
+
+Si bien John pudo hacer el commit y push a nuestro repositorio, es de buenas
+prácticas trabajar en ramas y no directamente en el master.
+
+
+\newpage
 %% Clase 25
 \section{Flujo de trabajo profesional: Haciendo merge de ramas de desarrollo a master}%
+
+Agregamos una imagen llamada
+\href{https://github.com/xguest512/hyperblog/raw/342e14d3f61865ce79a9c20cd72272f228123a0f/imagenes/dragon.png}{dragon.png}
+que lo usaremos como nuestro logo.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/272_status_logo.png}
+\end{figure}
+
+Agregamos la imagen, una imagen es un binario, recuerda que no es recomendable
+subir binarios a tu repositorio, sin embargo haremos una excepción por esta
+vez.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/273_add_dragon.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/274_commit.png}
+\end{figure}
+
+Hacemos push en nuestra rama \textbf{header}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/275_push_header.png}
+\end{figure}
+
+\newpage
+
+Ahora hacemos un cambio a la imagen, (se le agregó una cara sonriente) ver
+\href{https://github.com/xguest512/hyperblog/raw/b255bad5ad8d7bca0c639e3d96ab5fa59d685e80/imagenes/dragon.png}{dragon.png}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/276_dragon_modified.png}
+\end{figure}
+
+Agregamos al Staging Area la imagen y si usamos el comando diff no se
+especifica los cambios ya que son archivo binarios.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/277_status_diff.png}
+\end{figure}
+
+Luego hacemos commit y push en la rama \textbf{header}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/278_commit_push.png}
+\end{figure}
+
+Entonces modificamos nuestros ficheros html y css para agregar nuestro logo.\\
+
+\textbf{blogpost.html}
+\begin{minted}{html}
+  <!DOCTYPE html>
+  <html lang="es">
+    <head>
+      <meta charset="utf-8">
+      <title>Bienvenido a Hyperblog 2.0</title>
+      <link rel="stylesheet" href="css/estilos.css" type="text/css" media="all">
+    </head>
+    <body>
+      <div id="container">
+        <div id="cabecera">
+          <img id="logo" src="imagenes/dragon.png"/>
+          hyperblog <span id="tagline">Tu blog de cabecera</span>
+        </div>
+        <div id="post">
+          <h1>Este es el título atractivo e interesante del post</h1>
+          <p>Y este es el párrafo de inicio donde vamos a explicar las cosas
+          increíbles que se pueden hacer con ramas</p>
+          <p>Los blogs son la mejor forma de compartir información y tus ideas.
+          Mucho mas que ir a conferencias o salir en Youtube. Excepto si eres un
+          rockstar. Pero estadísticamente no lo eres... por ahora.</p>
+          <p>Subscribete y dale like</p>
+        </div>
+      </div>
+    </body>
+  </html>
+\end{minted}
+
+\textbf{css/estilos.css}
+\begin{minted}{css}
+  body {
+    background: #1e1f24;
+    color: #333;
+    text-align: center;
+    font-family: Arial;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+  }
+
+  #cabecera {
+    background: #37488b;
+    box-shadow: 0px 2px 20px 0px rgba(0,0,0,0.5);
+    color: white;
+    font-weight: bold;
+    margin: 0;
+    padding: 0.5em;
+  }
+
+  #cabecera #logo {
+    width: 20px;
+    vertical-align: middle;
+  }
+
+  #cabecera #tagline {
+    padding: 0 0 0 1em;
+    font-weight: normal;
+    font-size: 0.8em;
+  }
+
+  #container {
+    width: 70%;
+    padding: 0;
+    text-align: left;
+    border: 1px solid #DDD;
+    margin: 0 auto;
+  }
+
+  #container h1 {
+    font-size: 20px;
+  }
+
+  #post {
+    background: white;
+    padding: 1em;
+  }
+\end{minted}
+
+Verificamos los cambios usando \textbf{status}. Agregamos al Staging Area,
+hacemos commit y push a la rama header.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/279_status.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/280_commit_changes.png}
+\end{figure}
+
+\begin{minted}{bash}
+  git push origin header
+\end{minted}
+
+Ahora en otra sesión simulamos el trabajo de John que por su parte trabajará en
+la rama footer, para eso tenemos que hacer un pull de esta rama y mover el HEAD
+a la misma usando checkout.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/281_john_footer.png}
+\end{figure}
+
+\newpage
+
+John hará los cambios en los archivos \textbf{html} y \textbf{css}.\\
+
+\textbf{blogpost.html}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/302_blogposthtml.png}
+\end{figure}
+
+Para escribir el corazón en el archivo html podemos usar un caracter unicode de
+código U$+$1F49A.
+
+
+\textbf{css/estilos.css}
+\begin{minted}{css}
+  body {
+    color: #333;
+    text-align: left;
+    font-family: Arial;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+  }
+
+  #cabecera {
+    background: #33A;
+    box-shadow: 0px 2px 20px 0px rgba(0,0,0,0.75);
+    color: white;
+    font-weight: bold;
+    margin: 0;
+    padding: 0.5em;
+  }
+
+  #cabecera #tagline {
+    padding: 0 0 0 1em;
+    font-weight: normal;
+    font-size: 0.8em;
+  }
+
+  #container {
+    width: 70%;
+    padding: 0;
+    text-align: left;
+    border: 1px solid #DDD;
+    margin: 0 auto;
+  }
+
+  #container h1 {
+    font-size: 20px;
+  }
+
+  #post {
+    padding: 1em;
+  }
+
+  #footer {
+    background: #777;
+    color: white;
+    text-align: center;
+    padding: 0.5em;
+  }
+\end{minted}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/282_footer_john.png}
+\end{figure}
+
+Así se ve en el navegador. Luego John hace commit y push de los archivos
+modificados en la rama footer.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/283_status_john.png}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/284_commit_pull.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/285_push_footer.png}
+\end{figure}
+
+Podemos verificar en Github el commit subido, recuerda que podemos ver las
+ramas también desde aquí.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/286_Gh_footer.png}
+\end{figure}
+
+Ahora nosotros (propietario del repositorio) para traer los cambios hechos por
+John hacemos un git pull footer.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/287_pull_footer.png}
+\end{figure}
+
+Y podemos verificar los cambios hechos por John además como es un archivo html
+podemos visualizarlo en un navegador.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/288_footer.png}
+\end{figure}
+
+Vamos a verificar cómo se ve nuestros cambios en un navegador tanto en master,
+header y footer.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/289_ch_master.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/290_web_master.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/291_ch_header.png}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/292_web_header.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/293_ch_footer.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/294_web_footer.png}
+\end{figure}
+
+Lo que nos queda entonces es combinar los cambios a la rama master tanto de
+header como de footer, veamos.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/295_ch_master.png}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/296_merge_footer.png}
+\end{figure}
+
+Antes de completar el merge de header debemos agregarle un mensaje en el editor
+vim que nos abre automáticamente.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/297_merge_message.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/298_merge_footer.png}
+\end{figure}
+
+De igual manera para footer, antes de completar el merge de header debemos
+agregarle un mensaje en el editor vim.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/299_merge_message.png}
+\end{figure}
+
+Así es como tenemos un resultado en nuestra página web de blogpost que es la
+convinación de footer y de header.
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/300_web_master.png}
+\end{figure}
+
+
+\newpage
 
 %% Clase 26
 \section{Flujo de trabajo profesional con Pull requests}%
