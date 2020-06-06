@@ -4355,19 +4355,352 @@ convinación de footer y de header.
 \newpage
 
 %% Clase 26
-\section{Flujo de trabajo profesional con Pull requests}%
-En un entorno profesional normalmente se bloquea la rama master, y para enviar
-código a dicha rama pasa por un code review y luego de su aprobación se unen
-códigos con los llamados merge request.\\
+\section{Flujo de trabajo profesional usando Pull Request}%
+En la clase anterior nosotros decidimos hacer un merge de las ramas footer y
+header directamente a la rama master, pero en un entorno profesional
+normalmente se bloquea la rama master, la idea es que nadie debe hacer merge a
+master simplemente porque sí, y en el proceso antes haya un \textbf{call
+review}. La forma en la que funciona en el mundo profesional es la siguiente:\\
 
-Para realizar pruebas enviamos el código a servidores que normalmente los
-llamamos staging develop (servidores de pruebas) luego de que se realizan las
-pruebas pertinentes tanto de código como de la aplicación estos pasan a el
-servidor de producción con el ya antes mencionado merge request.\\
+Imagina que tienes una rama \textbf{master} que es tu rama principal, lo más
+importante es que sepas que esa rama es la que eventualmente es la que se va a
+subir al servidor. Específicamente a nuestro servidor real que se suele llamar
+\textbf{de producción}, donde normalmente está nuestra versión final. Pero a
+veces tenemos que hacer pruebas, sin que afecte a los usuarios, en un entorno
+que se parezca al de producción; entonces imaginen ustedes que tienen un sitio
+web que se llame \textbf{hyperblog.com}, que es el blog donde están trabajando,
+pero tienen también \textbf{test.hyperblog.com} para hacer pruebas. Cuando
+estén desarrollando aplicaciones móviles también ustedes tienen apps de pruebas
+y tienen el app que envían como versión final al app store o al playstore, esos
+tipos de servidores normalmente se llaman servidores de desarrollo o servidores
+de \textbf{staging} (se pone un poco confuso porque Staging también es el área
+intermedia donde nosotros agregamos archivos en git antes de mandarlos al
+repositorio local con commit, pero simplemente veanlo como cosas distintas. Una
+cosa es Staging para el desarrollo y otra es Staging dentro de git).\\
 
+Staging o servidores de desarrollo son ramas que justo están antes de master,
+entonces aquí también tenemos un servidor, pero este servidor es uno de pruebas
+que se parece tanto como sea posible al servidor real.\\
+
+Entonces ustedes crean una rama especial que nace de master que se llama
+\textbf{feature}, en nuestro ejemplo creamos uno para el header y otra para el
+footer, y desarrollan en su entorno local. Y luego envían la última versión de
+esa rama a \textbf{staging} para hacerle un \textbf{pull request} a la ultima
+versión de Staging. En teoría Staging y Master siempre deben estar
+sincronizados y este es un trabajo del líder del equipo. Un \textbf{Pull
+request} es un estado intermedio antes de hacer el merge, lo que el Pull
+request permite es que otros miembros del equipo puedan ver los cambios que tu
+hiciste y si les gusta aprobarlos y al auto aprobarlos se autoejecuta el merge
+en \textbf{Staging}. El pull request no es una característica de Git, es una
+característica de Github.\\
+
+El pull request también es importante, porque le permite a personas que no son
+colaboradores, trabajar y apoyar en una rama. La persona encargada de ver todo
+el flujo de trabajo normalmente es el líder del equipo o profesional de un
+perfil muy especial que se llama \textbf{DevOps}.\\
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{./Pictures/303_pull_request.png}
+\end{figure}
+
+
+\newpage
 %% Clase 27
 \section{Utilizando Pull requests en GitHub}%
+Vamos a sacar a John, para ver cómo sería para que John pueda aportar a un
+repositorio en el que no es colaborador  usando Pull requets.\\
 
+Para eso vamos al respositorio y como dueños del mismo, nos aparece una pestaña
+llamada \textbf{Settings}, luego en la parte derecha nos sale un menu vertical
+donde escogemos \textbf{Collaborators} y eliminamos a John Doe.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/304_settings.png}
+\end{figure}
+
+Una vez hecho eso, supongamos que John ingresa desde su cuenta y visita el
+repositorio \href{https://github.com/xguest512/hyperblog}{hyperblog}. En la
+parte superior tenemos tres botones, el primero \textbf{whatch} que nos permite
+indicarle a Github si queremos que nos envíe notificaciones del repositorio y
+escogemos la opción watching.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/305_remove_john.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/306_watching.png}
+\end{figure}
+
+\newpage
+
+El botón \textbf{star} nos permite guardar el repositorio en el grupo estrella
+de repositorios.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/307_star.png}
+\end{figure}
+
+\textbf{Fork} nos permite hacer una copia con el mismo nombre del repositorio
+pero en nuestro Github personal. Clonamos el repositorio clonado.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/308_fork.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/310_clone.png}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/311_cd_hyperblog.png}
+\end{figure}
+
+Hacemos cambios en los ficheros:\\
+
+\textbf{historia.txt}
+\begin{minted}{python}
+  Esta es la historia de Freddy Vega
+
+  Freddy Vega tiene 32 años y nació en Colombia
+
+  John Platzi es una persona que contribuy a este proyecto open source y nació en Internet
+
+  Mañana nos enfocaremos en su vida laboral
+\end{minted}
+
+
+\textbf{blogpost.html}
+\begin{minted}{html}
+  <!DOCTYPE html>
+  <html lang="es">
+    <head>
+      <meta charset="utf-8">
+      <title>Bienvenido a Hyperblog 2.0</title>
+      <link rel="stylesheet" href="css/estilos.css" type="text/css" media="all">
+    </head>
+    <body>
+      <div id="container">
+        <div id="cabecera">
+          <img id="logo" src="imagenes/dragon.png"/>
+          hyperblog <span id="tagline">Tu blog de cabecera</span>
+        </div>
+        <div id="post">
+          <h1>Este es el título atractivo e interesante del post</h1>
+          <p>Y este es el párrafo de inicio donde vamos a explicar las cosas
+          increíbles que se pueden hacer con ramas</p>
+          <p>Los blogs son la mejor forma de compartir información y tus ideas.
+          Mucho mas que ir a conferencias o salir en Youtube. Excepto si eres un
+          rockstar. Pero estadísticamente no lo eres... por ahora.</p>
+          <p>Subscríbete y dale like</p>
+          <div id="footer">
+            Hecho con amor en Platzi
+          </div>
+        </div>
+      </div>
+    </body>
+  </html>
+\end{minted}
+
+\newpage
+
+Hacemos commit de los cambios realizados en los archivos, además de push a
+nuestro repositorio remoto (fork).
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/312_status.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/313_commit_status.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/314_push.png}
+\end{figure}
+
+Una vez hecho el push, podemos hacer un \textbf{pull request}, que nos abrirá
+un página donde podemos comparar los campos, le damos clic en \textbf{New pull
+request}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/315_new_pull_request.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/316_diferencias.png}
+\end{figure}
+
+Le damos clic en \textbf{Create pull request}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/317_create_pr.png}
+\end{figure}
+
+Esto nos lleva a una página donde podemos escribir un mensaje y finalmente
+darle a \textbf{Create pull request}, para abrir un pull request al repositorio
+original.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/318_write_pr.png}
+\end{figure}
+
+\newpage
+
+Así es como se ve un pull request en estado \textbf{open}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/319_pull_request.png}
+\end{figure}
+
+Ahora si vemos la cuenta de Github del dueño original de repositorio, le
+aparecerán las noticias de lo que hizo \textbf{jdoe-tech} relacionado con el
+repositorio hyperblog (starred, forked).
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/320_notifications.png}
+\end{figure}
+
+En la parte superior derecha hay una campana, que si aparece con un punto azul
+significa que hay notificaciones pendientes y al darle clic nos mostrará todas
+las notificaciones, pudiendo ver nosotros las que ya leímos y las que tenemos
+sin leer.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/321_notifications.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/322_notification.png}
+\end{figure}
+
+\newpage
+
+Al darle clic en la notificación no leída nos redireccionará al pull request.
+Debajo del título encontramos cuatro pestañas: Conversation, Commits, Checks y
+\textbf{Files changed}. Damos clic en la última. Entonces podremos ver los
+ficheros y sus cambios, además nos aparece en la parte superior derecha un
+botón que dice \textbf{Review changes} al que le damos clic. Escribimos una
+respuesta y luego podemos escoger si solo comentamos, aprovamos o hacemos
+merge. Para finalizar la elección damos clic en \textbf{Submit review}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/323_review_ok.png}
+\end{figure}
+
+Luego de aprovar los cambios nos da la opción de hacer merge dando clic en
+\textbf{Merge pull request} y confirmamos.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/324_merge_pr.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/325_confirm_merge.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/326_merged.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/237_pull_request_log.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/238_cambio_sin_pull.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/239_error.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/240_merge_message.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/241_commit_pull.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/242_push.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/243_jdoe_github.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/244_swith_base.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/245_compare.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/246_to_xguest.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/247_url_ssh.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/248_add_upstream.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/249_pull_upstream.png}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{./Pictures/250_push.png}
+\end{figure}
+
+
+
+\newpage
 %% Clase 28
 \section{Creando un Fork, contribuyendo a un repositorio}%
 
