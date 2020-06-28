@@ -8,6 +8,8 @@ def main():
 
     make_square(dave)
 
+    turtle.mainloop()
+
 
 def make_square(dave):
     lenght = int(raw_input('Tamaño de cuadrado: '))

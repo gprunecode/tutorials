@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
+
 def is_prime(number):
+    if number < 2:
+        return False
     for x in range(2, number):
         if number % x == 0:
             return False
